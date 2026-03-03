@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import {
     Heart, Plus, Eye, Settings, Users, BarChart2,
-    Copy, ExternalLink, MoreVertical, Sparkles, Clock
+    Copy, ExternalLink, MoreVertical, Sparkles, Clock, Loader2, LogOut
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -17,38 +18,62 @@ import {
     DropdownMenuTrigger, DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
-
-// Mock data for UI demonstration
-const mockInvitations = [
-    {
-        id: '1',
-        slug: 'minh-anh-quang-huy',
-        title: 'Minh Anh & Quang Huy',
-        wedding_date: '2025-12-12',
-        is_published: true,
-        view_count: 342,
-        rsvp_total: 48,
-        rsvp_confirmed: 35,
-        style: 'minimal',
-        updated_at: '2025-11-28',
-    },
-]
-
-const stats = [
-    { label: 'Lượt xem thiệp', value: '342', icon: Eye, color: 'text-blue-500', bg: 'bg-blue-50' },
-    { label: 'Khách đã RSVP', value: '35/48', icon: Users, color: 'text-green-500', bg: 'bg-green-50' },
-    { label: 'Lời chúc nhận', value: '28', icon: Heart, color: 'text-rose-500', bg: 'bg-rose-50' },
-    { label: 'Ngày còn lại', value: '14', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50' },
-]
+import { getMyInvitations, getCurrentUser, signOut } from '@/lib/supabase/api'
+import type { Invitation } from '@/types'
 
 export default function DashboardPage() {
+    const router = useRouter()
     const [copied, setCopied] = useState(false)
+    const [invitations, setInvitations] = useState<Array<Invitation & { invitation_designs?: Array<{ blocks: unknown[] }> }>>([])
+    const [loading, setLoading] = useState(true)
+    const [userName, setUserName] = useState('')
+
+    useEffect(() => {
+        async function loadData() {
+            try {
+                const [user, data] = await Promise.all([
+                    getCurrentUser(),
+                    getMyInvitations(),
+                ])
+                setUserName(user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Bạn')
+                setInvitations(data || [])
+            } catch (err) {
+                console.error('Failed to load dashboard:', err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        loadData()
+    }, [])
 
     const copyLink = (slug: string) => {
         navigator.clipboard.writeText(`${window.location.origin}/${slug}`)
         setCopied(true)
         toast.success('Đã sao chép link thiệp!')
         setTimeout(() => setCopied(false), 2000)
+    }
+
+    const handleSignOut = async () => {
+        await signOut()
+        router.push('/login')
+    }
+
+    const stats = [
+        { label: 'Số thiệp', value: String(invitations.length), icon: Heart, color: 'text-rose-500', bg: 'bg-rose-50' },
+        { label: 'Lượt xem', value: String(invitations.reduce((s, i) => s + (i.view_count || 0), 0)), icon: Eye, color: 'text-blue-500', bg: 'bg-blue-50' },
+        { label: 'Đã đăng', value: String(invitations.filter(i => i.is_published).length), icon: Sparkles, color: 'text-green-500', bg: 'bg-green-50' },
+        { label: 'Ngày còn lại', value: invitations[0]?.wedding_date ? String(Math.max(0, Math.ceil((new Date(invitations[0].wedding_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))) : '--', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50' },
+    ]
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-[#fdfaf7] flex items-center justify-center">
+                <div className="text-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-[#c9a96e] mx-auto mb-4" />
+                    <p className="text-sm text-[#2c1810]/50">Đang tải...</p>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -82,7 +107,9 @@ export default function DashboardPage() {
                                 <DropdownMenuItem>Hồ sơ</DropdownMenuItem>
                                 <DropdownMenuItem>Cài đặt</DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem className="text-red-500">Đăng xuất</DropdownMenuItem>
+                                <DropdownMenuItem className="text-red-500" onClick={handleSignOut}>
+                                    <LogOut className="w-3.5 h-3.5 mr-2" />Đăng xuất
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -97,7 +124,7 @@ export default function DashboardPage() {
                     animate={{ opacity: 1, y: 0 }}
                 >
                     <h1 className="text-2xl font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
-                        Xin chào, Minh Anh 👋
+                        Xin chào, {userName} 👋
                     </h1>
                     <p className="text-[#2c1810]/50 mt-1">Quản lý và theo dõi thiệp cưới của bạn</p>
                 </motion.div>
@@ -134,10 +161,10 @@ export default function DashboardPage() {
                     <div className="lg:col-span-2 space-y-4">
                         <div className="flex items-center justify-between">
                             <h2 className="font-semibold text-[#2c1810]">Thiệp cưới của bạn</h2>
-                            <Badge variant="secondary" className="text-xs">{mockInvitations.length} thiệp</Badge>
+                            <Badge variant="secondary" className="text-xs">{invitations.length} thiệp</Badge>
                         </div>
 
-                        {mockInvitations.map((inv, i) => (
+                        {invitations.map((inv, i) => (
                             <motion.div
                                 key={inv.id}
                                 initial={{ opacity: 0, y: 10 }}
@@ -156,10 +183,12 @@ export default function DashboardPage() {
                                                         {inv.is_published ? 'Đã đăng' : 'Nháp'}
                                                     </Badge>
                                                 </div>
-                                                <p className="text-sm text-[#2c1810]/50 flex items-center gap-2">
-                                                    <Clock className="w-3 h-3" />
-                                                    Cưới ngày {new Date(inv.wedding_date).toLocaleDateString('vi-VN')}
-                                                </p>
+                                                {inv.wedding_date && (
+                                                    <p className="text-sm text-[#2c1810]/50 flex items-center gap-2">
+                                                        <Clock className="w-3 h-3" />
+                                                        Cưới ngày {new Date(inv.wedding_date).toLocaleDateString('vi-VN')}
+                                                    </p>
+                                                )}
                                             </div>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
@@ -183,16 +212,9 @@ export default function DashboardPage() {
                                             </DropdownMenu>
                                         </div>
 
-                                        {/* RSVP Progress */}
-                                        <div className="mb-4">
-                                            <div className="flex justify-between text-xs text-[#2c1810]/50 mb-1.5">
-                                                <span>RSVP ({inv.rsvp_confirmed}/{inv.rsvp_total} xác nhận)</span>
-                                                <span>{Math.round((inv.rsvp_confirmed / inv.rsvp_total) * 100)}%</span>
-                                            </div>
-                                            <Progress
-                                                value={(inv.rsvp_confirmed / inv.rsvp_total) * 100}
-                                                className="h-2 bg-[#c9a96e]/10"
-                                            />
+                                        {/* Stats */}
+                                        <div className="mb-4 flex items-center gap-4 text-xs text-[#2c1810]/50">
+                                            <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {inv.view_count} lượt xem</span>
                                         </div>
 
                                         {/* Actions */}

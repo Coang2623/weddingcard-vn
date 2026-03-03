@@ -44,11 +44,17 @@ export default function RegisterPage() {
                 },
             })
             if (error) throw error
-            toast.success('Tài khoản đã được tạo! Vui lòng kiểm tra email để xác nhận.')
-            router.push('/dashboard')
+            toast.success('Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.')
+            router.push('/login')
         } catch (err: unknown) {
             const error = err as { message?: string }
-            toast.error(error.message || 'Đăng ký thất bại. Vui lòng thử lại.')
+            const msg = error.message || ''
+            let viMsg = 'Đăng ký thất bại. Vui lòng thử lại.'
+            if (msg.includes('already registered')) viMsg = 'Email này đã được đăng ký. Vui lòng đăng nhập.'
+            else if (msg.includes('rate limit')) viMsg = 'Bạn đã thử quá nhiều lần. Vui lòng đợi vài phút rồi thử lại.'
+            else if (msg.includes('valid email')) viMsg = 'Vui lòng nhập email hợp lệ.'
+            else if (msg.includes('at least')) viMsg = 'Mật khẩu phải có ít nhất 8 ký tự.'
+            toast.error(viMsg)
         } finally {
             setLoading(false)
         }

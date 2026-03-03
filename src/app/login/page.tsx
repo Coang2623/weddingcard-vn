@@ -25,11 +25,17 @@ export default function LoginPage() {
             const supabase = createClient()
             const { error } = await supabase.auth.signInWithPassword({ email, password })
             if (error) throw error
-            toast.success('Đăng nhập thành công! Đang chuyển hướng...')
-            router.push('/dashboard')
+            toast.success('Đăng nhập thành công!')
+            const redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard'
+            router.push(redirect)
         } catch (err: unknown) {
             const error = err as { message?: string }
-            toast.error(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.')
+            const msg = error.message || ''
+            let viMsg = 'Đăng nhập thất bại. Vui lòng thử lại.'
+            if (msg.includes('Invalid login credentials')) viMsg = 'Sai email hoặc mật khẩu. Vui lòng kiểm tra lại.'
+            else if (msg.includes('Email not confirmed')) viMsg = 'Email chưa được xác nhận. Vui lòng kiểm tra hộp thư.'
+            else if (msg.includes('rate limit')) viMsg = 'Bạn đã thử quá nhiều lần. Vui lòng đợi vài phút.'
+            toast.error(viMsg)
         } finally {
             setLoading(false)
         }
