@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { DEFAULT_TEMPLATES, DEFAULT_THEME } from '@/lib/templates'
+import { DEFAULT_THEME } from '@/lib/templates'
 import type { Template } from '@/types'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
@@ -163,10 +163,28 @@ export default function NewInvitationPage() {
     const router = useRouter()
     const [step, setStep] = useState<'template' | 'details'>('template')
     const [selected, setSelected] = useState<Template | null>(null)
+    const [templates, setTemplates] = useState<Template[]>([])
+    const [loadingTemplates, setLoadingTemplates] = useState(true)
     const [groomName, setGroomName] = useState('')
     const [brideName, setBrideName] = useState('')
     const [weddingDate, setWeddingDate] = useState('')
     const [creating, setCreating] = useState(false)
+
+    useEffect(() => {
+        async function fetchTemplates() {
+            setLoadingTemplates(true)
+            const supabase = createClient()
+            const { data, error } = await supabase.from('templates').select('*')
+            if (error) {
+                console.error('Failed to load templates:', error)
+                toast.error('Không thể tải danh sách mẫu')
+            } else if (data) {
+                setTemplates(data as Template[])
+            }
+            setLoadingTemplates(false)
+        }
+        fetchTemplates()
+    }, [])
 
     const handleCreate = async () => {
         if (!selected || !groomName || !brideName) {
@@ -278,7 +296,12 @@ export default function NewInvitationPage() {
 
                         {/* Template Grid */}
                         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                            {DEFAULT_TEMPLATES.map((template, i) => {
+                            {loadingTemplates ? (
+                                <div className="col-span-full py-10 flex flex-col items-center justify-center opacity-50">
+                                    <Loader2 className="w-8 h-8 animate-spin mb-4 text-[#c9a96e]" />
+                                    <p className="text-sm">Đang tải các mẫu thiệp...</p>
+                                </div>
+                            ) : templates.map((template, i) => {
                                 const Preview = PREVIEW_COMPONENTS[template.id]
                                 const features = TEMPLATE_FEATURES[template.id] || []
                                 const isSelected = selected?.id === template.id

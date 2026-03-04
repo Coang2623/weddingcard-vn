@@ -22,7 +22,8 @@ import { loadDesignBlocks, saveDesignBlocks, getInvitationById } from '@/lib/sup
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
-import { RenderBlock, ThemeContext } from '@/app/[slug]/page'
+import { RenderBlock, ThemeContext } from '@/app/[slug]/ClientInvitation'
+import imageCompression from 'browser-image-compression'
 
 const BLOCK_META: Record<BlockType, { label: string; icon: React.ElementType; color: string; bg: string }> = {
     hero: { label: 'Tiêu Đề Chính', icon: Heart, color: 'text-rose-500', bg: 'bg-rose-50' },
@@ -61,9 +62,23 @@ function GalleryEditor({
             const supabase = createClient()
             const newImages = [...images]
             for (const file of Array.from(files)) {
+                // Compress image before upload
+                const options = {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    useWebWorker: true
+                }
+                let fileToUpload = file;
+                try {
+                    fileToUpload = await imageCompression(file, options);
+                } catch (error) {
+                    console.error('Lỗi nén ảnh:', error);
+                    // continue uploading the original if compression fails
+                }
+
                 const ext = file.name.split('.').pop()
                 const path = `gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-                const { error } = await supabase.storage.from('wedding-images').upload(path, file)
+                const { error } = await supabase.storage.from('wedding-images').upload(path, fileToUpload)
                 if (error) {
                     toast.error(`Lỗi upload: ${file.name}`)
                     continue
@@ -188,16 +203,20 @@ function BlockEditor({ block, onChange }: BlockEditorProps) {
             return (
                 <div className="space-y-3">
                     <div className="space-y-1.5">
-                        <Label className="text-xs">Tên Ngân Hàng</Label>
-                        <Input value={block.props.bankName || ''} onChange={(e) => updateProp('bankName', e.target.value)} placeholder="Vietcombank" className="h-9 text-sm" />
+                        <Label className="text-xs">Lời Nhắn (Tuỳ chọn)</Label>
+                        <Input value={(block.props.note as string) || ''} onChange={(e) => updateProp('note', e.target.value)} placeholder="Nhắn nhủ lời yêu thương đến cặp đôi" className="h-9 text-sm" />
+                    </div>
+                    <div className="space-y-1.5">
+                        <Label className="text-xs">Tên/Mã Ngân Hàng (VD: Vietcombank, MB, Techcombank)</Label>
+                        <Input value={(block.props.bankName as string) || ''} onChange={(e) => updateProp('bankName', e.target.value)} placeholder="Vietcombank" className="h-9 text-sm" />
                     </div>
                     <div className="space-y-1.5">
                         <Label className="text-xs">Số Tài Khoản</Label>
-                        <Input value={block.props.accountNumber || ''} onChange={(e) => updateProp('accountNumber', e.target.value)} placeholder="0123456789" className="h-9 text-sm" />
+                        <Input value={(block.props.accountNumber as string) || ''} onChange={(e) => updateProp('accountNumber', e.target.value)} placeholder="0123456789" className="h-9 text-sm" />
                     </div>
                     <div className="space-y-1.5">
                         <Label className="text-xs">Tên Chủ Tài Khoản</Label>
-                        <Input value={block.props.accountName || ''} onChange={(e) => updateProp('accountName', e.target.value)} placeholder="NGUYEN VAN A" className="h-9 text-sm" />
+                        <Input value={(block.props.accountOwner as string) || (block.props.accountName as string) || ''} onChange={(e) => updateProp('accountOwner', e.target.value.toUpperCase())} placeholder="NGUYEN VAN A" className="h-9 text-sm uppercase" />
                     </div>
                 </div>
             )

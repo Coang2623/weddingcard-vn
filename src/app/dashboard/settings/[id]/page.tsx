@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Heart, ArrowLeft, Save, Globe, Lock, Trash2, AlertTriangle, Loader2, Copy, ExternalLink } from 'lucide-react'
+import { Heart, ArrowLeft, Save, Globe, Lock, Trash2, AlertTriangle, Loader2, Copy, ExternalLink, QrCode, Download } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
+import { QRCodeCanvas } from 'qrcode.react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -167,6 +168,54 @@ export default function SettingsPage() {
                                 <Label htmlFor="date" className="text-sm text-[#2c1810]/70">Ngày cưới</Label>
                                 <Input id="date" type="date" value={weddingDate} onChange={e => setWeddingDate(e.target.value)}
                                     className="border-[#c9a96e]/20 focus:border-[#c9a96e]" />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+
+                {/* QR Code Section */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.12 }}>
+                    <Card className="border-[#c9a96e]/10">
+                        <CardContent className="p-6 space-y-5">
+                            <h2 className="font-semibold text-[#2c1810] flex items-center gap-2">
+                                <QrCode className="w-5 h-5 text-[#c9a96e]" />
+                                Mã QR Thiệp Mời
+                            </h2>
+                            <p className="text-sm text-[#2c1810]/60">
+                                Dùng mã QR này để in trực tiếp lên thiệp giấy, khách mời chỉ cần quét mã là có thể truy cập thiệp online của bạn.
+                            </p>
+                            <div className="flex flex-col items-center gap-4 py-4">
+                                <div className="p-4 bg-white border border-[#c9a96e]/20 rounded-2xl shadow-sm">
+                                    <QRCodeCanvas
+                                        id="wedding-qr-code"
+                                        value={publicUrl}
+                                        size={200}
+                                        bgColor={"#ffffff"}
+                                        fgColor={"#2c1810"}
+                                        level={"Q"}
+                                        includeMargin={false}
+                                    />
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    className="border-[#c9a96e]/30 text-[#c9a96e] hover:bg-[#c9a96e]/10 gap-2"
+                                    onClick={() => {
+                                        const canvas = document.getElementById('wedding-qr-code') as HTMLCanvasElement;
+                                        if (canvas) {
+                                            const pngUrl = canvas.toDataURL("image/png");
+                                            let downloadLink = document.createElement("a");
+                                            downloadLink.href = pngUrl;
+                                            downloadLink.download = `QR-ThiepCuoi.png`;
+                                            document.body.appendChild(downloadLink);
+                                            downloadLink.click();
+                                            document.body.removeChild(downloadLink);
+                                            toast.success('Đã tải xuống mã QR!');
+                                        }
+                                    }}
+                                >
+                                    <Download className="w-4 h-4" />
+                                    Tải ảnh QR (PNG)
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>

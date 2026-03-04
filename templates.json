@@ -1,0 +1,346 @@
+[
+  {
+    "id": "minimal-01",
+    "name": "Tinh Tế Tối Giản",
+    "style": "minimal",
+    "preview_image": "/templates/minimal-01.jpg",
+    "is_premium": false,
+    "default_theme": {
+      "primaryColor": "#c9a96e",
+      "secondaryColor": "#f5e6d3",
+      "backgroundColor": "#fdfaf7",
+      "textColor": "#2c1810",
+      "fontTitle": "Playfair Display",
+      "fontBody": "Lato",
+      "style": "minimal"
+    },
+    "default_blocks": [
+      {
+        "id": "bedde099-18a2-42fc-84a9-6f0e57091d53",
+        "type": "hero",
+        "props": {
+          "groomName": "Nguyễn Văn A",
+          "brideName": "Trần Thị B",
+          "weddingDate": "2025-12-12",
+          "subtitle": "Trân trọng kính mời"
+        },
+        "visibility": "all",
+        "order": 0
+      },
+      {
+        "id": "dc7a6799-4cfa-4d38-a135-1cee15f65e6c",
+        "type": "countdown",
+        "props": {
+          "targetDate": "2025-12-12T10:00:00"
+        },
+        "visibility": "all",
+        "order": 1
+      },
+      {
+        "id": "75c3a72a-e3da-455a-bdc2-22c884202d0b",
+        "type": "schedule",
+        "props": {
+          "venue": "Trung tâm Hội nghị ABC",
+          "address": "123 Đường XYZ, Quận 1, TP.HCM",
+          "events": [
+            {
+              "time": "10:00",
+              "title": "Đón khách & Chụp hình"
+            },
+            {
+              "time": "11:00",
+              "title": "Lễ Cưới"
+            },
+            {
+              "time": "12:00",
+              "title": "Tiệc Buffet"
+            }
+          ]
+        },
+        "visibility": "all",
+        "order": 3
+      },
+      {
+        "id": "13bf957c-bcbc-4397-960b-4806d4e1f2fb",
+        "type": "rsvp",
+        "props": {
+          "rsvpDeadline": "2025-12-05"
+        },
+        "visibility": "all",
+        "order": 6
+      }
+    ]
+  },
+  {
+    "id": "modern-01",
+    "name": "Hiện Đại Sang Trọng",
+    "style": "modern",
+    "preview_image": "/templates/modern-01.jpg",
+    "is_premium": false,
+    "default_theme": {
+      "primaryColor": "#6c63ff",
+      "secondaryColor": "#e8e6ff",
+      "backgroundColor": "#ffffff",
+      "textColor": "#1a1a2e",
+      "fontTitle": "Cormorant Garamond",
+      "fontBody": "Raleway",
+      "style": "modern"
+    },
+    "default_blocks": [
+      {
+        "id": "a9561dda-4383-48c9-8889-17d057a5b348",
+        "type": "hero",
+        "props": {
+          "groomName": "Nguyễn Văn A",
+          "brideName": "Trần Thị B",
+          "weddingDate": "2025-12-12",
+          "subtitle": "Trân trọng kính mời"
+        },
+        "visibility": "all",
+        "order": 0
+      },
+      {
+        "id": "9d917b26-0430-4383-972c-2487e2c111b3",
+        "type": "story",
+        "props": {
+          "story": "Câu chuyện tình yêu của chúng tôi bắt đầu từ một buổi chiều mùa thu..."
+        },
+        "visibility": "all",
+        "order": 2
+      },
+      {
+        "id": "872600d2-c7e4-4bdf-840f-bdafe9e86a81",
+        "type": "schedule",
+        "props": {
+          "venue": "Trung tâm Hội nghị ABC",
+          "address": "123 Đường XYZ, Quận 1, TP.HCM",
+          "events": [
+            {
+              "time": "10:00",
+              "title": "Đón khách & Chụp hình"
+            },
+            {
+              "time": "11:00",
+              "title": "Lễ Cưới"
+            },
+            {
+              "time": "12:00",
+              "title": "Tiệc Buffet"
+            }
+          ]
+        },
+        "visibility": "all",
+        "order": 3
+      },
+      {
+        "id": "e8f097be-647c-432d-9535-fdcf45ba8a9f",
+        "type": "gallery",
+        "props": {
+          "images": []
+        },
+        "visibility": "all",
+        "order": 5
+      },
+      {
+        "id": "d1c662a7-c6e0-47b0-a257-e2641c668e6e",
+        "type": "rsvp",
+        "props": {
+          "rsvpDeadline": "2025-12-05"
+        },
+        "visibility": "all",
+        "order": 6
+      },
+      {
+        "id": "f1b6af4a-ccb7-46b3-a6ad-f63bec79f3d8",
+        "type": "guestbook",
+        "props": {
+          "guestbookTitle": "Lời Chúc Mừng ❤️"
+        },
+        "visibility": "all",
+        "order": 8
+      }
+    ]
+  },
+  {
+    "id": "cinematic-01",
+    "name": "Điện Ảnh Lãng Mạn",
+    "style": "cinematic",
+    "preview_image": "/templates/cinematic-01.jpg",
+    "is_premium": true,
+    "default_theme": {
+      "primaryColor": "#d4af37",
+      "secondaryColor": "#2c2c2c",
+      "backgroundColor": "#1a1a1a",
+      "textColor": "#f5f5f5",
+      "fontTitle": "Cinzel",
+      "fontBody": "Raleway",
+      "style": "cinematic"
+    },
+    "default_blocks": [
+      {
+        "id": "405035aa-75fe-4344-87b8-0e60af46bd7b",
+        "type": "hero",
+        "props": {
+          "groomName": "Nguyễn Văn A",
+          "brideName": "Trần Thị B",
+          "weddingDate": "2025-12-12",
+          "subtitle": "Trân trọng kính mời"
+        },
+        "visibility": "all",
+        "order": 0
+      },
+      {
+        "id": "de5609fb-bfc7-4240-9b29-23b3ce68b126",
+        "type": "countdown",
+        "props": {
+          "targetDate": "2025-12-12T10:00:00"
+        },
+        "visibility": "all",
+        "order": 1
+      },
+      {
+        "id": "74869493-8e8c-4389-bfce-3e094db727ac",
+        "type": "story",
+        "props": {
+          "story": "Câu chuyện tình yêu của chúng tôi bắt đầu từ một buổi chiều mùa thu..."
+        },
+        "visibility": "all",
+        "order": 2
+      },
+      {
+        "id": "e5b7a944-5f05-45ac-883d-b3a7fa615002",
+        "type": "schedule",
+        "props": {
+          "venue": "Trung tâm Hội nghị ABC",
+          "address": "123 Đường XYZ, Quận 1, TP.HCM",
+          "events": [
+            {
+              "time": "10:00",
+              "title": "Đón khách & Chụp hình"
+            },
+            {
+              "time": "11:00",
+              "title": "Lễ Cưới"
+            },
+            {
+              "time": "12:00",
+              "title": "Tiệc Buffet"
+            }
+          ]
+        },
+        "visibility": "all",
+        "order": 3
+      },
+      {
+        "id": "d3e82d77-8311-41c0-93ab-4262d1e36a64",
+        "type": "map",
+        "props": {
+          "mapAddress": "123 Đường XYZ, Quận 1, TP.HCM"
+        },
+        "visibility": "all",
+        "order": 4
+      },
+      {
+        "id": "72170cfa-f58a-4b17-8741-40685d9b5c41",
+        "type": "gallery",
+        "props": {
+          "images": []
+        },
+        "visibility": "all",
+        "order": 5
+      },
+      {
+        "id": "7e488718-2315-485a-a120-7e2e334d26af",
+        "type": "rsvp",
+        "props": {
+          "rsvpDeadline": "2025-12-05"
+        },
+        "visibility": "all",
+        "order": 6
+      },
+      {
+        "id": "3d478271-dd95-4578-8cc6-16a7cddf31d9",
+        "type": "gift",
+        "props": {
+          "bankName": "Vietcombank",
+          "accountNumber": "0123456789",
+          "accountName": "NGUYEN VAN A"
+        },
+        "visibility": "friends",
+        "order": 7
+      }
+    ]
+  },
+  {
+    "id": "traditional-01",
+    "name": "Truyền Thống Đỏ Vàng",
+    "style": "traditional",
+    "preview_image": "/templates/traditional-01.jpg",
+    "is_premium": false,
+    "default_theme": {
+      "primaryColor": "#c0392b",
+      "secondaryColor": "#f9e4b7",
+      "backgroundColor": "#fef9f0",
+      "textColor": "#5d0e0e",
+      "fontTitle": "Noto Serif",
+      "fontBody": "Noto Sans",
+      "style": "traditional"
+    },
+    "default_blocks": [
+      {
+        "id": "6830af55-1c5a-4c9d-b4ac-865840f1f6e1",
+        "type": "hero",
+        "props": {
+          "groomName": "Nguyễn Văn A",
+          "brideName": "Trần Thị B",
+          "weddingDate": "2025-12-12",
+          "subtitle": "Trân trọng kính mời"
+        },
+        "visibility": "all",
+        "order": 0
+      },
+      {
+        "id": "03328a5f-76e8-4a02-ad37-b47da85dd986",
+        "type": "schedule",
+        "props": {
+          "venue": "Trung tâm Hội nghị ABC",
+          "address": "123 Đường XYZ, Quận 1, TP.HCM",
+          "events": [
+            {
+              "time": "10:00",
+              "title": "Đón khách & Chụp hình"
+            },
+            {
+              "time": "11:00",
+              "title": "Lễ Cưới"
+            },
+            {
+              "time": "12:00",
+              "title": "Tiệc Buffet"
+            }
+          ]
+        },
+        "visibility": "all",
+        "order": 3
+      },
+      {
+        "id": "897d008d-407b-4b1c-89fa-e3ce07510855",
+        "type": "map",
+        "props": {
+          "mapAddress": "123 Đường XYZ, Quận 1, TP.HCM"
+        },
+        "visibility": "all",
+        "order": 4
+      },
+      {
+        "id": "3f8f76ee-c181-46a1-8bdb-b8ba4cca23be",
+        "type": "rsvp",
+        "props": {
+          "rsvpDeadline": "2025-12-05"
+        },
+        "visibility": "all",
+        "order": 6
+      }
+    ]
+  }
+]
