@@ -28,20 +28,6 @@ const styleColors: Record<string, string> = {
     traditional: 'bg-red-100 text-red-700',
 }
 
-const templateEmojis: Record<string, string> = {
-    'minimal-01': '🌿',
-    'modern-01': '💜',
-    'cinematic-01': '🎬',
-    'traditional-01': '🏮',
-}
-
-const templateBgs: Record<string, string> = {
-    'minimal-01': 'from-stone-50 to-amber-50',
-    'modern-01': 'from-purple-50 to-indigo-50',
-    'cinematic-01': 'from-gray-900 to-black',
-    'traditional-01': 'from-red-50 to-yellow-50',
-}
-
 function slugify(text: string): string {
     return text
         .toLowerCase()
@@ -50,6 +36,127 @@ function slugify(text: string): string {
         .replace(/đ/g, 'd').replace(/Đ/g, 'd')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '')
+}
+
+// ─────────────── Unique Mini Previews for each template ───────────────
+
+function PreviewMinimal() {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#fdfaf7] to-[#f5e6d3] px-4 py-5">
+            <div className="w-12 h-px bg-[#c9a96e] mb-3" />
+            <p className="text-[9px] tracking-[4px] uppercase text-[#c9a96e] mb-2">Trân trọng kính mời</p>
+            <p className="text-sm font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>Minh Anh</p>
+            <div className="flex items-center gap-2 my-1">
+                <div className="w-6 h-px bg-[#c9a96e]/40" />
+                <span className="text-[#c9a96e] text-xs">❧</span>
+                <div className="w-6 h-px bg-[#c9a96e]/40" />
+            </div>
+            <p className="text-sm font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>Quang Huy</p>
+            <p className="text-[9px] text-[#2c1810]/40 mt-2 tracking-widest">12 – 12 – 2025</p>
+            <div className="w-12 h-px bg-[#c9a96e] mt-3" />
+            <div className="flex gap-3 mt-4">
+                {['Lễ Cưới', 'RSVP'].map(t => (
+                    <div key={t} className="text-[7px] border border-[#c9a96e]/30 rounded px-2 py-1 text-[#2c1810]/50 tracking-wider uppercase">{t}</div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+function PreviewModern() {
+    return (
+        <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] text-white overflow-hidden relative">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#6c63ff] via-[#e040fb] to-[#6c63ff]" />
+            <div className="flex-1 flex flex-col items-center justify-center px-4 py-4">
+                <div className="w-16 h-16 rounded-full border-2 border-[#6c63ff]/40 flex items-center justify-center mb-3 bg-[#6c63ff]/10">
+                    <span className="text-xl">💜</span>
+                </div>
+                <p className="text-[8px] tracking-[3px] uppercase text-[#6c63ff]/70 mb-1">Wedding Invitation</p>
+                <p className="text-sm font-bold" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Minh Anh &amp; Quang Huy</p>
+                <p className="text-[9px] text-white/40 mt-1">12 · 12 · 2025</p>
+            </div>
+            <div className="bg-[#6c63ff]/20 border-t border-[#6c63ff]/20 px-4 py-2 flex justify-around">
+                {['Câu Chuyện', 'Album', 'RSVP'].map(t => (
+                    <span key={t} className="text-[7px] text-white/50 tracking-wide">{t}</span>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+function PreviewCinematic() {
+    return (
+        <div className="w-full h-full flex flex-col bg-[#0d0d0d] text-white relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+            <div className="absolute top-2 left-0 right-0 flex justify-center gap-1">
+                {Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="w-3 h-1.5 border border-[#d4af37]/30 rounded-sm" />
+                ))}
+            </div>
+            <div className="flex-1 flex flex-col items-center justify-center relative z-10 px-4">
+                <p className="text-[7px] tracking-[5px] uppercase text-[#d4af37]/60 mb-3">A Wedding Story</p>
+                <p className="text-base font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, serif' }}>MINH ANH</p>
+                <div className="text-[#d4af37]/40 text-xs my-1">✦ ✦ ✦</div>
+                <p className="text-base font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, serif' }}>QUANG HUY</p>
+                <div className="flex items-center gap-2 mt-3">
+                    <div className="h-px w-8 bg-[#d4af37]/30" />
+                    <p className="text-[8px] text-white/40 tracking-widest">XII · XII · MMXXV</p>
+                    <div className="h-px w-8 bg-[#d4af37]/30" />
+                </div>
+            </div>
+            <div className="relative z-10 flex gap-2 justify-center pb-4">
+                {['🎬', '📸', '🗓️', '🎁'].map((e, i) => (
+                    <div key={i} className="w-7 h-7 rounded border border-[#d4af37]/20 flex items-center justify-center text-[10px]">{e}</div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+function PreviewTraditional() {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-between bg-gradient-to-b from-[#fef9f0] to-[#fde8c8] py-4 px-3">
+            <div className="w-full flex flex-col items-center">
+                <div className="text-[#c0392b] text-[10px] tracking-widest font-bold">❧ THIỆP CƯỚI ❧</div>
+                <div className="flex gap-1 mt-1">
+                    {['─', '✿', '─', '❋', '─', '✿', '─'].map((s, i) => (
+                        <span key={i} className="text-[#c0392b]/40 text-[8px]">{s}</span>
+                    ))}
+                </div>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+                <div className="text-2xl">🏮</div>
+                <p className="text-[8px] text-[#5d0e0e]/60 tracking-[2px]">TRÂN TRỌNG KÍNH MỜI</p>
+                <p className="text-sm font-bold text-[#c0392b]" style={{ fontFamily: 'Noto Serif, serif' }}>Minh Anh &amp; Quang Huy</p>
+                <p className="text-[9px] text-[#5d0e0e]/50">Ngày 12 tháng 12 năm 2025</p>
+            </div>
+            <div className="flex flex-col items-center gap-1 w-full">
+                <div className="flex gap-1">
+                    {['─', '✿', '─', '❋', '─', '✿', '─'].map((s, i) => (
+                        <span key={i} className="text-[#c0392b]/40 text-[8px]">{s}</span>
+                    ))}
+                </div>
+                <div className="flex gap-2">
+                    <div className="bg-[#c0392b] text-white text-[7px] px-2 py-0.5 rounded-sm tracking-wider">LỄ CƯỚI</div>
+                    <div className="border border-[#c0392b]/30 text-[#c0392b] text-[7px] px-2 py-0.5 rounded-sm tracking-wider">RSVP</div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const PREVIEW_COMPONENTS: Record<string, React.FC> = {
+    'minimal-01': PreviewMinimal,
+    'modern-01': PreviewModern,
+    'cinematic-01': PreviewCinematic,
+    'traditional-01': PreviewTraditional,
+}
+
+const TEMPLATE_FEATURES: Record<string, string[]> = {
+    'minimal-01': ['Thanh lịch, tinh tế', 'Nền kem nhẹ nhàng', '4 mục nội dung'],
+    'modern-01': ['Hiện đại, sang trọng', 'Tông tím-chàm tối', '6 mục + Album ảnh'],
+    'cinematic-01': ['Như phim, lãng mạn', 'Nền tối vàng gold', '8 mục đầy đủ nhất'],
+    'traditional-01': ['Truyền thống đỏ vàng', 'Phong cách Á Đông', '4 mục cơ bản'],
 }
 
 export default function NewInvitationPage() {
@@ -76,7 +183,6 @@ export default function NewInvitationPage() {
             const title = `${brideName} & ${groomName}`
             const slug = slugify(title) + '-' + Date.now().toString(36)
 
-            // Create invitation
             const { data: invitation, error: invError } = await supabase
                 .from('invitations')
                 .insert({
@@ -91,7 +197,6 @@ export default function NewInvitationPage() {
 
             if (invError) throw invError
 
-            // Create design with template blocks
             const templateBlocks = selected.default_blocks.map((b, i) => ({
                 ...b,
                 order: i,
@@ -125,7 +230,7 @@ export default function NewInvitationPage() {
     return (
         <div className="min-h-screen bg-[#fdfaf7]">
             {/* Nav */}
-            <nav className="border-b border-[#c9a96e]/10 bg-white/80 backdrop-blur-sm">
+            <nav className="border-b border-[#c9a96e]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
                     <Link href="/dashboard">
                         <Button variant="ghost" size="sm" className="gap-2 text-[#2c1810]/60">
@@ -138,6 +243,21 @@ export default function NewInvitationPage() {
                         <span className="font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
                             {step === 'template' ? 'Chọn Mẫu Thiệp' : 'Thông Tin Cặp Đôi'}
                         </span>
+                    </div>
+
+                    {/* Step indicator */}
+                    <div className="ml-auto flex items-center gap-2">
+                        <div className={`flex items-center gap-1.5 text-xs ${step === 'template' ? 'text-[#c9a96e]' : 'text-[#2c1810]/30'}`}>
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold
+                                ${step === 'template' ? 'border-[#c9a96e] bg-[#c9a96e] text-white' : 'border-[#2c1810]/20'}`}>1</div>
+                            <span className="hidden sm:inline">Chọn mẫu</span>
+                        </div>
+                        <div className="w-8 h-px bg-[#2c1810]/10" />
+                        <div className={`flex items-center gap-1.5 text-xs ${step === 'details' ? 'text-[#c9a96e]' : 'text-[#2c1810]/30'}`}>
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold
+                                ${step === 'details' ? 'border-[#c9a96e] bg-[#c9a96e] text-white' : 'border-[#2c1810]/20'}`}>2</div>
+                            <span className="hidden sm:inline">Thông tin</span>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -153,53 +273,64 @@ export default function NewInvitationPage() {
                             <h1 className="text-3xl font-bold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 Chọn mẫu thiệp yêu thích
                             </h1>
-                            <p className="text-[#2c1810]/50">Bạn có thể tùy chỉnh hoàn toàn sau khi chọn mẫu</p>
+                            <p className="text-[#2c1810]/50">Mỗi mẫu có phong cách riêng biệt – bạn có thể tùy chỉnh hoàn toàn sau khi chọn</p>
                         </motion.div>
 
                         {/* Template Grid */}
                         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                            {DEFAULT_TEMPLATES.map((template, i) => (
-                                <motion.div
-                                    key={template.id}
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    onClick={() => setSelected(template)}
-                                    className={`relative cursor-pointer rounded-2xl overflow-hidden border-2 transition-all duration-200 ${selected?.id === template.id
-                                        ? 'border-[#c9a96e] shadow-xl shadow-[#c9a96e]/20 scale-105'
-                                        : 'border-transparent hover:border-[#c9a96e]/30 hover:shadow-lg'
-                                        }`}
-                                >
-                                    <div className={`h-52 bg-gradient-to-b ${templateBgs[template.id]} flex flex-col items-center justify-center relative p-4`}>
-                                        {template.is_premium && (
-                                            <Badge className="absolute top-3 right-3 bg-[#c9a96e] text-white text-xs border-0">
-                                                Premium
-                                            </Badge>
-                                        )}
-                                        {selected?.id === template.id && (
-                                            <div className="absolute top-3 left-3 w-6 h-6 rounded-full bg-[#c9a96e] flex items-center justify-center">
-                                                <Check className="w-3.5 h-3.5 text-white" />
+                            {DEFAULT_TEMPLATES.map((template, i) => {
+                                const Preview = PREVIEW_COMPONENTS[template.id]
+                                const features = TEMPLATE_FEATURES[template.id] || []
+                                const isSelected = selected?.id === template.id
+
+                                return (
+                                    <motion.div
+                                        key={template.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        onClick={() => setSelected(template)}
+                                        className={`relative cursor-pointer rounded-2xl overflow-hidden border-2 transition-all duration-200 shadow-sm
+                                            ${isSelected
+                                                ? 'border-[#c9a96e] shadow-xl shadow-[#c9a96e]/20 scale-[1.03]'
+                                                : 'border-slate-100 hover:border-[#c9a96e]/40 hover:shadow-lg hover:scale-[1.01]'
+                                            }`}
+                                    >
+                                        {/* Mini preview */}
+                                        <div className="h-56 overflow-hidden relative">
+                                            {Preview && <Preview />}
+                                            {template.is_premium && (
+                                                <Badge className="absolute top-2.5 right-2.5 bg-gradient-to-r from-[#d4af37] to-[#c9a96e] text-white text-[10px] border-0 shadow">
+                                                    ✦ Premium
+                                                </Badge>
+                                            )}
+                                            {isSelected && (
+                                                <div className="absolute top-2.5 left-2.5 w-6 h-6 rounded-full bg-[#c9a96e] flex items-center justify-center shadow-md">
+                                                    <Check className="w-3.5 h-3.5 text-white" />
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Info */}
+                                        <div className="bg-white p-4">
+                                            <div className="flex items-start justify-between mb-2">
+                                                <h3 className="font-semibold text-sm text-[#2c1810] leading-tight">{template.name}</h3>
+                                                <Badge className={`text-[10px] border-0 shrink-0 ml-2 ${styleColors[template.style]}`}>
+                                                    {styleLabels[template.style]}
+                                                </Badge>
                                             </div>
-                                        )}
-                                        <div className="text-5xl mb-3">{templateEmojis[template.id]}</div>
-                                        <div className={`text-center ${template.style === 'cinematic' ? 'text-white' : 'text-[#2c1810]'}`}>
-                                            <p className="text-xs opacity-60 tracking-widest uppercase mb-1">Cô dâu & Chú rể</p>
-                                            <p className="text-sm font-semibold" style={{ fontFamily: template.default_theme.fontTitle + ', serif' }}>
-                                                Minh Anh & Quang Huy
-                                            </p>
-                                            <p className="text-xs opacity-50 mt-1">12 – 12 – 2025</p>
+                                            <ul className="space-y-0.5">
+                                                {features.map(f => (
+                                                    <li key={f} className="text-[10px] text-[#2c1810]/45 flex items-center gap-1.5">
+                                                        <span className="w-1 h-1 rounded-full bg-[#c9a96e]/40 shrink-0" />
+                                                        {f}
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                    </div>
-                                    <div className="bg-white p-4">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="font-semibold text-sm text-[#2c1810]">{template.name}</h3>
-                                            <Badge className={`text-xs border-0 ${styleColors[template.style]}`}>
-                                                {styleLabels[template.style]}
-                                            </Badge>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                    </motion.div>
+                                )
+                            })}
                         </div>
 
                         <div className="flex justify-center">
@@ -220,12 +351,34 @@ export default function NewInvitationPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
+                        {/* Selected template mini summary */}
+                        {selected && (() => {
+                            const P = PREVIEW_COMPONENTS[selected.id]
+                            return (
+                                <div className="flex items-center gap-3 bg-white border border-[#c9a96e]/15 rounded-xl p-3 mb-6 shadow-sm">
+                                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-[#c9a96e]/10 bg-slate-50">
+                                        {P && <P />}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-xs text-[#2c1810]/40">Mẫu đã chọn</p>
+                                        <p className="text-sm font-semibold text-[#2c1810] truncate">{selected.name}</p>
+                                    </div>
+                                    <button
+                                        className="text-xs text-[#c9a96e] hover:underline shrink-0"
+                                        onClick={() => setStep('template')}
+                                    >
+                                        Đổi mẫu
+                                    </button>
+                                </div>
+                            )
+                        })()}
+
                         <div className="text-center mb-8">
                             <div className="text-5xl mb-4">💒</div>
                             <h1 className="text-2xl font-bold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 Thông tin cặp đôi
                             </h1>
-                            <p className="text-[#2c1810]/50 text-sm">Nhập tên và ngày cưới để tạo thiệp</p>
+                            <p className="text-[#2c1810]/50 text-sm">Nhập tên và ngày cưới để hoàn tất thiệp</p>
                         </div>
 
                         <div className="space-y-5 bg-white rounded-2xl border border-[#c9a96e]/10 p-6 shadow-sm">

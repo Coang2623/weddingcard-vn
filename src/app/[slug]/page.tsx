@@ -1,7 +1,8 @@
 'use client'
 
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, createContext, useContext } from 'react'
 import { motion, LayoutGroup } from 'framer-motion'
 import { Heart, MapPin, Calendar, Share2, QrCode, MessageSquare, Loader2, Gift, Type } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -9,7 +10,63 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
-import type { InvitationBlock } from '@/types'
+import type { InvitationBlock, InvitationTheme } from '@/types'
+import { DEFAULT_THEME } from '@/lib/templates'
+
+// ── Premium UI Helpers ──
+
+function seededFloat(seed: number) {
+    // Deterministic pseudo-random in [0, 1) — avoids Math.random() during render.
+    const x = Math.sin(seed) * 10000
+    return x - Math.floor(x)
+}
+
+const FloatingParticles = () => (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {Array.from({ length: 15 }).map((_, i) => {
+            const x = `${seededFloat(i * 17 + 1) * 100}%`
+            const y = `${seededFloat(i * 29 + 2) * 100}%`
+            const duration = seededFloat(i * 37 + 3) * 10 + 5
+            const delay = seededFloat(i * 41 + 4) * 5
+            return (
+                <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-white/40 rounded-full"
+                    initial={{ x, y, opacity: 0 }}
+                    animate={{ y: ['0%', '100%'], opacity: [0, 1, 0] }}
+                    transition={{ duration, repeat: Infinity, ease: 'linear', delay }}
+                />
+            )
+        })}
+    </div>
+)
+
+const OrnamentDecoration = ({ style }: { style: string }) => {
+    if (style === 'minimal') return null;
+    return (
+        <div className="absolute inset-0 pointer-events-none opacity-[0.07] mix-blend-multiply">
+            {/* Standard floral ornament corners */}
+            <img src="/assets/ornament.png" alt="" className="absolute top-4 left-4 w-24 h-24 rotate-[-90deg]" />
+            <img src="/assets/ornament.png" alt="" className="absolute top-4 right-4 w-24 h-24" />
+            <img src="/assets/ornament.png" alt="" className="absolute bottom-4 left-4 w-24 h-24 rotate-[180deg]" />
+            <img src="/assets/ornament.png" alt="" className="absolute bottom-4 right-4 w-24 h-24 rotate-[90deg]" />
+        </div>
+    )
+}
+
+// ── Theme Context ──
+export const ThemeContext = createContext<InvitationTheme>(DEFAULT_THEME)
+export const useTheme = () => useContext(ThemeContext)
+
+// Style-specific layout wrappers
+function themeVars(t: InvitationTheme) {
+    return {
+        '--p': t.primaryColor,
+        '--bg': t.backgroundColor,
+        '--text': t.textColor,
+        '--sec': t.secondaryColor,
+    } as React.CSSProperties
+}
 
 // ---- Block Components ----
 
@@ -17,40 +74,168 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
     const { groomName, brideName, weddingDate, subtitle } = block.props as {
         groomName?: string; brideName?: string; weddingDate?: string; subtitle?: string
     }
+    const theme = useTheme()
+    const isCinematic = theme.style === 'cinematic'
+    const isModern = theme.style === 'modern'
+    const isTraditional = theme.style === 'traditional'
+
     return (
         <motion.div
-            className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6 text-center bg-gradient-to-b from-[#f5e6d3] via-[#fdfaf7] to-[#fdfaf7] overflow-hidden"
+            className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 text-center overflow-hidden"
+            style={{
+                background: isCinematic
+                    ? `linear-gradient(to bottom, #050505, #1a1a1a)`
+                    : isModern
+                        ? `linear-gradient(135deg, #0f0c29, #302b63, #24243e)`
+                        : isTraditional
+                            ? `linear-gradient(to bottom, #fdf5e6, #fde8c8)`
+                            : `linear-gradient(to bottom, ${theme.secondaryColor}, ${theme.backgroundColor})`,
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 1.2 }}
         >
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-[#c9a96e]/10 blur-2xl" />
-            <motion.div
-                className="text-4xl sm:text-5xl mb-4"
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-            >
-                💐
-            </motion.div>
-            <p className="text-[10px] sm:text-xs tracking-widest text-[#c9a96e]/60 uppercase mb-3 sm:mb-4">
-                {subtitle || 'Trân trọng kính mời'}
-            </p>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2c1810] mb-1 break-words" style={{ fontFamily: 'Playfair Display, serif' }}>
-                {groomName || 'Chú Rể'}
-            </h1>
-            <div className="flex items-center justify-center gap-2 sm:gap-3 my-2">
-                <div className="w-8 sm:w-12 h-px bg-[#c9a96e]/30" />
-                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-[#c9a96e] fill-[#c9a96e] animate-heartbeat" />
-                <div className="w-8 sm:w-12 h-px bg-[#c9a96e]/30" />
-            </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2c1810] break-words" style={{ fontFamily: 'Playfair Display, serif' }}>
-                {brideName || 'Cô Dâu'}
-            </h1>
-            {weddingDate && (
-                <p className="mt-3 sm:mt-4 text-[#c9a96e] font-medium text-base sm:text-lg">
-                    {new Date(weddingDate).toLocaleDateString('vi-VN', { day: '2-digit', month: 'long', year: 'numeric' })}
-                </p>
+            {/* Background Texture Overlay */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
+                style={{ backgroundImage: 'url(/assets/texture.png)', backgroundSize: 'cover' }} />
+
+            {/* Premium Decorations */}
+            <OrnamentDecoration style={theme.style} />
+            {(isCinematic || isModern) && <FloatingParticles />}
+
+            {/* Style-specific decorations */}
+            {isCinematic && (
+                <>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+                    <div className="absolute top-2 left-0 right-0 flex justify-center gap-1.5 opacity-20">
+                        {Array.from({ length: 16 }).map((_, i) => (
+                            <div key={i} className="w-4 h-3 border border-yellow-400/40 rounded-sm" />
+                        ))}
+                    </div>
+                </>
             )}
+            {isModern && (
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+            )}
+            {isTraditional && (
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 text-xs tracking-[8px] text-red-700/50 font-bold">
+                    ❧ THIỆP CƯỚI ❧
+                </div>
+            )}
+
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[120px] opacity-10"
+                style={{ background: theme.primaryColor }} />
+
+            <div className="relative z-10">
+                <motion.div
+                    className="text-5xl sm:text-6xl mb-6 flex justify-center items-center gap-4"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', damping: 15 }}
+                >
+                    <div className="w-12 h-px bg-current opacity-20" />
+                    <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                        {isCinematic ? '�️' : isTraditional ? '🏮' : isModern ? '�' : '�️'}
+                    </motion.div>
+                    <div className="w-12 h-px bg-current opacity-20" />
+                </motion.div>
+
+                <motion.p
+                    className={`text-[10px] sm:text-xs tracking-[5px] uppercase mb-6 sm:mb-8 font-medium`}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    style={{ color: isTraditional ? '#c0392b' : `${theme.primaryColor}cc` }}
+                >
+                    {subtitle || (isCinematic ? 'A Cinematic Wedding Story' : 'Trân trọng kính mời')}
+                </motion.p>
+
+                <div className="flex flex-col items-center gap-2 sm:gap-4">
+                    <motion.h1
+                        className="text-4xl sm:text-5xl md:text-7xl font-bold break-words leading-tight"
+                        initial={{ y: 30, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        style={{
+                            fontFamily: `${theme.fontTitle}, serif`,
+                            color: (isCinematic || isModern) ? 'white' : theme.textColor,
+                            textShadow: (isCinematic || isModern) ? '0 4px 12px rgba(0,0,0,0.3)' : 'none'
+                        }}
+                    >
+                        {groomName}
+                    </motion.h1>
+
+                    <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.7, type: 'spring' }}
+                        className="my-2"
+                    >
+                        <Heart
+                            className={`w-8 h-8 ${isTraditional ? 'animate-heartbeat text-[#c0392b]' : ''}`}
+                            style={{
+                                fill: isTraditional ? '#c0392b' : theme.primaryColor,
+                                color: isTraditional ? '#c0392b' : theme.primaryColor,
+                                filter: (isCinematic || isModern) ? 'drop-shadow(0 0 10px var(--p))' : 'none'
+                            }}
+                        />
+                    </motion.div>
+
+                    <motion.h1
+                        className="text-4xl sm:text-5xl md:text-7xl font-bold break-words leading-tight"
+                        initial={{ y: 30, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.9 }}
+                        style={{
+                            fontFamily: `${theme.fontTitle}, serif`,
+                            color: (isCinematic || isModern) ? 'white' : theme.textColor,
+                            textShadow: (isCinematic || isModern) ? '0 4px 12px rgba(0,0,0,0.3)' : 'none'
+                        }}
+                    >
+                        {brideName}
+                    </motion.h1>
+                </div>
+
+                {weddingDate && (
+                    <motion.div
+                        className="mt-10 sm:mt-12 inline-block px-8 py-3 rounded-full border backdrop-blur-sm"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1.2 }}
+                        style={{
+                            borderColor: `${theme.primaryColor}30`,
+                            background: isCinematic || isModern ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+                            color: (isCinematic || isModern) ? 'white' : theme.textColor
+                        }}
+                    >
+                        <p className="text-sm sm:text-base font-medium tracking-[3px] uppercase" style={{ fontFamily: theme.fontBody }}>
+                            {new Date(weddingDate).toLocaleDateString('vi-VN', {
+                                day: 'numeric', month: 'long', year: 'numeric'
+                            })}
+                        </p>
+                    </motion.div>
+                )}
+            </div>
+
+            {/* Scroll Indicator */}
+            <motion.div
+                className="absolute bottom-10 left-1/2 -translate-x-1/2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0], y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 2 }}
+            >
+                <div className="w-6 h-10 border-2 rounded-full flex justify-center p-1.5" style={{ borderColor: `${theme.primaryColor}30` }}>
+                    <motion.div
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: theme.primaryColor }}
+                        animate={{ y: [0, 12, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                    />
+                </div>
+            </motion.div>
         </motion.div>
     )
 }
@@ -58,6 +243,8 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
 function CountdownBlock({ block }: { block: InvitationBlock }) {
     const targetDate = (block.props as { targetDate?: string }).targetDate || ''
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+    const theme = useTheme()
+    const isDark = theme.style === 'cinematic' || theme.style === 'modern'
 
     useEffect(() => {
         if (!targetDate) return
@@ -77,23 +264,50 @@ function CountdownBlock({ block }: { block: InvitationBlock }) {
     }, [targetDate])
 
     return (
-        <div className="py-8 sm:py-12 px-4 sm:px-6 bg-[#2c1810] text-white text-center">
-            <p className="text-[10px] sm:text-xs tracking-widest text-[#c9a96e]/70 uppercase mb-4 sm:mb-6">Đếm ngược đến ngày vui</p>
-            <div className="flex justify-center gap-2 sm:gap-4 md:gap-8">
+        <div className="py-12 sm:py-16 px-4 sm:px-6 text-center relative overflow-hidden"
+            style={{ background: isDark ? (theme.style === 'cinematic' ? '#0d0d0d' : '#14142b') : theme.backgroundColor }}>
+
+            <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                style={{ backgroundImage: 'url(/assets/texture.png)', backgroundSize: '200px' }} />
+
+            <motion.p
+                className="text-[10px] sm:text-xs tracking-[4px] uppercase mb-8 sm:mb-10 font-medium"
+                style={{ color: `${theme.primaryColor}cc` }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+            >
+                Đếm ngược đến ngày vui
+            </motion.p>
+
+            <div className="flex justify-center gap-3 sm:gap-6 md:gap-10 perspective-1000">
                 {[
                     { v: timeLeft.days, l: 'Ngày' },
                     { v: timeLeft.hours, l: 'Giờ' },
                     { v: timeLeft.minutes, l: 'Phút' },
                     { v: timeLeft.seconds, l: 'Giây' },
-                ].map((item) => (
-                    <div key={item.l} className="text-center">
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-xl sm:rounded-2xl mb-1 sm:mb-2">
-                            <span className="text-lg sm:text-2xl md:text-3xl font-bold text-[#c9a96e]" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                {String(item.v).padStart(2, '0')}
-                            </span>
+                ].map((item, i) => (
+                    <motion.div
+                        key={item.l}
+                        className="text-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                    >
+                        <div className="relative group">
+                            <div className="absolute -inset-1 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity"
+                                style={{ backgroundColor: theme.primaryColor }} />
+                            <div className="relative w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 flex flex-col items-center justify-center bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl overflow-hidden">
+                                <span className="text-xl sm:text-3xl md:text-4xl font-bold"
+                                    style={{ fontFamily: `${theme.fontTitle}, serif`, color: theme.primaryColor }}>
+                                    {String(item.v).padStart(2, '0')}
+                                </span>
+                            </div>
                         </div>
-                        <span className="text-[10px] sm:text-xs text-white/40">{item.l}</span>
-                    </div>
+                        <span className="text-[10px] sm:text-xs font-semibold tracking-widest mt-3 block uppercase opacity-40"
+                            style={{ color: isDark ? 'white' : theme.textColor }}>
+                            {item.l}
+                        </span>
+                    </motion.div>
                 ))}
             </div>
         </div>
@@ -102,19 +316,55 @@ function CountdownBlock({ block }: { block: InvitationBlock }) {
 
 function StoryBlock({ block }: { block: InvitationBlock }) {
     const { content } = block.props as { content?: string }
+    const theme = useTheme()
+    const isDark = theme.style === 'cinematic' || theme.style === 'modern'
+    const isTraditional = theme.style === 'traditional'
+
     return (
         <motion.div
-            className="py-8 sm:py-10 px-4 sm:px-6 bg-[#fdfaf7]"
+            className="py-16 sm:py-20 px-6 sm:px-12 relative overflow-hidden"
+            style={{
+                background: isDark
+                    ? (theme.style === 'cinematic' ? '#111' : '#1a1a2e')
+                    : theme.backgroundColor
+            }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
         >
-            <h2 className="text-center text-lg sm:text-xl font-semibold text-[#2c1810] mb-4 sm:mb-5" style={{ fontFamily: 'Playfair Display, serif' }}>
-                Câu Chuyện Của Chúng Tôi
-            </h2>
-            <p className="text-xs sm:text-sm text-[#2c1810]/60 leading-relaxed text-center whitespace-pre-wrap">
-                {content || 'Chưa có nội dung câu chuyện...'}
-            </p>
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                style={{ backgroundImage: 'url(/assets/texture.png)' }} />
+
+            <div className="max-w-2xl mx-auto relative group">
+                <div className="absolute -top-10 -left-10 w-32 h-32 opacity-10 blur-2xl rounded-full" style={{ background: theme.primaryColor }} />
+
+                <div className="text-center mb-8 relative">
+                    <OrnamentDecoration style={theme.style} />
+                    <h2 className="text-2xl sm:text-3xl font-bold"
+                        style={{ fontFamily: `${theme.fontTitle}, serif`, color: isDark ? theme.primaryColor : theme.textColor }}>
+                        {theme.style === 'cinematic' ? 'Our Story' : 'Câu Chuyện Tình Yêu'}
+                    </h2>
+                    <div className="w-16 h-1 mx-auto mt-4 rounded-full" style={{ background: theme.primaryColor }} />
+                </div>
+
+                <div className="relative">
+                    <div className="absolute -left-6 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-current to-transparent opacity-10"
+                        style={{ color: theme.primaryColor }} />
+                    <p className="text-sm sm:text-base leading-[1.8] text-center italic font-light px-4"
+                        style={{
+                            fontFamily: theme.fontBody,
+                            color: isDark ? 'rgba(255,255,255,0.7)' : `${theme.textColor}cc`
+                        }}>
+                        {content || 'Câu chuyện tình yêu của chúng tôi là một hành trình kỳ diệu của định mệnh, nơi sự tình cờ đã biến thành khoảnh khắc mãi mãi.'}
+                    </p>
+                    <div className="absolute -right-6 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-current to-transparent opacity-10"
+                        style={{ color: theme.primaryColor }} />
+                </div>
+
+                <div className="mt-8 flex justify-center text-3xl opacity-20">
+                    {isTraditional ? '✿' : '🕊️'}
+                </div>
+            </div>
         </motion.div>
     )
 }
@@ -124,20 +374,24 @@ function ScheduleBlock({ block }: { block: InvitationBlock }) {
         venue?: string; address?: string; events?: { time: string; title: string }[]
     }
     const eventList = events || []
+    const theme = useTheme()
+    const isDark = theme.style === 'cinematic' || theme.style === 'modern'
+    const bg = isDark ? (theme.style === 'cinematic' ? '#1a1a1a' : '#1a1a2e') : 'white'
 
     return (
         <motion.div
-            className="py-10 px-6 bg-white"
+            className="py-10 px-6"
+            style={{ background: bg }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
         >
             <div className="flex items-center gap-2 justify-center mb-5">
-                <Calendar className="w-5 h-5 text-[#c9a96e]" />
-                <h2 className="text-xl font-semibold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>Lịch Trình</h2>
+                <Calendar className="w-5 h-5" style={{ color: theme.primaryColor }} />
+                <h2 className="text-xl font-semibold" style={{ fontFamily: `${theme.fontTitle}, serif`, color: isDark ? theme.primaryColor : theme.textColor }}>Lịch Trình</h2>
             </div>
             {venue && (
-                <div className="flex items-center gap-2 justify-center mb-6 text-sm text-[#2c1810]/50">
+                <div className="flex items-center gap-2 justify-center mb-6 text-sm" style={{ color: isDark ? 'rgba(255,255,255,0.4)' : `${theme.textColor}60` }}>
                     <MapPin className="w-4 h-4" />
                     <span>{venue}</span>
                 </div>
@@ -152,22 +406,22 @@ function ScheduleBlock({ block }: { block: InvitationBlock }) {
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1 }}
                     >
-                        <span className="text-sm font-semibold text-[#c9a96e] w-12 text-right flex-shrink-0">{evt.time}</span>
+                        <span className="text-sm font-semibold w-12 text-right flex-shrink-0" style={{ color: theme.primaryColor }}>{evt.time}</span>
                         <div className="flex flex-col items-center flex-shrink-0">
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#c9a96e]" />
-                            {i < eventList.length - 1 && <div className="w-px h-8 bg-[#c9a96e]/20 mt-1" />}
+                            <div className="w-2.5 h-2.5 rounded-full" style={{ background: theme.primaryColor }} />
+                            {i < eventList.length - 1 && <div className="w-px h-8 mt-1" style={{ background: `${theme.primaryColor}30` }} />}
                         </div>
-                        <span className="text-sm text-[#2c1810]/70">{evt.title}</span>
+                        <span className="text-sm" style={{ color: isDark ? 'rgba(255,255,255,0.6)' : `${theme.textColor}80` }}>{evt.title}</span>
                     </motion.div>
                 ))}
             </div>
             {address && (
-                <div className="mt-6 p-3 bg-[#fdfaf7] rounded-xl text-center">
-                    <Button variant="outline" size="sm" className="h-9 text-xs border-[#c9a96e]/20 text-[#c9a96e] gap-1.5"
+                <div className="mt-6 p-3 rounded-xl text-center" style={{ background: `${theme.primaryColor}10` }}>
+                    <Button variant="outline" size="sm" className="h-9 text-xs gap-1.5"
+                        style={{ borderColor: `${theme.primaryColor}30`, color: theme.primaryColor }}
                         onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(address)}`)}
                     >
-                        <MapPin className="w-3.5 h-3.5" />
-                        Xem bản đồ
+                        <MapPin className="w-3.5 h-3.5" /> Xem bản đồ
                     </Button>
                 </div>
             )}
@@ -183,6 +437,10 @@ function RSVPBlock({ block, invitationId }: { block: InvitationBlock; invitation
     const [message, setMessage] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
+    const theme = useTheme()
+    const isCinematic = theme.style === 'cinematic'
+    const isModern = theme.style === 'modern'
+    const isDark = isCinematic || isModern
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -200,68 +458,109 @@ function RSVPBlock({ block, invitationId }: { block: InvitationBlock; invitation
                 guest_count: attending ? parseInt(guestCount) : 0,
                 message: message || null,
             })
-        } catch {
-            // silently handle - still show success to guest
-        }
+        } catch { }
         setLoading(false)
         setSubmitted(true)
         toast.success(attending ? '🎉 Cảm ơn bạn đã xác nhận tham dự!' : 'Cảm ơn bạn đã phản hồi!')
     }
 
+    const cardBg = isDark ? 'rgba(255,255,255,0.05)' : 'white'
+    const inputBg = isDark ? 'rgba(255,255,255,0.02)' : '#fdfaf7'
+
     if (submitted) {
         return (
-            <div className="py-12 px-6 bg-[#fdfaf7] text-center">
-                <div className="text-5xl mb-4">{attending ? '🎊' : '🌸'}</div>
-                <h3 className="text-xl font-semibold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                    {attending ? 'Hẹn gặp bạn tại lễ cưới!' : 'Cảm ơn bạn đã phản hồi!'}
+            <div className="py-16 px-6 text-center" style={{ background: isDark ? '#0a0a0a' : '#fdfaf7' }}>
+                <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="text-6xl mb-6">
+                    {attending ? '🎊' : '💌'}
+                </motion.div>
+                <h3 className="text-2xl font-bold mb-4"
+                    style={{ fontFamily: `${theme.fontTitle}, serif`, color: isDark ? 'white' : theme.textColor }}>
+                    {attending ? 'Rất vui được đón tiếp bạn!' : 'Cảm ơn phẩn hồi của bạn!'}
                 </h3>
-                <p className="text-sm text-[#2c1810]/50">
-                    {attending ? `Chúng tôi rất vui khi được đón bạn và ${guestCount} người thân.` : 'Chúng tôi hiểu và mong sẽ gặp lại bạn trong tương lai!'}
+                <p className="text-sm opacity-60" style={{ color: isDark ? 'white' : theme.textColor }}>
+                    {attending ? `Hẹn gặp bạn và ${guestCount} người thân tại lễ cưới.` : 'Mọi sự hiện diện tinh thần của bạn đều là món quà quý giá.'}
                 </p>
             </div>
         )
     }
 
     return (
-        <div className="py-10 px-6 bg-[#fdfaf7]">
-            <div className="text-center mb-6">
-                <Heart className="w-8 h-8 text-[#c9a96e] fill-[#c9a96e] mx-auto mb-3 animate-heartbeat" />
-                <h3 className="text-xl font-semibold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
-                    Xác Nhận Tham Dự
-                </h3>
-                {rsvpDeadline && (
-                    <p className="text-sm text-[#2c1810]/50 mt-1">
-                        Vui lòng xác nhận trước ngày {new Date(rsvpDeadline).toLocaleDateString('vi-VN')}
-                    </p>
-                )}
-            </div>
-            <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4">
-                <Input placeholder="Tên của bạn *" value={guestName} onChange={(e) => setGuestName(e.target.value)} className="h-11 border-[#c9a96e]/20 focus:border-[#c9a96e] bg-white" />
-                <div className="flex gap-3">
-                    <button type="button" onClick={() => setAttending(true)} className={`flex-1 py-3 rounded-xl border-2 text-sm font-medium transition-all ${attending === true ? 'border-[#c9a96e] bg-[#c9a96e] text-white' : 'border-[#c9a96e]/20 text-[#2c1810]/60 hover:border-[#c9a96e]/50'}`}>
-                        ✓ Sẽ tham dự
-                    </button>
-                    <button type="button" onClick={() => setAttending(false)} className={`flex-1 py-3 rounded-xl border-2 text-sm font-medium transition-all ${attending === false ? 'border-rose-400 bg-rose-50 text-rose-600' : 'border-[#c9a96e]/20 text-[#2c1810]/60 hover:border-rose-300'}`}>
-                        ✗ Không thể tham dự
-                    </button>
-                </div>
-                {attending && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-3">
-                        <div>
-                            <label className="text-xs text-[#2c1810]/50 mb-1.5 block">Số người tham dự (bao gồm bạn)</label>
-                            <div className="flex items-center gap-3">
-                                <button type="button" onClick={() => setGuestCount(String(Math.max(1, parseInt(guestCount) - 1)))} className="w-10 h-10 rounded-xl border border-[#c9a96e]/20 flex items-center justify-center text-lg text-[#c9a96e]">−</button>
-                                <div className="flex-1 h-10 flex items-center justify-center border border-[#c9a96e]/20 rounded-xl font-semibold text-[#2c1810]">{guestCount}</div>
-                                <button type="button" onClick={() => setGuestCount(String(Math.min(10, parseInt(guestCount) + 1)))} className="w-10 h-10 rounded-xl border border-[#c9a96e]/20 flex items-center justify-center text-lg text-[#c9a96e]">+</button>
-                            </div>
-                        </div>
+        <div className="py-16 px-6 sm:px-12 relative overflow-hidden"
+            style={{ background: isDark ? (theme.style === 'cinematic' ? '#0d0d0d' : '#14142b') : '#fdfbf7' }}>
+
+            <div className="max-w-md mx-auto relative">
+                <div className="absolute -right-20 -bottom-20 w-64 h-64 opacity-5 blur-[80px] rounded-full" style={{ background: theme.primaryColor }} />
+
+                <div className="text-center mb-10">
+                    <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
+                        <Heart className="w-10 h-10 mx-auto mb-4" style={{ fill: theme.primaryColor, color: theme.primaryColor }} />
                     </motion.div>
-                )}
-                <Textarea placeholder="Lời chúc hoặc yêu cầu đặc biệt (tùy chọn)" value={message} onChange={(e) => setMessage(e.target.value)} rows={3} className="border-[#c9a96e]/20 focus:border-[#c9a96e] bg-white resize-none text-sm" />
-                <Button type="submit" disabled={loading} className="w-full h-11 bg-[#c9a96e] hover:bg-[#b8925a] text-white font-medium shadow-lg shadow-[#c9a96e]/30">
-                    {loading ? 'Đang gửi...' : 'Gửi Xác Nhận'}
-                </Button>
-            </form>
+                    <h3 className="text-2xl font-bold mb-2 tracking-wide" style={{ fontFamily: `${theme.fontTitle}, serif`, color: isDark ? 'white' : theme.textColor }}>
+                        Xác Nhận Tham Dự
+                    </h3>
+                    {rsvpDeadline && (
+                        <div className="inline-block px-3 py-1 rounded-full text-[10px] tracking-[2px] uppercase opacity-40 border"
+                            style={{ color: isDark ? 'white' : theme.textColor, borderColor: 'currentColor' }}>
+                            Trước {new Date(rsvpDeadline).toLocaleDateString('vi-VN')}
+                        </div>
+                    )}
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6 bg-white/[0.03] backdrop-blur-md p-6 sm:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] uppercase tracking-[2px] opacity-40 ml-1" style={{ color: isDark ? 'white' : theme.textColor }}>Họ & Tên *</label>
+                        <Input placeholder="Tên của bạn..." value={guestName} onChange={(e) => setGuestName(e.target.value)}
+                            className="h-12 border-white/10 focus:border-primary/50 bg-white/5 rounded-2xl text-sm"
+                            style={{ backgroundColor: inputBg, color: isDark ? 'white' : theme.textColor }} />
+                    </div>
+
+                    <div className="flex gap-3">
+                        <motion.button type="button" whileTap={{ scale: 0.95 }} onClick={() => setAttending(true)}
+                            className={`flex-1 py-4 rounded-2xl border transition-all text-xs font-bold uppercase tracking-widest ${attending === true ? 'shadow-lg' : 'opacity-50 hover:opacity-100'}`}
+                            style={{
+                                backgroundColor: attending === true ? theme.primaryColor : 'transparent',
+                                borderColor: attending === true ? theme.primaryColor : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'),
+                                color: attending === true ? (isDark ? 'black' : 'white') : (isDark ? 'white' : theme.textColor)
+                            }}>
+                            Sẽ tham dự
+                        </motion.button>
+                        <motion.button type="button" whileTap={{ scale: 0.95 }} onClick={() => setAttending(false)}
+                            className={`flex-1 py-4 rounded-2xl border transition-all text-xs font-bold uppercase tracking-widest ${attending === false ? 'shadow-lg' : 'opacity-50 hover:opacity-100'}`}
+                            style={{
+                                backgroundColor: attending === false ? '#f43f5e' : 'transparent',
+                                borderColor: attending === false ? '#f43f5e' : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'),
+                                color: attending === false ? 'white' : (isDark ? 'white' : theme.textColor)
+                            }}>
+                            Bận mất rồi
+                        </motion.button>
+                    </div>
+
+                    {attending && (
+                        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 pt-2">
+                            <div className="space-y-3">
+                                <label className="text-[10px] uppercase tracking-[2px] opacity-40 ml-1" style={{ color: isDark ? 'white' : theme.textColor }}>Số người tham dự</label>
+                                <div className="flex items-center gap-4 bg-white/5 rounded-2xl p-1 border border-white/5" style={{ backgroundColor: inputBg }}>
+                                    <button type="button" onClick={() => setGuestCount(String(Math.max(1, parseInt(guestCount) - 1)))} className="w-10 h-10 rounded-xl flex items-center justify-center text-xl opacity-40 hover:opacity-100 transition-opacity" style={{ color: isDark ? 'white' : theme.textColor }}>−</button>
+                                    <div className="flex-1 text-center font-bold text-lg" style={{ color: isDark ? 'white' : theme.textColor }}>{guestCount}</div>
+                                    <button type="button" onClick={() => setGuestCount(String(Math.min(10, parseInt(guestCount) + 1)))} className="w-10 h-10 rounded-xl flex items-center justify-center text-xl opacity-40 hover:opacity-100 transition-opacity" style={{ color: isDark ? 'white' : theme.textColor }}>+</button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] uppercase tracking-[2px] opacity-40 ml-1" style={{ color: isDark ? 'white' : theme.textColor }}>Lời chúc (tùy chọn)</label>
+                        <Textarea placeholder="Vài lời gửi gắm..." value={message} onChange={(e) => setMessage(e.target.value)} rows={3}
+                            className="border-white/10 focus:border-primary/50 bg-white/5 rounded-2xl text-sm p-4 resize-none"
+                            style={{ backgroundColor: inputBg, color: isDark ? 'white' : theme.textColor }} />
+                    </div>
+
+                    <Button type="submit" disabled={loading} className="w-full h-14 rounded-2xl font-bold uppercase tracking-[4px] mt-4 shadow-2xl transition-transform active:scale-95"
+                        style={{ backgroundColor: theme.primaryColor, color: (isCinematic || isModern) ? 'black' : 'white', opacity: loading ? 0.7 : 1 }}>
+                        {loading ? 'Đang gửi...' : 'Gửi Phản Hồi'}
+                    </Button>
+                </form>
+            </div>
         </div>
     )
 }
@@ -271,6 +570,7 @@ function GuestbookBlock({ invitationId }: { invitationId: string }) {
     const [content, setContent] = useState('')
     const [messages, setMessages] = useState<{ author_name: string; content: string; created_at: string }[]>([])
     const [loading, setLoading] = useState(false)
+    const [nowMs, setNowMs] = useState(0)
 
     useEffect(() => {
         async function loadMessages() {
@@ -285,6 +585,15 @@ function GuestbookBlock({ invitationId }: { invitationId: string }) {
         }
         loadMessages()
     }, [invitationId])
+
+    useEffect(() => {
+        const t = setTimeout(() => setNowMs(Date.now()), 0)
+        const id = setInterval(() => setNowMs(Date.now()), 60_000)
+        return () => {
+            clearTimeout(t)
+            clearInterval(id)
+        }
+    }, [])
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -308,7 +617,8 @@ function GuestbookBlock({ invitationId }: { invitationId: string }) {
     }
 
     const timeAgo = (dateStr: string) => {
-        const diff = Date.now() - new Date(dateStr).getTime()
+        if (!nowMs) return ''
+        const diff = nowMs - new Date(dateStr).getTime()
         const mins = Math.floor(diff / 60000)
         if (mins < 1) return 'Vừa xong'
         if (mins < 60) return `${mins} phút trước`
@@ -358,14 +668,19 @@ function GalleryBlock({ block }: { block: InvitationBlock }) {
     const [lightbox, setLightbox] = useState<number | null>(null)
     const [shuffledOrder, setShuffledOrder] = useState<number[]>([])
     const touchStartX = useRef(0)
-    const touchDeltaX = useRef(0)
+    const [touchDeltaX, setTouchDeltaX] = useState(0)
     const [swiping, setSwiping] = useState(false)
 
     // Initialize shuffled order
     useEffect(() => {
-        if (images && images.length > 0) {
-            setShuffledOrder(images.map((_, i) => i))
-        }
+        const t = setTimeout(() => {
+            if (images && images.length > 0) {
+                setShuffledOrder(images.map((_, i) => i))
+            } else {
+                setShuffledOrder([])
+            }
+        }, 0)
+        return () => clearTimeout(t)
     }, [images])
 
     // Desktop: auto-shuffle every 5s
@@ -386,24 +701,24 @@ function GalleryBlock({ block }: { block: InvitationBlock }) {
     // Mobile: touch handlers for swipe
     const handleTouchStart = (e: React.TouchEvent) => {
         touchStartX.current = e.touches[0].clientX
-        touchDeltaX.current = 0
+        setTouchDeltaX(0)
         setSwiping(true)
     }
 
     const handleTouchMove = (e: React.TouchEvent) => {
-        touchDeltaX.current = e.touches[0].clientX - touchStartX.current
+        setTouchDeltaX(e.touches[0].clientX - touchStartX.current)
     }
 
     const handleTouchEnd = () => {
         setSwiping(false)
         if (!images) return
         const threshold = 50
-        if (touchDeltaX.current < -threshold && activeIndex < images.length - 1) {
+        if (touchDeltaX < -threshold && activeIndex < images.length - 1) {
             setActiveIndex(prev => prev + 1)
-        } else if (touchDeltaX.current > threshold && activeIndex > 0) {
+        } else if (touchDeltaX > threshold && activeIndex > 0) {
             setActiveIndex(prev => prev - 1)
         }
-        touchDeltaX.current = 0
+        setTouchDeltaX(0)
     }
 
     if (!images || images.length === 0) {
@@ -434,7 +749,7 @@ function GalleryBlock({ block }: { block: InvitationBlock }) {
                     <div
                         className="flex transition-transform duration-300 ease-out"
                         style={{
-                            transform: `translateX(calc(-${activeIndex * 100}% + ${swiping ? touchDeltaX.current : 0}px))`,
+                            transform: `translateX(calc(-${activeIndex * 100}% + ${swiping ? touchDeltaX : 0}px))`,
                             ...(swiping ? { transition: 'none' } : {})
                         }}
                     >
@@ -622,7 +937,7 @@ function TextBlock({ block }: { block: InvitationBlock }) {
 }
 
 // ---- Dynamic Block Renderer ----
-function RenderBlock({ block, invitationId }: { block: InvitationBlock; invitationId: string }) {
+export function RenderBlock({ block, invitationId }: { block: InvitationBlock; invitationId: string }) {
     switch (block.type) {
         case 'hero': return <HeroBlock block={block} />
         case 'countdown': return <CountdownBlock block={block} />
@@ -645,6 +960,7 @@ export default function InvitationPublicPage() {
     const slug = params.slug as string
 
     const [blocks, setBlocks] = useState<InvitationBlock[]>([])
+    const [theme, setTheme] = useState<import('@/types').InvitationTheme>(DEFAULT_THEME)
     const [invitationId, setInvitationId] = useState<string>('')
     const [invTitle, setInvTitle] = useState('')
     const [loading, setLoading] = useState(true)
@@ -655,7 +971,6 @@ export default function InvitationPublicPage() {
             try {
                 const supabase = createClient()
 
-                // First get the invitation
                 const { data: invData, error: invError } = await supabase
                     .from('invitations')
                     .select('*')
@@ -663,7 +978,6 @@ export default function InvitationPublicPage() {
                     .single()
 
                 if (invError || !invData) {
-                    console.error('Invitation not found:', invError)
                     setNotFound(true)
                     return
                 }
@@ -671,22 +985,20 @@ export default function InvitationPublicPage() {
                 setInvitationId(invData.id)
                 setInvTitle(invData.title)
 
-                // Then get the design separately
-                const { data: designData, error: designError } = await supabase
+                const { data: designData } = await supabase
                     .from('invitation_designs')
                     .select('*')
                     .eq('invitation_id', invData.id)
                     .single()
 
-                if (designError) {
-                    console.error('Design not found:', designError)
+                if (designData?.theme) {
+                    setTheme(designData.theme as import('@/types').InvitationTheme)
                 }
 
                 if (designData?.blocks) {
                     const blockArr = designData.blocks as InvitationBlock[]
                     const sorted = [...blockArr].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
                     setBlocks(sorted)
-                    console.log('Loaded blocks:', sorted.map(b => `${b.order}: ${b.type}`))
                 }
             } catch (err) {
                 console.error('Load invitation error:', err)
@@ -709,10 +1021,10 @@ export default function InvitationPublicPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#fdfaf7]">
+            <div className="min-h-screen flex items-center justify-center" style={{ background: DEFAULT_THEME.backgroundColor }}>
                 <div className="text-center">
-                    <Loader2 className="w-8 h-8 animate-spin text-[#c9a96e] mx-auto mb-4" />
-                    <p className="text-sm text-[#2c1810]/50">Đang tải thiệp...</p>
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" style={{ color: DEFAULT_THEME.primaryColor }} />
+                    <p className="text-sm" style={{ color: `${DEFAULT_THEME.textColor}60` }}>Đang tải thiệp...</p>
                 </div>
             </div>
         )
@@ -728,45 +1040,53 @@ export default function InvitationPublicPage() {
                     </h1>
                     <p className="text-sm text-[#2c1810]/50 mb-6">Thiệp này không tồn tại hoặc đã bị xóa.</p>
                     <Button asChild className="bg-[#c9a96e] hover:bg-[#b8925a] text-white">
-                        <a href="/">Về trang chủ</a>
+                        <Link href="/">Về trang chủ</Link>
                     </Button>
                 </div>
             </div>
         )
     }
 
+    const isDarkTheme = theme.style === 'cinematic' || theme.style === 'modern'
+    const outerBg = isDarkTheme ? '#0a0a0a' : `${theme.secondaryColor}30`
+
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#f5e6d3]/30 via-[#fdfaf7] to-[#f5e6d3]/20">
-            <div className="w-full max-w-2xl mx-auto min-h-screen bg-white sm:shadow-2xl sm:my-0">
-                {/* Render all blocks in order */}
-                {blocks.map((block) => (
-                    <RenderBlock key={block.id} block={block} invitationId={invitationId} />
-                ))}
+        <ThemeContext.Provider value={theme}>
+            <div className="min-h-screen" style={{ background: outerBg }}>
+                <div className="w-full max-w-2xl mx-auto min-h-screen sm:shadow-2xl sm:my-0"
+                    style={{ background: isDarkTheme ? '#111' : 'white' }}>
+                    {blocks.map((block) => (
+                        <RenderBlock key={block.id} block={block} invitationId={invitationId} />
+                    ))}
 
-                {/* Share buttons after the first Hero block */}
-                {blocks.length > 0 && blocks[0].type === 'hero' && (
-                    <div className="flex justify-center gap-3 -mt-4 mb-4 relative z-10">
-                        <Button variant="outline" size="sm" className="h-9 gap-1.5 border-[#c9a96e]/20 text-[#c9a96e] hover:bg-[#c9a96e]/5 text-xs" onClick={handleShare}>
-                            <Share2 className="w-3.5 h-3.5" /> Chia sẻ
-                        </Button>
-                        <Button variant="outline" size="sm" className="h-9 gap-1.5 border-[#c9a96e]/20 text-[#c9a96e] hover:bg-[#c9a96e]/5 text-xs">
-                            <QrCode className="w-3.5 h-3.5" /> QR Code
-                        </Button>
+                    {blocks.length > 0 && blocks[0].type === 'hero' && (
+                        <div className="flex justify-center gap-3 -mt-4 mb-4 relative z-10">
+                            <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs"
+                                style={{ borderColor: `${theme.primaryColor}30`, color: theme.primaryColor }}
+                                onClick={handleShare}>
+                                <Share2 className="w-3.5 h-3.5" /> Chia sẻ
+                            </Button>
+                            <Button variant="outline" size="sm" className="h-9 gap-1.5 text-xs"
+                                style={{ borderColor: `${theme.primaryColor}30`, color: theme.primaryColor }}>
+                                <QrCode className="w-3.5 h-3.5" /> QR Code
+                            </Button>
+                        </div>
+                    )}
+
+                    {/* Footer */}
+                    <div className="py-8 px-6 text-center" style={{ background: isDarkTheme ? '#050505' : theme.textColor }}>
+                        <Heart className="w-6 h-6 mx-auto mb-3 animate-heartbeat"
+                            style={{ fill: theme.primaryColor, color: theme.primaryColor }} />
+                        <p className="text-white/50 text-xs">
+                            Made with ❤️ by{' '}
+                            <Link href="/" className="hover:underline" style={{ color: theme.primaryColor }}>WeddingCard.vn</Link>
+                        </p>
+                        <p className="text-white/30 text-xs mt-1">
+                            <Link href="/" className="hover:text-white/60 transition-colors">Tạo thiệp cưới của bạn →</Link>
+                        </p>
                     </div>
-                )}
-
-                {/* Footer */}
-                <div className="py-8 px-6 bg-[#2c1810] text-center">
-                    <Heart className="w-6 h-6 fill-[#c9a96e] text-[#c9a96e] mx-auto mb-3 animate-heartbeat" />
-                    <p className="text-white/50 text-xs">
-                        Made with ❤️ by{' '}
-                        <a href="/" className="text-[#c9a96e] hover:underline">WeddingCard.vn</a>
-                    </p>
-                    <p className="text-white/30 text-xs mt-1">
-                        <a href="/" className="hover:text-[#c9a96e] transition-colors">Tạo thiệp cưới của bạn →</a>
-                    </p>
                 </div>
             </div>
-        </div>
+        </ThemeContext.Provider>
     )
 }

@@ -17,11 +17,12 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import type { InvitationBlock, BlockType } from '@/types'
-import { BLOCK_TEMPLATES } from '@/lib/templates'
+import { BLOCK_TEMPLATES, DEFAULT_THEME } from '@/lib/templates'
 import { loadDesignBlocks, saveDesignBlocks, getInvitationById } from '@/lib/supabase/api'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
+import { RenderBlock, ThemeContext } from '@/app/[slug]/page'
 
 const BLOCK_META: Record<BlockType, { label: string; icon: React.ElementType; color: string; bg: string }> = {
     hero: { label: 'Tiêu Đề Chính', icon: Heart, color: 'text-rose-500', bg: 'bg-rose-50' },
@@ -41,6 +42,95 @@ const ADD_BLOCKS: BlockType[] = ['hero', 'countdown', 'story', 'gallery', 'sched
 interface BlockEditorProps {
     block: InvitationBlock
     onChange: (updated: InvitationBlock) => void
+}
+
+function GalleryEditor({
+    images,
+    onChangeImages,
+}: {
+    images: string[]
+    onChangeImages: (next: string[]) => void
+}) {
+    const [uploading, setUploading] = useState(false)
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (!files || files.length === 0) return
+        setUploading(true)
+        try {
+            const supabase = createClient()
+            const newImages = [...images]
+            for (const file of Array.from(files)) {
+                const ext = file.name.split('.').pop()
+                const path = `gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+                const { error } = await supabase.storage.from('wedding-images').upload(path, file)
+                if (error) {
+                    toast.error(`Lỗi upload: ${file.name}`)
+                    continue
+                }
+                const { data: urlData } = supabase.storage.from('wedding-images').getPublicUrl(path)
+                newImages.push(urlData.publicUrl)
+            }
+            onChangeImages(newImages)
+            toast.success(`Đã thêm ${files.length} ảnh!`)
+        } catch {
+            toast.error('Upload ảnh thất bại.')
+        } finally {
+            setUploading(false)
+            e.target.value = ''
+        }
+    }
+
+    const removeImage = (index: number) => {
+        onChangeImages(images.filter((_, i) => i !== index))
+    }
+
+    const addImageUrl = () => {
+        const url = prompt('Nhập URL ảnh:')
+        if (url) onChangeImages([...images, url])
+    }
+
+    return (
+        <div className="space-y-3">
+            <Label className="text-xs">Album Ảnh ({images.length} ảnh)</Label>
+
+            {/* Image thumbnails */}
+            {images.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                    {images.map((url, i) => (
+                        <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-[#c9a96e]/10 group">
+                            <img src={url} alt="" className="w-full h-full object-cover" />
+                            <button
+                                onClick={() => removeImage(i)}
+                                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                <X className="w-3 h-3" />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Upload buttons */}
+            <div className="flex gap-2">
+                <label className="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg border border-dashed border-[#c9a96e]/30 text-xs text-[#c9a96e] cursor-pointer hover:bg-[#c9a96e]/5 transition-colors">
+                    <Upload className="w-3.5 h-3.5" />
+                    {uploading ? 'Đang tải...' : 'Tải ảnh lên'}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handleImageUpload}
+                        disabled={uploading}
+                    />
+                </label>
+                <Button variant="outline" size="sm" onClick={addImageUrl} className="h-9 text-xs border-[#c9a96e]/20">
+                    <Plus className="w-3.5 h-3.5 mr-1" /> URL
+                </Button>
+            </div>
+        </div>
+    )
 }
 
 function BlockEditor({ block, onChange }: BlockEditorProps) {
@@ -120,86 +210,11 @@ function BlockEditor({ block, onChange }: BlockEditorProps) {
             )
         case 'gallery': {
             const images: string[] = block.props.images || []
-            const [uploading, setUploading] = useState(false)
-
-            const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-                const files = e.target.files
-                if (!files || files.length === 0) return
-                setUploading(true)
-                try {
-                    const supabase = createClient()
-                    const newImages = [...images]
-                    for (const file of Array.from(files)) {
-                        const ext = file.name.split('.').pop()
-                        const path = `gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-                        const { error } = await supabase.storage.from('wedding-images').upload(path, file)
-                        if (error) {
-                            toast.error(`Lỗi upload: ${file.name}`)
-                            continue
-                        }
-                        const { data: urlData } = supabase.storage.from('wedding-images').getPublicUrl(path)
-                        newImages.push(urlData.publicUrl)
-                    }
-                    updateProp('images', newImages)
-                    toast.success(`Đã thêm ${files.length} ảnh!`)
-                } catch {
-                    toast.error('Upload ảnh thất bại.')
-                } finally {
-                    setUploading(false)
-                    e.target.value = ''
-                }
-            }
-
-            const removeImage = (index: number) => {
-                const newImages = images.filter((_, i) => i !== index)
-                updateProp('images', newImages)
-            }
-
-            const addImageUrl = () => {
-                const url = prompt('Nhập URL ảnh:')
-                if (url) updateProp('images', [...images, url])
-            }
-
             return (
-                <div className="space-y-3">
-                    <Label className="text-xs">Album Ảnh ({images.length} ảnh)</Label>
-
-                    {/* Image thumbnails */}
-                    {images.length > 0 && (
-                        <div className="grid grid-cols-3 gap-2">
-                            {images.map((url, i) => (
-                                <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-[#c9a96e]/10 group">
-                                    <img src={url} alt="" className="w-full h-full object-cover" />
-                                    <button
-                                        onClick={() => removeImage(i)}
-                                        className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Upload buttons */}
-                    <div className="flex gap-2">
-                        <label className="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg border border-dashed border-[#c9a96e]/30 text-xs text-[#c9a96e] cursor-pointer hover:bg-[#c9a96e]/5 transition-colors">
-                            <Upload className="w-3.5 h-3.5" />
-                            {uploading ? 'Đang tải...' : 'Tải ảnh lên'}
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                className="hidden"
-                                onChange={handleImageUpload}
-                                disabled={uploading}
-                            />
-                        </label>
-                        <Button variant="outline" size="sm" onClick={addImageUrl} className="h-9 text-xs border-[#c9a96e]/20">
-                            <Plus className="w-3.5 h-3.5 mr-1" /> URL
-                        </Button>
-                    </div>
-                </div>
+                <GalleryEditor
+                    images={images}
+                    onChangeImages={(next) => updateProp('images', next)}
+                />
             )
         }
         case 'map':
@@ -218,176 +233,7 @@ function BlockEditor({ block, onChange }: BlockEditorProps) {
     }
 }
 
-// ---- Live Preview Components ----
-function PreviewHero({ block }: { block: InvitationBlock }) {
-    return (
-        <div className="py-12 px-6 text-center bg-gradient-to-b from-[#fdfaf7] to-[#f5e6d3]">
-            <div className="text-4xl mb-4">💐</div>
-            <p className="text-xs tracking-widest text-[#c9a96e]/60 uppercase mb-3">{block.props.subtitle || 'Trân trọng kính mời'}</p>
-            <h2 className="text-2xl font-bold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                {block.props.groomName || 'Chú Rể'} <span className="text-[#c9a96e]">♥</span> {block.props.brideName || 'Cô Dâu'}
-            </h2>
-            {block.props.weddingDate && (
-                <p className="text-sm text-[#c9a96e] font-medium mt-2">
-                    {new Date(block.props.weddingDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                </p>
-            )}
-        </div>
-    )
-}
-
-function PreviewCountdown({ block }: { block: InvitationBlock }) {
-    const target = block.props.targetDate ? new Date(block.props.targetDate) : new Date('2025-12-12')
-    const now = new Date()
-    const diff = Math.max(0, target.getTime() - now.getTime())
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-
-    return (
-        <div className="py-8 px-6 bg-[#2c1810] text-white text-center">
-            <p className="text-xs tracking-widest text-[#c9a96e]/70 uppercase mb-4">Đếm ngược đến ngày vui</p>
-            <div className="flex justify-center gap-4">
-                {[{ v: days, l: 'Ngày' }, { v: hours, l: 'Giờ' }, { v: mins, l: 'Phút' }].map((item) => (
-                    <div key={item.l} className="text-center">
-                        <div className="text-3xl font-bold text-[#c9a96e]" style={{ fontFamily: 'Playfair Display, serif' }}>
-                            {String(item.v).padStart(2, '0')}
-                        </div>
-                        <div className="text-xs text-white/40 mt-1">{item.l}</div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-}
-
-function PreviewSchedule({ block }: { block: InvitationBlock }) {
-    const events = (block.props.events as Array<{ time: string; title: string }>) || []
-    return (
-        <div className="py-8 px-6 bg-white">
-            <h3 className="text-center text-lg font-semibold text-[#2c1810] mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>Lịch Trình</h3>
-            {block.props.venue && <p className="text-center text-sm text-[#c9a96e] mb-4">📍 {block.props.venue}</p>}
-            <div className="space-y-3">
-                {events.map((evt, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                        <span className="text-sm font-medium text-[#c9a96e] w-12 text-right flex-shrink-0">{evt.time}</span>
-                        <div className="w-px h-8 bg-[#c9a96e]/20 flex-shrink-0" />
-                        <span className="text-sm text-[#2c1810]">{evt.title}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-}
-
-function PreviewRSVP() {
-    return (
-        <div className="py-8 px-6 bg-[#fdfaf7]">
-            <h3 className="text-center text-lg font-semibold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>Xác Nhận Tham Dự</h3>
-            <div className="space-y-3 max-w-sm mx-auto">
-                <Input placeholder="Tên của bạn" className="h-9 text-sm border-[#c9a96e]/20" readOnly />
-                <Input placeholder="Số điện thoại (tùy chọn)" className="h-9 text-sm border-[#c9a96e]/20" readOnly />
-                <div className="flex gap-2">
-                    <Button size="sm" className="flex-1 bg-[#c9a96e] text-white text-xs h-9">✓ Tôi sẽ tham dự</Button>
-                    <Button size="sm" variant="outline" className="flex-1 text-xs h-9 border-[#c9a96e]/20">✗ Không thể tham dự</Button>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-function PreviewGuestbook() {
-    return (
-        <div className="py-8 px-6 bg-white">
-            <h3 className="text-center text-lg font-semibold text-[#2c1810] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>❤️ Lời Chúc Mừng</h3>
-            <div className="space-y-3 max-w-sm mx-auto">
-                <div className="bg-[#fdfaf7] rounded-xl p-3 border border-[#c9a96e]/10">
-                    <p className="text-sm text-[#2c1810]/70">&ldquo;Chúc mừng hai bạn! Sống vui, sống khỏe, sống hạnh phúc bên nhau mãi mãi! 🎉&rdquo;</p>
-                    <p className="text-xs text-[#c9a96e] mt-2">— Bạn Thân</p>
-                </div>
-                <Textarea placeholder="Để lại lời chúc của bạn..." rows={2} className="text-sm resize-none border-[#c9a96e]/20" readOnly />
-                <Button size="sm" className="w-full bg-[#c9a96e] text-white text-xs h-9">Gửi Lời Chúc</Button>
-            </div>
-        </div>
-    )
-}
-
-function PreviewGift({ block }: { block: InvitationBlock }) {
-    return (
-        <div className="py-8 px-6 bg-[#fdfaf7] text-center">
-            <div className="text-3xl mb-3">🎁</div>
-            <h3 className="text-lg font-semibold text-[#2c1810] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Thông Tin Mừng Cưới</h3>
-            <div className="glass-card rounded-xl p-4 max-w-xs mx-auto text-left space-y-2">
-                <p className="text-xs text-[#2c1810]/50">Ngân hàng: <span className="font-medium text-[#2c1810]">{block.props.bankName || 'Vietcombank'}</span></p>
-                <p className="text-xs text-[#2c1810]/50">Số TK: <span className="font-medium text-[#2c1810] tracking-wider">{block.props.accountNumber || '012 345 6789'}</span></p>
-                <p className="text-xs text-[#2c1810]/50">Tên: <span className="font-medium text-[#2c1810]">{block.props.accountName || 'NGUYEN VAN A'}</span></p>
-            </div>
-        </div>
-    )
-}
-
-function PreviewText({ block }: { block: InvitationBlock }) {
-    return (
-        <div className="py-8 px-6 bg-white">
-            <p className="text-sm text-[#2c1810]/70 leading-relaxed text-center whitespace-pre-wrap">{block.props.content}</p>
-        </div>
-    )
-}
-
-function BlockPreview({ block }: { block: InvitationBlock }) {
-    switch (block.type) {
-        case 'hero': return <PreviewHero block={block} />
-        case 'countdown': return <PreviewCountdown block={block} />
-        case 'schedule': return <PreviewSchedule block={block} />
-        case 'rsvp': return <PreviewRSVP />
-        case 'guestbook': return <PreviewGuestbook />
-        case 'gift': return <PreviewGift block={block} />
-        case 'text': return <PreviewText block={block} />
-        case 'story': return (
-            <div className="py-8 px-6 bg-[#fdfaf7]">
-                <h3 className="text-center text-lg font-semibold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>Câu Chuyện Của Chúng Tôi</h3>
-                <p className="text-sm text-[#2c1810]/60 text-center leading-relaxed">{block.props.story}</p>
-            </div>
-        )
-        case 'gallery': {
-            const imgs: string[] = block.props.images || []
-            return (
-                <div className="py-8 px-6 bg-white">
-                    <h3 className="text-center text-lg font-semibold text-[#2c1810] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>Album Ảnh Cưới</h3>
-                    {imgs.length > 0 ? (
-                        <div className="grid grid-cols-3 gap-1.5 max-w-xs mx-auto">
-                            {imgs.map((url, i) => (
-                                <div key={i} className="aspect-square rounded-lg overflow-hidden bg-[#c9a96e]/10">
-                                    <img src={url} alt="" className="w-full h-full object-cover" />
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-3 gap-1.5 max-w-xs mx-auto">
-                            {Array.from({ length: 6 }).map((_, i) => (
-                                <div key={i} className="aspect-square rounded-lg bg-[#c9a96e]/10 flex items-center justify-center">
-                                    <Image className="w-5 h-5 text-[#c9a96e]/40" />
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )
-        }
-        case 'map': return (
-            <div className="py-8 px-6 bg-white text-center">
-                <h3 className="text-lg font-semibold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>📍 Địa Điểm</h3>
-                <div className="h-36 bg-[#c9a96e]/10 rounded-xl flex items-center justify-center">
-                    <div className="text-center">
-                        <MapPin className="w-8 h-8 text-[#c9a96e] mx-auto mb-2" />
-                        <p className="text-xs text-[#2c1810]/50">{block.props.mapAddress || 'Địa chỉ sẽ hiển thị tại đây'}</p>
-                    </div>
-                </div>
-            </div>
-        )
-        default: return <div className="py-4 px-6 text-center text-sm text-muted-foreground">Block đang được cập nhật...</div>
-    }
-}
+// Removed Preview Components
 
 
 // ---- MAIN BUILDER ----
@@ -397,6 +243,7 @@ export default function BuilderPage() {
     const invitationId = params.id
 
     const [blocks, setBlocks] = useState<InvitationBlock[]>([])
+    const [theme, setTheme] = useState<import('@/types').InvitationTheme>(DEFAULT_THEME)
     const [invitationTitle, setInvitationTitle] = useState('')
     const [invitationSlug, setInvitationSlug] = useState('')
     const [activeBlock, setActiveBlock] = useState<string | null>(null)
@@ -456,6 +303,7 @@ export default function BuilderPage() {
                 setInvitationSlug(invitation.slug || '')
 
                 const design = await loadDesignBlocks(invitationId)
+                if (design.theme) setTheme(design.theme)
                 const sorted = [...design.blocks].sort((a, b) => a.order - b.order)
                 setBlocks(sorted)
                 if (sorted.length > 0) {
@@ -529,7 +377,7 @@ export default function BuilderPage() {
     const handleSave = async () => {
         setSaving(true)
         try {
-            await saveDesignBlocks(invitationId, blocks)
+            await saveDesignBlocks(invitationId, blocks, theme)
             toast.success('Thiệp đã được lưu thành công!')
         } catch (err: unknown) {
             console.error('Save failed:', err)
@@ -798,15 +646,19 @@ export default function BuilderPage() {
                                                 <div className="w-20 h-1.5 rounded-full bg-gray-600" />
                                             </div>
                                         )}
-                                        <div className="overflow-y-auto" style={{ maxHeight: `${(windowHeight - 160) / scale}px` }}>
-                                            {blocks.map((block) => (
-                                                <BlockPreview key={block.id} block={block} />
-                                            ))}
-                                            {blocks.length === 0 && (
-                                                <div className="py-20 text-center text-xs text-[#2c1810]/30">
-                                                    Preview thiệp sẽ hiển thị tại đây
+                                        <div className="overflow-y-auto w-full h-full relative" style={{ maxHeight: `${(windowHeight - 160) / scale}px` }}>
+                                            <ThemeContext.Provider value={theme}>
+                                                <div style={{ background: theme.style === 'cinematic' || theme.style === 'modern' ? '#111' : 'white', minHeight: '100%' }}>
+                                                    {blocks.map((block) => (
+                                                        <RenderBlock key={block.id} block={block} invitationId={invitationId} />
+                                                    ))}
+                                                    {blocks.length === 0 && (
+                                                        <div className="py-20 text-center text-xs text-[#2c1810]/30">
+                                                            Preview thiệp sẽ hiển thị tại đây
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
+                                            </ThemeContext.Provider>
                                         </div>
                                     </div>
                                 </div>
