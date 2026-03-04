@@ -283,27 +283,33 @@ export default function DashboardPage() {
                         <Card className="border-[#c9a96e]/10">
                             <CardContent className="p-5">
                                 <h3 className="font-semibold text-[#2c1810] mb-4 text-sm">Truy cập nhanh</h3>
-                                <div className="space-y-2">
-                                    {[
-                                        { icon: Sparkles, label: 'Chỉnh sửa thiệp', href: '/dashboard/builder/1', color: 'text-purple-500 bg-purple-50' },
-                                        { icon: Users, label: 'Danh sách khách mời', href: '/dashboard/guests/1', color: 'text-blue-500 bg-blue-50' },
-                                        { icon: BarChart2, label: 'Thống kê RSVP', href: '/dashboard/stats/1', color: 'text-green-500 bg-green-50' },
-                                        { icon: Settings, label: 'Cài đặt thiệp', href: '/dashboard/settings/1', color: 'text-slate-500 bg-slate-50' },
-                                    ].map((item) => (
-                                        <Link
-                                            key={item.label}
-                                            href={item.href}
-                                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#c9a96e]/5 transition-colors group"
-                                        >
-                                            <div className={`w-8 h-8 rounded-lg ${item.color.split(' ')[1]} flex items-center justify-center`}>
-                                                <item.icon className={`w-4 h-4 ${item.color.split(' ')[0]}`} />
-                                            </div>
-                                            <span className="text-sm text-[#2c1810]/70 group-hover:text-[#2c1810] transition-colors font-medium">
-                                                {item.label}
-                                            </span>
-                                        </Link>
-                                    ))}
-                                </div>
+                                {invitations.length === 0 ? (
+                                    <p className="text-xs text-[#2c1810]/40 text-center py-2">
+                                        Tạo thiệp đầu tiên để bắt đầu
+                                    </p>
+                                ) : (
+                                    <div className="space-y-1">
+                                        {[
+                                            { icon: Sparkles, label: 'Chỉnh sửa thiệp', href: `/dashboard/builder/${invitations[0].id}`, color: 'text-purple-500 bg-purple-50' },
+                                            { icon: Users, label: 'Danh sách khách mời', href: `/dashboard/guests/${invitations[0].id}`, color: 'text-blue-500 bg-blue-50' },
+                                            { icon: BarChart2, label: 'Thống kê RSVP', href: `/dashboard/stats/${invitations[0].id}`, color: 'text-green-500 bg-green-50' },
+                                            { icon: Settings, label: 'Cài đặt thiệp', href: `/dashboard/settings/${invitations[0].id}`, color: 'text-slate-500 bg-slate-50' },
+                                        ].map((item) => (
+                                            <Link
+                                                key={item.label}
+                                                href={item.href}
+                                                className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#c9a96e]/5 transition-colors group"
+                                            >
+                                                <div className={`w-8 h-8 rounded-lg ${item.color.split(' ')[1]} flex items-center justify-center flex-shrink-0`}>
+                                                    <item.icon className={`w-4 h-4 ${item.color.split(' ')[0]}`} />
+                                                </div>
+                                                <span className="text-sm text-[#2c1810]/70 group-hover:text-[#2c1810] transition-colors font-medium">
+                                                    {item.label}
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
 
