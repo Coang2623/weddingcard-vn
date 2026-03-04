@@ -19,6 +19,7 @@ interface Invitation {
     slug: string
     wedding_date: string | null
     is_published: boolean
+    password: string | null
 }
 
 export default function SettingsPage() {
@@ -35,6 +36,8 @@ export default function SettingsPage() {
     const [slug, setSlug] = useState('')
     const [weddingDate, setWeddingDate] = useState('')
     const [isPublished, setIsPublished] = useState(false)
+    const [password, setPassword] = useState('')
+    const [usePassword, setUsePassword] = useState(false)
 
     useEffect(() => {
         async function load() {
@@ -46,6 +49,8 @@ export default function SettingsPage() {
                 setSlug(data.slug)
                 setWeddingDate(data.wedding_date?.split('T')[0] || '')
                 setIsPublished(data.is_published)
+                setPassword(data.password || '')
+                setUsePassword(!!data.password)
             }
             setLoading(false)
         }
@@ -65,6 +70,7 @@ export default function SettingsPage() {
             slug: slug.trim().toLowerCase().replace(/\s+/g, '-'),
             wedding_date: weddingDate || null,
             is_published: isPublished,
+            password: usePassword && password ? password : null,
         }).eq('id', id)
 
         setSaving(false)
@@ -187,16 +193,28 @@ export default function SettingsPage() {
                                 <Switch checked={isPublished} onCheckedChange={setIsPublished} />
                             </div>
 
-                            {/* Password - coming soon until DB column is added */}
-                            <div className="p-4 rounded-xl border border-[#c9a96e]/10 space-y-2 opacity-50">
+                            {/* Password protection */}
+                            <div className="p-4 rounded-xl border border-[#c9a96e]/10 space-y-3">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <Lock className="w-4 h-4 text-[#2c1810]/50" />
                                         <p className="font-medium text-sm text-[#2c1810]">Đặt mật khẩu thiệp</p>
                                     </div>
-                                    <span className="text-[10px] uppercase tracking-widest bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Sắp có</span>
+                                    <Switch checked={usePassword} onCheckedChange={setUsePassword} />
                                 </div>
-                                <p className="text-xs text-[#2c1810]/40">Tính năng bảo mật thiệp sẽ sớm được thêm vào.</p>
+                                {usePassword && (
+                                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+                                        <Input
+                                            placeholder="Nhập mật khẩu (vd: 1234)"
+                                            value={password}
+                                            onChange={e => setPassword(e.target.value)}
+                                            className="border-[#c9a96e]/20 focus:border-[#c9a96e] mt-2"
+                                        />
+                                        <p className="text-xs text-[#2c1810]/40 mt-1.5">
+                                            Khách sẽ cần nhập mật khẩu này để xem thiệp
+                                        </p>
+                                    </motion.div>
+                                )}
                             </div>
                         </CardContent>
                     </Card>
