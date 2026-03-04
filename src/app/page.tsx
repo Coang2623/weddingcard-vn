@@ -196,9 +196,9 @@ export default function LandingPage() {
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </Link>
-            <Link href="#demo">
+            <Link href="/demo" target="_blank">
               <Button size="lg" variant="outline" className="border-[#c9a96e]/40 text-[#c9a96e] hover:bg-[#c9a96e]/5 h-12 text-base gap-2">
-                Xem Demo Thiệp
+                🎴 Xem Demo Thiệp
               </Button>
             </Link>
           </motion.div>
