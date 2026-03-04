@@ -8,7 +8,7 @@ import { Heart, MapPin, Calendar, Share2, QrCode, MessageSquare, Loader2, Gift, 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { toast } from 'sonner'
+import { toast } from '@/lib/toast'
 import { createClient } from '@/lib/supabase/client'
 import type { InvitationBlock, InvitationTheme } from '@/types'
 import { DEFAULT_THEME } from '@/lib/templates'
@@ -1038,6 +1038,13 @@ export default function ClientInvitation({ slug }: { slug: string }) {
             }
         }
         loadInvitation()
+
+        // Increment view count
+        const incrementView = async () => {
+            const supabase = createClient()
+            await supabase.rpc('increment_view_count', { invitation_slug: slug })
+        }
+        incrementView()
     }, [slug])
 
     const handleShare = async () => {

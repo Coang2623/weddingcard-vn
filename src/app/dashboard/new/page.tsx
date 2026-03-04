@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { DEFAULT_THEME } from '@/lib/templates'
 import type { Template } from '@/types'
 import { createClient } from '@/lib/supabase/client'
-import { toast } from 'sonner'
+import { toast } from '@/lib/toast'
 
 const styleLabels: Record<string, string> = {
     minimal: 'Tối Giản',
@@ -208,7 +208,7 @@ export default function NewInvitationPage() {
                     title,
                     slug,
                     wedding_date: weddingDate || null,
-                    is_published: false,
+                    is_published: true, // Auto publish by default for easier experience
                 })
                 .select()
                 .single()

@@ -7,9 +7,13 @@ const supabase = createClient()
 // ---- Invitations CRUD ----
 
 export async function getMyInvitations() {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Not authenticated')
+
     const { data, error } = await supabase
         .from('invitations')
         .select('*, invitation_designs(*)')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
     if (error) throw error
@@ -54,7 +58,7 @@ export async function createInvitation(data: {
             title: data.title,
             slug: data.slug,
             wedding_date: data.wedding_date || null,
-            is_published: false,
+            is_published: true, // Auto publish by default
         })
         .select()
         .single()

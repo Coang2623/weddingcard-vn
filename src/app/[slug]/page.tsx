@@ -1,6 +1,6 @@
 import { Metadata, ResolvingMetadata } from 'next'
 import ClientInvitation from './ClientInvitation'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 
 type Props = {
     params: Promise<{ slug: string }>
@@ -12,10 +12,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
     const slug = (await params).slug
 
-    // Create a Supabase client for fetching metadata
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    const supabase = createClient(supabaseUrl, supabaseKey)
+    // Create a Supabase client capable of reading cookies
+    const supabase = await createClient()
 
     const { data: invData } = await supabase
         .from('invitations')

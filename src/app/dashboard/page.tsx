@@ -17,7 +17,7 @@ import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem,
     DropdownMenuTrigger, DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu'
-import { toast } from 'sonner'
+import { toast } from '@/lib/toast'
 import { getMyInvitations, getCurrentUser, signOut } from '@/lib/supabase/api'
 import type { Invitation } from '@/types'
 

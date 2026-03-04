@@ -7,7 +7,7 @@ import {
     GripVertical, Plus, Trash2, Eye, Save,
     ChevronDown, ChevronUp, Smartphone, Monitor, ArrowLeft,
     Heart, Image, Calendar, MapPin, Users, MessageSquare, Gift, Timer, Type,
-    Loader2, ArrowUpCircle, ArrowDownCircle, Upload, X
+    Loader2, ArrowUpCircle, ArrowDownCircle, Upload, X, Globe, Lock
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,11 +16,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Switch } from '@/components/ui/switch'
 import type { InvitationBlock, BlockType } from '@/types'
 import { BLOCK_TEMPLATES, DEFAULT_THEME } from '@/lib/templates'
-import { loadDesignBlocks, saveDesignBlocks, getInvitationById } from '@/lib/supabase/api'
+import { loadDesignBlocks, saveDesignBlocks, getInvitationById, updateInvitation } from '@/lib/supabase/api'
 import Link from 'next/link'
-import { toast } from 'sonner'
+import { toast } from '@/lib/toast'
 import { createClient } from '@/lib/supabase/client'
 import { RenderBlock, ThemeContext } from '@/app/[slug]/ClientInvitation'
 import imageCompression from 'browser-image-compression'
@@ -265,6 +266,7 @@ export default function BuilderPage() {
     const [theme, setTheme] = useState<import('@/types').InvitationTheme>(DEFAULT_THEME)
     const [invitationTitle, setInvitationTitle] = useState('')
     const [invitationSlug, setInvitationSlug] = useState('')
+    const [isPublished, setIsPublished] = useState(false) // Added this line
     const [activeBlock, setActiveBlock] = useState<string | null>(null)
     const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(new Set())
     const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile')
@@ -320,6 +322,7 @@ export default function BuilderPage() {
                 const invitation = await getInvitationById(invitationId)
                 setInvitationTitle(invitation.title || '')
                 setInvitationSlug(invitation.slug || '')
+                setIsPublished(invitation.is_published || false)
 
                 const design = await loadDesignBlocks(invitationId)
                 if (design.theme) setTheme(design.theme)
@@ -406,6 +409,17 @@ export default function BuilderPage() {
         }
     }
 
+    const handleTogglePublish = async (checked: boolean) => {
+        try {
+            await updateInvitation(invitationId, { is_published: checked })
+            setIsPublished(checked)
+            toast.success(checked ? 'Đã công khai thiệp!' : 'Đã ẩn thiệp (Bản nháp)')
+        } catch (err) {
+            console.error(err)
+            toast.error('Cập nhật trạng thái thất bại')
+        }
+    }
+
     // Loading state
     if (loading) {
         return (
@@ -449,7 +463,16 @@ export default function BuilderPage() {
                         <Heart className="w-4 h-4 fill-[#c9a96e] text-[#c9a96e]" />
                         <span className="font-semibold text-sm text-[#2c1810]">{invitationTitle || 'Thiệp chưa đặt tên'}</span>
                     </div>
-                    <div className="ml-auto flex items-center gap-2">
+                    <div className="ml-auto flex items-center gap-4">
+                        {/* Publish Toggle */}
+                        <div className="flex items-center gap-2 mr-2 border-r border-[#c9a96e]/10 pr-4">
+                            {isPublished ? <Globe className="w-3.5 h-3.5 text-green-500" /> : <Lock className="w-3.5 h-3.5 text-[#2c1810]/40" />}
+                            <span className="text-xs font-medium text-[#2c1810]/70">
+                                {isPublished ? 'Công khai' : 'Bản nháp'}
+                            </span>
+                            <Switch checked={isPublished} onCheckedChange={handleTogglePublish} className="scale-75 origin-left ml-1" />
+                        </div>
+
                         {/* Preview mode toggle */}
                         <div className="flex items-center bg-[#f5f0ec] rounded-lg p-0.5 gap-0.5">
                             <Button
