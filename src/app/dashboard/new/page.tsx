@@ -42,21 +42,21 @@ function slugify(text: string): string {
 
 function PreviewMinimal() {
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#fdfaf7] to-[#f5e6d3] px-4 py-5">
-            <div className="w-12 h-px bg-[#c9a96e] mb-3" />
-            <p className="text-[9px] tracking-[4px] uppercase text-[#c9a96e] mb-2">Trân trọng kính mời</p>
-            <p className="text-sm font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>Minh Anh</p>
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#FDF5F0] to-[#F8DCE0] px-4 py-5">
+            <div className="w-12 h-px bg-[#8B0000] mb-3" />
+            <p className="text-[9px] tracking-[4px] uppercase text-[#8B0000] mb-2">Trân trọng kính mời</p>
+            <p className="text-sm font-bold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>Minh Anh</p>
             <div className="flex items-center gap-2 my-1">
-                <div className="w-6 h-px bg-[#c9a96e]/40" />
-                <span className="text-[#c9a96e] text-xs">❧</span>
-                <div className="w-6 h-px bg-[#c9a96e]/40" />
+                <div className="w-6 h-px bg-[#8B0000]/40" />
+                <span className="text-[#8B0000] text-xs">❧</span>
+                <div className="w-6 h-px bg-[#8B0000]/40" />
             </div>
-            <p className="text-sm font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>Quang Huy</p>
-            <p className="text-[9px] text-[#2c1810]/40 mt-2 tracking-widest">12 – 12 – 2025</p>
-            <div className="w-12 h-px bg-[#c9a96e] mt-3" />
+            <p className="text-sm font-bold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>Quang Huy</p>
+            <p className="text-[9px] text-[#4A0E0E]/40 mt-2 tracking-widest">12 – 12 – 2025</p>
+            <div className="w-12 h-px bg-[#8B0000] mt-3" />
             <div className="flex gap-3 mt-4">
                 {['Lễ Cưới', 'RSVP'].map(t => (
-                    <div key={t} className="text-[7px] border border-[#c9a96e]/30 rounded px-2 py-1 text-[#2c1810]/50 tracking-wider uppercase">{t}</div>
+                    <div key={t} className="text-[7px] border border-[#8B0000]/30 rounded px-2 py-1 text-[#4A0E0E]/50 tracking-wider uppercase">{t}</div>
                 ))}
             </div>
         </div>
@@ -246,34 +246,34 @@ export default function NewInvitationPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#fdfaf7]">
+        <div className="min-h-screen bg-[#FDF5F0]">
             {/* Nav */}
-            <nav className="border-b border-[#c9a96e]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+            <nav className="border-b border-[#8B0000]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
                     <Link href="/dashboard">
-                        <Button variant="ghost" size="sm" className="gap-2 text-[#2c1810]/60">
+                        <Button variant="ghost" size="sm" className="gap-2 text-[#4A0E0E]/60">
                             <ArrowLeft className="w-4 h-4" />
                             Quay lại
                         </Button>
                     </Link>
                     <div className="flex items-center gap-2">
-                        <Heart className="w-5 h-5 text-[#c9a96e] fill-[#c9a96e]" />
-                        <span className="font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <Heart className="w-5 h-5 text-[#8B0000] fill-[#8B0000]" />
+                        <span className="font-bold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
                             {step === 'template' ? 'Chọn Mẫu Thiệp' : 'Thông Tin Cặp Đôi'}
                         </span>
                     </div>
 
                     {/* Step indicator */}
                     <div className="ml-auto flex items-center gap-2">
-                        <div className={`flex items-center gap-1.5 text-xs ${step === 'template' ? 'text-[#c9a96e]' : 'text-[#2c1810]/30'}`}>
+                        <div className={`flex items-center gap-1.5 text-xs ${step === 'template' ? 'text-[#8B0000]' : 'text-[#4A0E0E]/30'}`}>
                             <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold
-                                ${step === 'template' ? 'border-[#c9a96e] bg-[#c9a96e] text-white' : 'border-[#2c1810]/20'}`}>1</div>
+                                ${step === 'template' ? 'border-[#8B0000] bg-[#8B0000] text-white' : 'border-[#4A0E0E]/20'}`}>1</div>
                             <span className="hidden sm:inline">Chọn mẫu</span>
                         </div>
-                        <div className="w-8 h-px bg-[#2c1810]/10" />
-                        <div className={`flex items-center gap-1.5 text-xs ${step === 'details' ? 'text-[#c9a96e]' : 'text-[#2c1810]/30'}`}>
+                        <div className="w-8 h-px bg-[#4A0E0E]/10" />
+                        <div className={`flex items-center gap-1.5 text-xs ${step === 'details' ? 'text-[#8B0000]' : 'text-[#4A0E0E]/30'}`}>
                             <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold
-                                ${step === 'details' ? 'border-[#c9a96e] bg-[#c9a96e] text-white' : 'border-[#2c1810]/20'}`}>2</div>
+                                ${step === 'details' ? 'border-[#8B0000] bg-[#8B0000] text-white' : 'border-[#4A0E0E]/20'}`}>2</div>
                             <span className="hidden sm:inline">Thông tin</span>
                         </div>
                     </div>
@@ -288,17 +288,17 @@ export default function NewInvitationPage() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                         >
-                            <h1 className="text-3xl font-bold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            <h1 className="text-3xl font-bold text-[#4A0E0E] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 Chọn mẫu thiệp yêu thích
                             </h1>
-                            <p className="text-[#2c1810]/50">Mỗi mẫu có phong cách riêng biệt – bạn có thể tùy chỉnh hoàn toàn sau khi chọn</p>
+                            <p className="text-[#4A0E0E]/50">Mỗi mẫu có phong cách riêng biệt – bạn có thể tùy chỉnh hoàn toàn sau khi chọn</p>
                         </motion.div>
 
                         {/* Template Grid */}
                         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                             {loadingTemplates ? (
                                 <div className="col-span-full py-10 flex flex-col items-center justify-center opacity-50">
-                                    <Loader2 className="w-8 h-8 animate-spin mb-4 text-[#c9a96e]" />
+                                    <Loader2 className="w-8 h-8 animate-spin mb-4 text-[#8B0000]" />
                                     <p className="text-sm">Đang tải các mẫu thiệp...</p>
                                 </div>
                             ) : templates.map((template, i) => {
@@ -315,20 +315,20 @@ export default function NewInvitationPage() {
                                         onClick={() => setSelected(template)}
                                         className={`relative cursor-pointer rounded-2xl overflow-hidden border-2 transition-all duration-200 shadow-sm
                                             ${isSelected
-                                                ? 'border-[#c9a96e] shadow-xl shadow-[#c9a96e]/20 scale-[1.03]'
-                                                : 'border-slate-100 hover:border-[#c9a96e]/40 hover:shadow-lg hover:scale-[1.01]'
+                                                ? 'border-[#8B0000] shadow-xl shadow-[#8B0000]/20 scale-[1.03]'
+                                                : 'border-slate-100 hover:border-[#8B0000]/40 hover:shadow-lg hover:scale-[1.01]'
                                             }`}
                                     >
                                         {/* Mini preview */}
                                         <div className="h-56 overflow-hidden relative">
                                             {Preview && <Preview />}
                                             {template.is_premium && (
-                                                <Badge className="absolute top-2.5 right-2.5 bg-gradient-to-r from-[#d4af37] to-[#c9a96e] text-white text-[10px] border-0 shadow">
+                                                <Badge className="absolute top-2.5 right-2.5 bg-gradient-to-r from-[#d4af37] to-[#8B0000] text-white text-[10px] border-0 shadow">
                                                     ✦ Premium
                                                 </Badge>
                                             )}
                                             {isSelected && (
-                                                <div className="absolute top-2.5 left-2.5 w-6 h-6 rounded-full bg-[#c9a96e] flex items-center justify-center shadow-md">
+                                                <div className="absolute top-2.5 left-2.5 w-6 h-6 rounded-full bg-[#8B0000] flex items-center justify-center shadow-md">
                                                     <Check className="w-3.5 h-3.5 text-white" />
                                                 </div>
                                             )}
@@ -337,15 +337,15 @@ export default function NewInvitationPage() {
                                         {/* Info */}
                                         <div className="bg-white p-4">
                                             <div className="flex items-start justify-between mb-2">
-                                                <h3 className="font-semibold text-sm text-[#2c1810] leading-tight">{template.name}</h3>
+                                                <h3 className="font-semibold text-sm text-[#4A0E0E] leading-tight">{template.name}</h3>
                                                 <Badge className={`text-[10px] border-0 shrink-0 ml-2 ${styleColors[template.style]}`}>
                                                     {styleLabels[template.style]}
                                                 </Badge>
                                             </div>
                                             <ul className="space-y-0.5">
                                                 {features.map(f => (
-                                                    <li key={f} className="text-[10px] text-[#2c1810]/45 flex items-center gap-1.5">
-                                                        <span className="w-1 h-1 rounded-full bg-[#c9a96e]/40 shrink-0" />
+                                                    <li key={f} className="text-[10px] text-[#4A0E0E]/45 flex items-center gap-1.5">
+                                                        <span className="w-1 h-1 rounded-full bg-[#8B0000]/40 shrink-0" />
                                                         {f}
                                                     </li>
                                                 ))}
@@ -360,7 +360,7 @@ export default function NewInvitationPage() {
                             <Button
                                 size="lg"
                                 disabled={!selected}
-                                className="bg-[#c9a96e] hover:bg-[#b8925a] text-white gap-2 px-10 h-12 disabled:opacity-40 shadow-lg shadow-[#c9a96e]/30"
+                                className="bg-[#8B0000] hover:bg-[#A61C00] text-white gap-2 px-10 h-12 disabled:opacity-40 shadow-lg shadow-[#8B0000]/30"
                                 onClick={() => setStep('details')}
                             >
                                 <Heart className="w-4 h-4 fill-white" />
@@ -378,16 +378,16 @@ export default function NewInvitationPage() {
                         {selected && (() => {
                             const P = PREVIEW_COMPONENTS[selected.id]
                             return (
-                                <div className="flex items-center gap-3 bg-white border border-[#c9a96e]/15 rounded-xl p-3 mb-6 shadow-sm">
-                                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-[#c9a96e]/10 bg-slate-50">
+                                <div className="flex items-center gap-3 bg-white border border-[#8B0000]/15 rounded-xl p-3 mb-6 shadow-sm">
+                                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-[#8B0000]/10 bg-slate-50">
                                         {P && <P />}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-xs text-[#2c1810]/40">Mẫu đã chọn</p>
-                                        <p className="text-sm font-semibold text-[#2c1810] truncate">{selected.name}</p>
+                                        <p className="text-xs text-[#4A0E0E]/40">Mẫu đã chọn</p>
+                                        <p className="text-sm font-semibold text-[#4A0E0E] truncate">{selected.name}</p>
                                     </div>
                                     <button
-                                        className="text-xs text-[#c9a96e] hover:underline shrink-0"
+                                        className="text-xs text-[#8B0000] hover:underline shrink-0"
                                         onClick={() => setStep('template')}
                                     >
                                         Đổi mẫu
@@ -398,53 +398,53 @@ export default function NewInvitationPage() {
 
                         <div className="text-center mb-8">
                             <div className="text-5xl mb-4">💒</div>
-                            <h1 className="text-2xl font-bold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            <h1 className="text-2xl font-bold text-[#4A0E0E] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 Thông tin cặp đôi
                             </h1>
-                            <p className="text-[#2c1810]/50 text-sm">Nhập tên và ngày cưới để hoàn tất thiệp</p>
+                            <p className="text-[#4A0E0E]/50 text-sm">Nhập tên và ngày cưới để hoàn tất thiệp</p>
                         </div>
 
-                        <div className="space-y-5 bg-white rounded-2xl border border-[#c9a96e]/10 p-6 shadow-sm">
+                        <div className="space-y-5 bg-white rounded-2xl border border-[#8B0000]/10 p-6 shadow-sm">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-medium text-[#2c1810]">Tên Chú Rể</Label>
+                                    <Label className="text-sm font-medium text-[#4A0E0E]">Tên Chú Rể</Label>
                                     <Input
                                         value={groomName}
                                         onChange={(e) => setGroomName(e.target.value)}
                                         placeholder="Nguyễn Văn A"
-                                        className="h-11 border-[#c9a96e]/20 focus:border-[#c9a96e]"
+                                        className="h-11 border-[#8B0000]/20 focus:border-[#8B0000]"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-medium text-[#2c1810]">Tên Cô Dâu</Label>
+                                    <Label className="text-sm font-medium text-[#4A0E0E]">Tên Cô Dâu</Label>
                                     <Input
                                         value={brideName}
                                         onChange={(e) => setBrideName(e.target.value)}
                                         placeholder="Trần Thị B"
-                                        className="h-11 border-[#c9a96e]/20 focus:border-[#c9a96e]"
+                                        className="h-11 border-[#8B0000]/20 focus:border-[#8B0000]"
                                     />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-sm font-medium text-[#2c1810]">Ngày Cưới</Label>
+                                <Label className="text-sm font-medium text-[#4A0E0E]">Ngày Cưới</Label>
                                 <Input
                                     type="date"
                                     value={weddingDate}
                                     onChange={(e) => setWeddingDate(e.target.value)}
-                                    className="h-11 border-[#c9a96e]/20 focus:border-[#c9a96e]"
+                                    className="h-11 border-[#8B0000]/20 focus:border-[#8B0000]"
                                 />
                             </div>
 
                             <div className="flex gap-3 pt-2">
                                 <Button
                                     variant="outline"
-                                    className="flex-1 h-11 border-[#c9a96e]/20"
+                                    className="flex-1 h-11 border-[#8B0000]/20"
                                     onClick={() => setStep('template')}
                                 >
                                     ← Đổi mẫu
                                 </Button>
                                 <Button
-                                    className="flex-1 h-11 bg-[#c9a96e] hover:bg-[#b8925a] text-white shadow-lg shadow-[#c9a96e]/30"
+                                    className="flex-1 h-11 bg-[#8B0000] hover:bg-[#A61C00] text-white shadow-lg shadow-[#8B0000]/30"
                                     onClick={handleCreate}
                                     disabled={creating || !groomName || !brideName}
                                 >

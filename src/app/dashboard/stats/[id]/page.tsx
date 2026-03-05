@@ -48,8 +48,8 @@ export default function StatsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#fdfaf7] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-[#c9a96e]" />
+            <div className="min-h-screen bg-[#FDF5F0] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-[#8B0000]" />
             </div>
         )
     }
@@ -60,19 +60,19 @@ export default function StatsPage() {
     const responseRate = rsvps.length ? Math.round((rsvps.length / Math.max(rsvps.length, 1)) * 100) : 0
 
     return (
-        <div className="min-h-screen bg-[#fdfaf7]">
+        <div className="min-h-screen bg-[#FDF5F0]">
             {/* Nav */}
-            <nav className="border-b border-[#c9a96e]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+            <nav className="border-b border-[#8B0000]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
-                    <Link href="/dashboard" className="flex items-center gap-1.5 text-sm text-[#2c1810]/60 hover:text-[#2c1810] transition-colors">
+                    <Link href="/dashboard" className="flex items-center gap-1.5 text-sm text-[#4A0E0E]/60 hover:text-[#4A0E0E] transition-colors">
                         <ArrowLeft className="w-4 h-4" /> Dashboard
                     </Link>
-                    <span className="text-[#c9a96e]">/</span>
-                    <span className="text-sm font-medium text-[#2c1810]">Thống kê RSVP</span>
+                    <span className="text-[#8B0000]">/</span>
+                    <span className="text-sm font-medium text-[#4A0E0E]">Thống kê RSVP</span>
                     {invitation && (
                         <>
-                            <span className="text-[#c9a96e]">/</span>
-                            <span className="text-sm text-[#2c1810]/60">{invitation.title}</span>
+                            <span className="text-[#8B0000]">/</span>
+                            <span className="text-sm text-[#4A0E0E]/60">{invitation.title}</span>
                         </>
                     )}
                 </div>
@@ -80,10 +80,10 @@ export default function StatsPage() {
 
             <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                    <h1 className="text-2xl font-bold text-[#2c1810] mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <h1 className="text-2xl font-bold text-[#4A0E0E] mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
                         Thống kê RSVP
                     </h1>
-                    <p className="text-sm text-[#2c1810]/50 mb-8">{invitation?.title}</p>
+                    <p className="text-sm text-[#4A0E0E]/50 mb-8">{invitation?.title}</p>
                 </motion.div>
 
                 {/* Summary Cards */}
@@ -96,12 +96,12 @@ export default function StatsPage() {
                         { icon: TrendingUp, label: 'Tổng khách đến', value: totalGuests, color: 'text-amber-500', bg: 'bg-amber-50' },
                     ].map((s, i) => (
                         <motion.div key={s.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 + 0.15 }}>
-                            <Card className="border-[#c9a96e]/10">
+                            <Card className="border-[#8B0000]/10">
                                 <CardContent className="p-4">
                                     <div className="flex items-start justify-between">
                                         <div>
-                                            <p className="text-xs text-[#2c1810]/40 mb-1">{s.label}</p>
-                                            <p className="text-2xl font-bold text-[#2c1810]">{s.value}</p>
+                                            <p className="text-xs text-[#4A0E0E]/40 mb-1">{s.label}</p>
+                                            <p className="text-2xl font-bold text-[#4A0E0E]">{s.value}</p>
                                         </div>
                                         <div className={`w-9 h-9 rounded-xl ${s.bg} flex items-center justify-center`}>
                                             <s.icon className={`w-4 h-4 ${s.color}`} />
@@ -116,12 +116,12 @@ export default function StatsPage() {
                 {/* Attending breakdown */}
                 {rsvps.length > 0 && (
                     <motion.div className="mb-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-                        <Card className="border-[#c9a96e]/10">
+                        <Card className="border-[#8B0000]/10">
                             <CardContent className="p-6">
-                                <h2 className="font-semibold text-[#2c1810] mb-4">Tỷ lệ phản hồi</h2>
+                                <h2 className="font-semibold text-[#4A0E0E] mb-4">Tỷ lệ phản hồi</h2>
                                 <div className="flex items-center gap-4 mb-3">
                                     <div className="flex-1">
-                                        <div className="flex justify-between text-xs text-[#2c1810]/50 mb-1.5">
+                                        <div className="flex justify-between text-xs text-[#4A0E0E]/50 mb-1.5">
                                             <span>Sẽ tham dự ({attending.length})</span>
                                             <span>{rsvps.length > 0 ? Math.round(attending.length / rsvps.length * 100) : 0}%</span>
                                         </div>
@@ -131,7 +131,7 @@ export default function StatsPage() {
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <div className="flex-1">
-                                        <div className="flex justify-between text-xs text-[#2c1810]/50 mb-1.5">
+                                        <div className="flex justify-between text-xs text-[#4A0E0E]/50 mb-1.5">
                                             <span>Không thể đến ({declining.length})</span>
                                             <span>{rsvps.length > 0 ? Math.round(declining.length / rsvps.length * 100) : 0}%</span>
                                         </div>
@@ -147,23 +147,23 @@ export default function StatsPage() {
                 {/* RSVP List */}
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="font-semibold text-[#2c1810]">Danh sách phản hồi</h2>
+                        <h2 className="font-semibold text-[#4A0E0E]">Danh sách phản hồi</h2>
                         <Badge variant="secondary">{rsvps.length} người</Badge>
                     </div>
 
                     {rsvps.length === 0 ? (
-                        <Card className="border-[#c9a96e]/10">
+                        <Card className="border-[#8B0000]/10">
                             <CardContent className="p-16 text-center">
-                                <Users className="w-10 h-10 text-[#c9a96e]/30 mx-auto mb-3" />
-                                <p className="text-[#2c1810]/50 text-sm">Chưa có phản hồi nào</p>
-                                <p className="text-[#2c1810]/30 text-xs mt-1">Khách sẽ xuất hiện đây khi họ xác nhận tham dự</p>
+                                <Users className="w-10 h-10 text-[#8B0000]/30 mx-auto mb-3" />
+                                <p className="text-[#4A0E0E]/50 text-sm">Chưa có phản hồi nào</p>
+                                <p className="text-[#4A0E0E]/30 text-xs mt-1">Khách sẽ xuất hiện đây khi họ xác nhận tham dự</p>
                             </CardContent>
                         </Card>
                     ) : (
                         <div className="space-y-3">
                             {rsvps.map((r, i) => (
                                 <motion.div key={r.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}>
-                                    <Card className="border-[#c9a96e]/10 hover:shadow-sm transition-shadow">
+                                    <Card className="border-[#8B0000]/10 hover:shadow-sm transition-shadow">
                                         <CardContent className="p-4">
                                             <div className="flex items-start justify-between gap-4">
                                                 <div className="flex items-center gap-3">
@@ -173,8 +173,8 @@ export default function StatsPage() {
                                                             : <XCircle className="w-4 h-4 text-red-400" />}
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium text-sm text-[#2c1810]">{r.guest_name}</p>
-                                                        <p className="text-xs text-[#2c1810]/40">
+                                                        <p className="font-medium text-sm text-[#4A0E0E]">{r.guest_name}</p>
+                                                        <p className="text-xs text-[#4A0E0E]/40">
                                                             {r.attending ? `${r.guest_count} người tham dự` : 'Không thể tham dự'}
                                                         </p>
                                                     </div>
@@ -183,15 +183,15 @@ export default function StatsPage() {
                                                     <Badge className={r.attending ? 'bg-green-100 text-green-700 border-0 text-xs' : 'bg-red-100 text-red-600 border-0 text-xs'}>
                                                         {r.attending ? 'Tham dự' : 'Vắng'}
                                                     </Badge>
-                                                    <p className="text-[10px] text-[#2c1810]/30 mt-1">
+                                                    <p className="text-[10px] text-[#4A0E0E]/30 mt-1">
                                                         {new Date(r.created_at).toLocaleDateString('vi-VN')}
                                                     </p>
                                                 </div>
                                             </div>
                                             {r.message && (
                                                 <div className="mt-3 flex gap-2 pl-12">
-                                                    <MessageSquare className="w-3.5 h-3.5 text-[#c9a96e] flex-shrink-0 mt-0.5" />
-                                                    <p className="text-xs text-[#2c1810]/60 italic">"{r.message}"</p>
+                                                    <MessageSquare className="w-3.5 h-3.5 text-[#8B0000] flex-shrink-0 mt-0.5" />
+                                                    <p className="text-xs text-[#4A0E0E]/60 italic">"{r.message}"</p>
                                                 </div>
                                             )}
                                         </CardContent>

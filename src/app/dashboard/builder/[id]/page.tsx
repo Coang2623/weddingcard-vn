@@ -114,7 +114,7 @@ function GalleryEditor({
             {images.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                     {images.map((url, i) => (
-                        <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-[#c9a96e]/10 group">
+                        <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-[#8B0000]/10 group">
                             <img src={url} alt="" className="w-full h-full object-cover" />
                             <button
                                 onClick={() => removeImage(i)}
@@ -129,7 +129,7 @@ function GalleryEditor({
 
             {/* Upload buttons */}
             <div className="flex gap-2">
-                <label className="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg border border-dashed border-[#c9a96e]/30 text-xs text-[#c9a96e] cursor-pointer hover:bg-[#c9a96e]/5 transition-colors">
+                <label className="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg border border-dashed border-[#8B0000]/30 text-xs text-[#8B0000] cursor-pointer hover:bg-[#8B0000]/5 transition-colors">
                     <Upload className="w-3.5 h-3.5" />
                     {uploading ? 'Đang tải...' : 'Tải ảnh lên'}
                     <input
@@ -141,7 +141,7 @@ function GalleryEditor({
                         disabled={uploading}
                     />
                 </label>
-                <Button variant="outline" size="sm" onClick={addImageUrl} className="h-9 text-xs border-[#c9a96e]/20">
+                <Button variant="outline" size="sm" onClick={addImageUrl} className="h-9 text-xs border-[#8B0000]/20">
                     <Plus className="w-3.5 h-3.5 mr-1" /> URL
                 </Button>
             </div>
@@ -423,10 +423,10 @@ export default function BuilderPage() {
     // Loading state
     if (loading) {
         return (
-            <div className="h-screen bg-[#fdfaf7] flex items-center justify-center">
+            <div className="h-screen bg-[#FDF5F0] flex items-center justify-center">
                 <div className="text-center">
-                    <Loader2 className="w-8 h-8 animate-spin text-[#c9a96e] mx-auto mb-4" />
-                    <p className="text-sm text-[#2c1810]/50">Đang tải thiệp...</p>
+                    <Loader2 className="w-8 h-8 animate-spin text-[#8B0000] mx-auto mb-4" />
+                    <p className="text-sm text-[#4A0E0E]/50">Đang tải thiệp...</p>
                 </div>
             </div>
         )
@@ -435,7 +435,7 @@ export default function BuilderPage() {
     // Error state
     if (loadError) {
         return (
-            <div className="h-screen bg-[#fdfaf7] flex items-center justify-center">
+            <div className="h-screen bg-[#FDF5F0] flex items-center justify-center">
                 <div className="text-center">
                     <div className="text-4xl mb-4">😔</div>
                     <p className="text-sm text-red-500 mb-4">{loadError}</p>
@@ -448,26 +448,26 @@ export default function BuilderPage() {
     }
 
     return (
-        <div className="h-screen bg-[#fdfaf7] flex flex-col overflow-hidden">
+        <div className="h-screen bg-[#FDF5F0] flex flex-col overflow-hidden">
             {/* Top Bar */}
-            <div className="border-b border-[#c9a96e]/10 bg-white/90 backdrop-blur-sm flex-shrink-0 z-40">
+            <div className="border-b border-[#8B0000]/10 bg-white/90 backdrop-blur-sm flex-shrink-0 z-40">
                 <div className="h-14 flex items-center px-4 gap-3">
                     <Link href="/dashboard">
-                        <Button variant="ghost" size="sm" className="gap-1.5 text-[#2c1810]/60 h-8">
+                        <Button variant="ghost" size="sm" className="gap-1.5 text-[#4A0E0E]/60 h-8">
                             <ArrowLeft className="w-3.5 h-3.5" />
                             Dashboard
                         </Button>
                     </Link>
                     <Separator orientation="vertical" className="h-5" />
                     <div className="flex items-center gap-2">
-                        <Heart className="w-4 h-4 fill-[#c9a96e] text-[#c9a96e]" />
-                        <span className="font-semibold text-sm text-[#2c1810]">{invitationTitle || 'Thiệp chưa đặt tên'}</span>
+                        <Heart className="w-4 h-4 fill-[#8B0000] text-[#8B0000]" />
+                        <span className="font-semibold text-sm text-[#4A0E0E]">{invitationTitle || 'Thiệp chưa đặt tên'}</span>
                     </div>
                     <div className="ml-auto flex items-center gap-4">
                         {/* Publish Toggle */}
-                        <div className="flex items-center gap-2 mr-2 border-r border-[#c9a96e]/10 pr-4">
-                            {isPublished ? <Globe className="w-3.5 h-3.5 text-green-500" /> : <Lock className="w-3.5 h-3.5 text-[#2c1810]/40" />}
-                            <span className="text-xs font-medium text-[#2c1810]/70">
+                        <div className="flex items-center gap-2 mr-2 border-r border-[#8B0000]/10 pr-4">
+                            {isPublished ? <Globe className="w-3.5 h-3.5 text-green-500" /> : <Lock className="w-3.5 h-3.5 text-[#4A0E0E]/40" />}
+                            <span className="text-xs font-medium text-[#4A0E0E]/70">
                                 {isPublished ? 'Công khai' : 'Bản nháp'}
                             </span>
                             <Switch checked={isPublished} onCheckedChange={handleTogglePublish} className="scale-75 origin-left ml-1" />
@@ -492,7 +492,7 @@ export default function BuilderPage() {
                                 <Monitor className="w-3.5 h-3.5" />
                             </Button>
                         </div>
-                        <Button variant="outline" size="sm" className="h-8 text-xs border-[#c9a96e]/20 gap-1.5" asChild>
+                        <Button variant="outline" size="sm" className="h-8 text-xs border-[#8B0000]/20 gap-1.5" asChild>
                             <Link href={`/${invitationSlug}`} target="_blank">
                                 <Eye className="w-3.5 h-3.5" />
                                 Xem thiệp
@@ -500,7 +500,7 @@ export default function BuilderPage() {
                         </Button>
                         <Button
                             size="sm"
-                            className="h-8 text-xs bg-[#c9a96e] hover:bg-[#b8925a] text-white gap-1.5"
+                            className="h-8 text-xs bg-[#8B0000] hover:bg-[#A61C00] text-white gap-1.5"
                             onClick={handleSave}
                             disabled={saving}
                         >
@@ -514,9 +514,9 @@ export default function BuilderPage() {
             {/* Main 3-column layout */}
             <div className="flex-1 flex overflow-hidden">
                 {/* Left: Block Library */}
-                <div className="w-52 border-r border-[#c9a96e]/10 bg-white/50 flex-shrink-0 overflow-y-auto">
+                <div className="w-52 border-r border-[#8B0000]/10 bg-white/50 flex-shrink-0 overflow-y-auto">
                     <div className="p-3">
-                        <p className="text-xs font-semibold text-[#2c1810]/40 uppercase tracking-wider mb-3 px-1">Thêm Block</p>
+                        <p className="text-xs font-semibold text-[#4A0E0E]/40 uppercase tracking-wider mb-3 px-1">Thêm Block</p>
                         <div className="space-y-1">
                             {ADD_BLOCKS.map((type) => {
                                 const meta = BLOCK_META[type]
@@ -524,13 +524,13 @@ export default function BuilderPage() {
                                     <button
                                         key={type}
                                         onClick={() => addBlock(type)}
-                                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-[#c9a96e]/5 transition-colors group"
+                                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-[#8B0000]/5 transition-colors group"
                                     >
                                         <div className={`w-7 h-7 rounded-lg ${meta.bg} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                                             <meta.icon className={`w-3.5 h-3.5 ${meta.color}`} />
                                         </div>
-                                        <span className="text-xs text-[#2c1810]/70 group-hover:text-[#2c1810] font-medium">{meta.label}</span>
-                                        <Plus className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 text-[#c9a96e]" />
+                                        <span className="text-xs text-[#4A0E0E]/70 group-hover:text-[#4A0E0E] font-medium">{meta.label}</span>
+                                        <Plus className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 text-[#8B0000]" />
                                     </button>
                                 )
                             })}
@@ -558,52 +558,52 @@ export default function BuilderPage() {
                                                             {...drag.draggableProps}
                                                             style={drag.draggableProps.style}
                                                             className={`bg-white rounded-2xl border-2 transition-shadow duration-150 ${snapshot.isDragging
-                                                                ? 'border-[#c9a96e] shadow-xl'
+                                                                ? 'border-[#8B0000] shadow-xl'
                                                                 : isActive
-                                                                    ? 'border-[#c9a96e]/50 shadow-md'
-                                                                    : 'border-transparent hover:border-[#c9a96e]/20'
+                                                                    ? 'border-[#8B0000]/50 shadow-md'
+                                                                    : 'border-transparent hover:border-[#8B0000]/20'
                                                                 }`}
                                                             onClick={() => setActiveBlock(block.id)}
                                                         >
                                                             {/* Block Header */}
                                                             <div className="flex items-center gap-2 px-3 py-2.5">
-                                                                <div {...drag.dragHandleProps} className="cursor-grab active:cursor-grabbing p-1 rounded hover:bg-[#c9a96e]/10 flex-shrink-0">
-                                                                    <GripVertical className="w-4 h-4 text-[#2c1810]/25" />
+                                                                <div {...drag.dragHandleProps} className="cursor-grab active:cursor-grabbing p-1 rounded hover:bg-[#8B0000]/10 flex-shrink-0">
+                                                                    <GripVertical className="w-4 h-4 text-[#4A0E0E]/25" />
                                                                 </div>
                                                                 {/* Move up/down buttons */}
                                                                 <div className="flex flex-col gap-0 flex-shrink-0">
                                                                     <button
                                                                         onClick={(e) => { e.stopPropagation(); moveBlock(index, 'up') }}
                                                                         disabled={index === 0}
-                                                                        className="p-0.5 rounded hover:bg-[#c9a96e]/10 disabled:opacity-20 transition-opacity"
+                                                                        className="p-0.5 rounded hover:bg-[#8B0000]/10 disabled:opacity-20 transition-opacity"
                                                                         title="Di chuyển lên"
                                                                     >
-                                                                        <ChevronUp className="w-3 h-3 text-[#2c1810]/40" />
+                                                                        <ChevronUp className="w-3 h-3 text-[#4A0E0E]/40" />
                                                                     </button>
                                                                     <button
                                                                         onClick={(e) => { e.stopPropagation(); moveBlock(index, 'down') }}
                                                                         disabled={index === blocks.length - 1}
-                                                                        className="p-0.5 rounded hover:bg-[#c9a96e]/10 disabled:opacity-20 transition-opacity"
+                                                                        className="p-0.5 rounded hover:bg-[#8B0000]/10 disabled:opacity-20 transition-opacity"
                                                                         title="Di chuyển xuống"
                                                                     >
-                                                                        <ChevronDown className="w-3 h-3 text-[#2c1810]/40" />
+                                                                        <ChevronDown className="w-3 h-3 text-[#4A0E0E]/40" />
                                                                     </button>
                                                                 </div>
                                                                 <div className={`w-7 h-7 rounded-lg ${meta.bg} flex items-center justify-center flex-shrink-0`}>
                                                                     <meta.icon className={`w-3.5 h-3.5 ${meta.color}`} />
                                                                 </div>
-                                                                <span className="text-sm font-medium text-[#2c1810] flex-1">{meta.label}</span>
-                                                                <Badge variant="outline" className="text-xs border-[#c9a96e]/20 text-[#2c1810]/30">
+                                                                <span className="text-sm font-medium text-[#4A0E0E] flex-1">{meta.label}</span>
+                                                                <Badge variant="outline" className="text-xs border-[#8B0000]/20 text-[#4A0E0E]/30">
                                                                     #{index + 1}
                                                                 </Badge>
                                                                 <div className="flex items-center gap-1">
                                                                     <Button
                                                                         variant="ghost"
                                                                         size="icon"
-                                                                        className="h-7 w-7 hover:bg-[#c9a96e]/10"
+                                                                        className="h-7 w-7 hover:bg-[#8B0000]/10"
                                                                         onClick={(e) => { e.stopPropagation(); toggleExpanded(block.id) }}
                                                                     >
-                                                                        {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-[#2c1810]/40" /> : <ChevronDown className="w-3.5 h-3.5 text-[#2c1810]/40" />}
+                                                                        {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-[#4A0E0E]/40" /> : <ChevronDown className="w-3.5 h-3.5 text-[#4A0E0E]/40" />}
                                                                     </Button>
                                                                     <Button
                                                                         variant="ghost"
@@ -619,7 +619,7 @@ export default function BuilderPage() {
                                                             {/* Block Editor (expanded) */}
                                                             {isExpanded && (
                                                                 <div>
-                                                                    <Separator className="bg-[#c9a96e]/10" />
+                                                                    <Separator className="bg-[#8B0000]/10" />
                                                                     <div className="px-4 py-4">
                                                                         <BlockEditor block={block} onChange={updateBlock} />
                                                                     </div>
@@ -633,7 +633,7 @@ export default function BuilderPage() {
                                         {provided.placeholder}
 
                                         {blocks.length === 0 && (
-                                            <div className="text-center py-16 text-[#2c1810]/30">
+                                            <div className="text-center py-16 text-[#4A0E0E]/30">
                                                 <div className="text-4xl mb-3">✨</div>
                                                 <p className="text-sm">Chọn block từ bên trái để bắt đầu tạo thiệp</p>
                                             </div>
@@ -647,25 +647,25 @@ export default function BuilderPage() {
 
                 {/* Resize Handle */}
                 <div
-                    className="w-1.5 flex-shrink-0 cursor-col-resize group relative hover:bg-[#c9a96e]/20 transition-colors bg-transparent border-l border-[#c9a96e]/10"
+                    className="w-1.5 flex-shrink-0 cursor-col-resize group relative hover:bg-[#8B0000]/20 transition-colors bg-transparent border-l border-[#8B0000]/10"
                     onMouseDown={handleResizeStart}
                     title="Kéo để thay đổi kích thước xem trước"
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-8 rounded-full bg-[#c9a96e]/20 group-hover:bg-[#c9a96e]/50 transition-colors" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-8 rounded-full bg-[#8B0000]/20 group-hover:bg-[#8B0000]/50 transition-colors" />
                 </div>
 
                 {/* Right: Live Preview */}
                 <div
                     ref={previewRef}
                     style={{ width: previewWidth }}
-                    className="border-l border-[#c9a96e]/10 bg-gray-50 flex-shrink-0 flex flex-col"
+                    className="border-l border-[#8B0000]/10 bg-gray-50 flex-shrink-0 flex flex-col"
                 >
-                    <div className="p-3 border-b border-[#c9a96e]/10 flex items-center justify-between">
+                    <div className="p-3 border-b border-[#8B0000]/10 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <Eye className="w-3.5 h-3.5 text-[#2c1810]/40" />
-                            <span className="text-xs font-medium text-[#2c1810]/50">Xem trước ({previewMode === 'mobile' ? 'Mobile' : 'Desktop'})</span>
+                            <Eye className="w-3.5 h-3.5 text-[#4A0E0E]/40" />
+                            <span className="text-xs font-medium text-[#4A0E0E]/50">Xem trước ({previewMode === 'mobile' ? 'Mobile' : 'Desktop'})</span>
                         </div>
-                        <span className="text-[10px] text-[#2c1810]/30 font-mono">{previewWidth}px</span>
+                        <span className="text-[10px] text-[#4A0E0E]/30 font-mono">{previewWidth}px</span>
                     </div>
                     {(() => {
                         const baseWidth = previewMode === 'mobile' ? 375 : 768
@@ -681,7 +681,7 @@ export default function BuilderPage() {
                                         transformOrigin: 'top center',
                                     }}
                                 >
-                                    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-[#c9a96e]/10">
+                                    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-[#8B0000]/10">
                                         {/* Mock phone frame for mobile */}
                                         {previewMode === 'mobile' && (
                                             <div className="bg-[#1a1a1a] px-6 py-2 flex items-center justify-center">
@@ -695,7 +695,7 @@ export default function BuilderPage() {
                                                         <RenderBlock key={block.id} block={block} invitationId={invitationId} />
                                                     ))}
                                                     {blocks.length === 0 && (
-                                                        <div className="py-20 text-center text-xs text-[#2c1810]/30">
+                                                        <div className="py-20 text-center text-xs text-[#4A0E0E]/30">
                                                             Preview thiệp sẽ hiển thị tại đây
                                                         </div>
                                                     )}

@@ -91,33 +91,33 @@ export default function GuestsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#fdfaf7]">
+        <div className="min-h-screen bg-[#FDF5F0]">
             {/* Nav */}
-            <nav className="border-b border-[#c9a96e]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+            <nav className="border-b border-[#8B0000]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
                 <div className="max-w-5xl mx-auto px-4 h-16 flex items-center gap-4">
                     <Link href="/dashboard">
-                        <Button variant="ghost" size="sm" className="gap-2 text-[#2c1810]/60 h-8">
+                        <Button variant="ghost" size="sm" className="gap-2 text-[#4A0E0E]/60 h-8">
                             <ArrowLeft className="w-4 h-4" />
                         </Button>
                     </Link>
                     <div className="flex items-center gap-2">
-                        <Heart className="w-5 h-5 text-[#c9a96e] fill-[#c9a96e]" />
-                        <span className="font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <Heart className="w-5 h-5 text-[#8B0000] fill-[#8B0000]" />
+                        <span className="font-bold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
                             Quản lý Khách Mời
                         </span>
                     </div>
                     <div className="ml-auto flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="h-8 text-xs border-[#c9a96e]/20 gap-1.5">
+                        <Button variant="outline" size="sm" className="h-8 text-xs border-[#8B0000]/20 gap-1.5">
                             <Download className="w-3.5 h-3.5" />
                             Xuất CSV
                         </Button>
-                        <Button variant="outline" size="sm" className="h-8 text-xs border-[#c9a96e]/20 gap-1.5">
+                        <Button variant="outline" size="sm" className="h-8 text-xs border-[#8B0000]/20 gap-1.5">
                             <Upload className="w-3.5 h-3.5" />
                             Import CSV
                         </Button>
                         <Dialog open={addOpen} onOpenChange={setAddOpen}>
                             <DialogTrigger asChild>
-                                <Button size="sm" className="h-8 text-xs bg-[#c9a96e] hover:bg-[#b8925a] text-white gap-1.5">
+                                <Button size="sm" className="h-8 text-xs bg-[#8B0000] hover:bg-[#A61C00] text-white gap-1.5">
                                     <Plus className="w-3.5 h-3.5" />
                                     Thêm khách
                                 </Button>
@@ -146,7 +146,7 @@ export default function GuestsPage() {
                                             </SelectContent>
                                         </Select>
                                     </div>
-                                    <Button onClick={handleAdd} className="w-full bg-[#c9a96e] hover:bg-[#b8925a] text-white">
+                                    <Button onClick={handleAdd} className="w-full bg-[#8B0000] hover:bg-[#A61C00] text-white">
                                         <UserPlus className="w-4 h-4 mr-2" />
                                         Thêm khách
                                     </Button>
@@ -166,15 +166,15 @@ export default function GuestsPage() {
                         { label: 'Không tham dự', value: stats.declined, icon: XCircle, color: 'text-red-500', bg: 'bg-red-50' },
                         { label: 'Chưa phản hồi', value: stats.pending, icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50' },
                     ].map((s) => (
-                        <Card key={s.label} className="border-[#c9a96e]/10">
+                        <Card key={s.label} className="border-[#8B0000]/10">
                             <CardContent className="p-4">
                                 <div className="flex items-center justify-between mb-2">
-                                    <p className="text-xs text-[#2c1810]/40">{s.label}</p>
+                                    <p className="text-xs text-[#4A0E0E]/40">{s.label}</p>
                                     <div className={`w-7 h-7 rounded-lg ${s.bg} flex items-center justify-center`}>
                                         <s.icon className={`w-3.5 h-3.5 ${s.color}`} />
                                     </div>
                                 </div>
-                                <p className="text-xl font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                <p className="text-xl font-bold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
                                     {s.value}
                                 </p>
                             </CardContent>
@@ -183,12 +183,12 @@ export default function GuestsPage() {
                 </div>
 
                 {/* RSVP Progress bar */}
-                <Card className="border-[#c9a96e]/10 mb-6">
+                <Card className="border-[#8B0000]/10 mb-6">
                     <CardContent className="p-5">
                         <div className="flex items-center gap-2 mb-3">
-                            <BarChart2 className="w-4 h-4 text-[#c9a96e]" />
-                            <span className="font-medium text-sm text-[#2c1810]">Tỉ lệ phản hồi RSVP</span>
-                            <span className="text-sm text-[#2c1810]/50 ml-auto">
+                            <BarChart2 className="w-4 h-4 text-[#8B0000]" />
+                            <span className="font-medium text-sm text-[#4A0E0E]">Tỉ lệ phản hồi RSVP</span>
+                            <span className="text-sm text-[#4A0E0E]/50 ml-auto">
                                 {stats.attending + stats.declined}/{stats.total} ({Math.round(((stats.attending + stats.declined) / stats.total) * 100)}%)
                             </span>
                         </div>
@@ -197,7 +197,7 @@ export default function GuestsPage() {
                             <div className="bg-red-300 transition-all" style={{ width: `${(stats.declined / stats.total) * 100}%` }} />
                             <div className="bg-amber-200 flex-1" />
                         </div>
-                        <div className="flex gap-4 mt-2 text-xs text-[#2c1810]/50">
+                        <div className="flex gap-4 mt-2 text-xs text-[#4A0E0E]/50">
                             <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" />Sẽ tham dự</span>
                             <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-300 inline-block" />Không tham dự</span>
                             <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-200 inline-block" />Chưa phản hồi</span>
@@ -208,16 +208,16 @@ export default function GuestsPage() {
                 {/* Filters */}
                 <div className="flex flex-col sm:flex-row gap-3 mb-5">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#2c1810]/30" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4A0E0E]/30" />
                         <Input
                             placeholder="Tìm theo tên hoặc số điện thoại..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="pl-10 h-9 text-sm border-[#c9a96e]/20"
+                            className="pl-10 h-9 text-sm border-[#8B0000]/20"
                         />
                     </div>
                     <Select value={filterGroup} onValueChange={setFilterGroup}>
-                        <SelectTrigger className="w-40 h-9 text-sm border-[#c9a96e]/20">
+                        <SelectTrigger className="w-40 h-9 text-sm border-[#8B0000]/20">
                             <SelectValue placeholder="Nhóm" />
                         </SelectTrigger>
                         <SelectContent>
@@ -228,7 +228,7 @@ export default function GuestsPage() {
                         </SelectContent>
                     </Select>
                     <Select value={filterRsvp} onValueChange={setFilterRsvp}>
-                        <SelectTrigger className="w-44 h-9 text-sm border-[#c9a96e]/20">
+                        <SelectTrigger className="w-44 h-9 text-sm border-[#8B0000]/20">
                             <SelectValue placeholder="Trạng thái" />
                         </SelectTrigger>
                         <SelectContent>
@@ -242,7 +242,7 @@ export default function GuestsPage() {
 
                 {/* Guest List */}
                 <Tabs defaultValue="list">
-                    <TabsList className="mb-4 bg-[#c9a96e]/5">
+                    <TabsList className="mb-4 bg-[#8B0000]/5">
                         <TabsTrigger value="list" className="text-sm data-[state=active]:bg-white">Danh sách</TabsTrigger>
                         <TabsTrigger value="pending" className="text-sm data-[state=active]:bg-white">
                             Chưa phản hồi
@@ -261,7 +261,7 @@ export default function GuestsPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.03 }}
                                     >
-                                        <Card className="border-[#c9a96e]/10 hover:shadow-sm transition-shadow">
+                                        <Card className="border-[#8B0000]/10 hover:shadow-sm transition-shadow">
                                             <CardContent className="p-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className={`w-9 h-9 rounded-full ${rsvpCfg.bg} flex items-center justify-center flex-shrink-0`}>
@@ -269,14 +269,14 @@ export default function GuestsPage() {
                                                     </div>
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex items-center gap-2 flex-wrap">
-                                                            <span className="font-medium text-sm text-[#2c1810]">{guest.name}</span>
+                                                            <span className="font-medium text-sm text-[#4A0E0E]">{guest.name}</span>
                                                             <Badge className={`text-xs border-0 ${rsvpCfg.badge}`}>{rsvpCfg.label}</Badge>
-                                                            <Badge variant="outline" className="text-xs border-[#c9a96e]/20 text-[#2c1810]/50">
+                                                            <Badge variant="outline" className="text-xs border-[#8B0000]/20 text-[#4A0E0E]/50">
                                                                 {GROUP_LABELS[guest.group]}
                                                             </Badge>
                                                         </div>
-                                                        {guest.phone && <p className="text-xs text-[#2c1810]/40 mt-0.5">{guest.phone}</p>}
-                                                        {guest.message && <p className="text-xs text-[#2c1810]/50 mt-1 italic">&ldquo;{guest.message}&rdquo;</p>}
+                                                        {guest.phone && <p className="text-xs text-[#4A0E0E]/40 mt-0.5">{guest.phone}</p>}
+                                                        {guest.message && <p className="text-xs text-[#4A0E0E]/50 mt-1 italic">&ldquo;{guest.message}&rdquo;</p>}
                                                     </div>
                                                     <div className="text-right flex-shrink-0">
                                                         {guest.rsvp === 'attending' && (
@@ -303,7 +303,7 @@ export default function GuestsPage() {
                                 )
                             })}
                             {filtered.length === 0 && (
-                                <div className="text-center py-16 text-[#2c1810]/30">
+                                <div className="text-center py-16 text-[#4A0E0E]/30">
                                     <Users className="w-10 h-10 mx-auto mb-3 opacity-30" />
                                     <p className="text-sm">Không tìm thấy khách mời phù hợp</p>
                                 </div>
@@ -318,8 +318,8 @@ export default function GuestsPage() {
                                     <Card className="border-amber-200 bg-amber-50/50">
                                         <CardContent className="p-4 flex items-center justify-between">
                                             <div>
-                                                <p className="font-medium text-sm text-[#2c1810]">{guest.name}</p>
-                                                {guest.phone && <p className="text-xs text-[#2c1810]/40">{guest.phone} · {GROUP_LABELS[guest.group]}</p>}
+                                                <p className="font-medium text-sm text-[#4A0E0E]">{guest.name}</p>
+                                                {guest.phone && <p className="text-xs text-[#4A0E0E]/40">{guest.phone} · {GROUP_LABELS[guest.group]}</p>}
                                             </div>
                                             <Button size="sm" variant="outline" className="h-8 text-xs gap-1.5 border-amber-300">
                                                 <Mail className="w-3 h-3" />
