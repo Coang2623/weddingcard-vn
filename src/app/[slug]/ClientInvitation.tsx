@@ -465,11 +465,11 @@ function RSVPBlock({ block, invitationId }: { block: InvitationBlock; invitation
     }
 
     const cardBg = isDark ? 'rgba(255,255,255,0.05)' : 'white'
-    const inputBg = isDark ? 'rgba(255,255,255,0.02)' : '#fdfaf7'
+    const inputBg = isDark ? 'rgba(255,255,255,0.02)' : '#FDF5F0'
 
     if (submitted) {
         return (
-            <div className="py-16 px-6 text-center" style={{ background: isDark ? '#0a0a0a' : '#fdfaf7' }}>
+            <div className="py-16 px-6 text-center" style={{ background: isDark ? '#0a0a0a' : '#FDF5F0' }}>
                 <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="text-6xl mb-6">
                     {attending ? '🎊' : '💌'}
                 </motion.div>
@@ -640,28 +640,28 @@ function GuestbookBlock({ invitationId }: { invitationId: string }) {
         <div className="py-10 px-6 bg-white">
             <div className="text-center mb-6">
                 <MessageSquare className="w-7 h-7 text-pink-400 mx-auto mb-2" />
-                <h3 className="text-xl font-semibold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h3 className="text-xl font-semibold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Sổ Lưu Bút ❤️
                 </h3>
             </div>
             <div className="max-w-sm mx-auto">
                 <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
                     {messages.map((msg, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-[#fdfaf7] rounded-xl p-3 border border-[#c9a96e]/10">
-                            <p className="text-sm text-[#2c1810]/70 leading-relaxed">&ldquo;{msg.content}&rdquo;</p>
+                        <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-[#FDF5F0] rounded-xl p-3 border border-[#8B0000]/10">
+                            <p className="text-sm text-[#4A0E0E]/70 leading-relaxed">&ldquo;{msg.content}&rdquo;</p>
                             <div className="flex items-center justify-between mt-2">
-                                <span className="text-xs font-medium text-[#c9a96e]">— {msg.author_name}</span>
-                                <span className="text-xs text-[#2c1810]/30">{timeAgo(msg.created_at)}</span>
+                                <span className="text-xs font-medium text-[#8B0000]">— {msg.author_name}</span>
+                                <span className="text-xs text-[#4A0E0E]/30">{timeAgo(msg.created_at)}</span>
                             </div>
                         </motion.div>
                     ))}
                     {messages.length === 0 && (
-                        <p className="text-center text-sm text-[#2c1810]/30 py-4">Chưa có lời chúc nào. Hãy là người đầu tiên! 💌</p>
+                        <p className="text-center text-sm text-[#4A0E0E]/30 py-4">Chưa có lời chúc nào. Hãy là người đầu tiên! 💌</p>
                     )}
                 </div>
                 <form onSubmit={handleSend} className="space-y-3">
-                    <Input placeholder="Tên của bạn" value={author} onChange={(e) => setAuthor(e.target.value)} className="h-10 border-[#c9a96e]/20 bg-[#fdfaf7] text-sm" />
-                    <Textarea placeholder="Lời chúc từ trái tim bạn..." value={content} onChange={(e) => setContent(e.target.value)} rows={3} className="border-[#c9a96e]/20 bg-[#fdfaf7] resize-none text-sm" />
+                    <Input placeholder="Tên của bạn" value={author} onChange={(e) => setAuthor(e.target.value)} className="h-10 border-[#8B0000]/20 bg-[#FDF5F0] text-sm" />
+                    <Textarea placeholder="Lời chúc từ trái tim bạn..." value={content} onChange={(e) => setContent(e.target.value)} rows={3} className="border-[#8B0000]/20 bg-[#FDF5F0] resize-none text-sm" />
                     <Button type="submit" disabled={loading} size="sm" className="w-full bg-pink-400 hover:bg-pink-500 text-white text-sm h-10">
                         {loading ? 'Đang gửi...' : '💌 Gửi Lời Chúc'}
                     </Button>
@@ -732,18 +732,18 @@ function GalleryBlock({ block }: { block: InvitationBlock }) {
 
     if (!images || images.length === 0) {
         return (
-            <div className="py-8 sm:py-10 px-4 sm:px-6 bg-[#fdfaf7]">
-                <h2 className="text-center text-lg sm:text-xl font-semibold text-[#2c1810] mb-4 sm:mb-5" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <div className="py-8 sm:py-10 px-4 sm:px-6 bg-[#FDF5F0]">
+                <h2 className="text-center text-lg sm:text-xl font-semibold text-[#4A0E0E] mb-4 sm:mb-5" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Album Ảnh
                 </h2>
-                <p className="text-center text-sm text-[#2c1810]/30">Chưa có ảnh trong album.</p>
+                <p className="text-center text-sm text-[#4A0E0E]/30">Chưa có ảnh trong album.</p>
             </div>
         )
     }
 
     return (
-        <div className="py-8 sm:py-10 bg-[#fdfaf7]">
-            <h2 className="text-center text-lg sm:text-xl font-semibold text-[#2c1810] mb-4 sm:mb-5 px-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+        <div className="py-8 sm:py-10 bg-[#FDF5F0]">
+            <h2 className="text-center text-lg sm:text-xl font-semibold text-[#4A0E0E] mb-4 sm:mb-5 px-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                 Album Ảnh
             </h2>
 
@@ -783,8 +783,8 @@ function GalleryBlock({ block }: { block: InvitationBlock }) {
                                 key={i}
                                 onClick={() => setActiveIndex(i)}
                                 className={`h-2 rounded-full transition-all duration-300 ${i === activeIndex
-                                    ? 'bg-[#c9a96e] w-6'
-                                    : 'bg-[#c9a96e]/25 w-2'
+                                    ? 'bg-[#8B0000] w-6'
+                                    : 'bg-[#8B0000]/25 w-2'
                                     }`}
                             />
                         ))}
@@ -792,7 +792,7 @@ function GalleryBlock({ block }: { block: InvitationBlock }) {
                 )}
 
                 {/* Counter */}
-                <p className="text-center text-xs text-[#2c1810]/30 mt-2">
+                <p className="text-center text-xs text-[#4A0E0E]/30 mt-2">
                     {activeIndex + 1} / {images.length}
                 </p>
             </div>
@@ -816,7 +816,7 @@ function GalleryBlock({ block }: { block: InvitationBlock }) {
                                 whileHover={{ scale: 1.05 }}
                                 onClick={() => setLightbox(imgIndex)}
                             >
-                                <div className="aspect-square bg-[#c9a96e]/10 h-full w-full">
+                                <div className="aspect-square bg-[#8B0000]/10 h-full w-full">
                                     <img src={images[imgIndex]} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x800/fdfaf7/c9a96e?text=Opps' }} />
                                 </div>
                             </motion.div>
@@ -881,8 +881,8 @@ function MapBlock({ block }: { block: InvitationBlock }) {
     return (
         <div className="py-10 px-6 bg-white">
             <div className="flex items-center gap-2 justify-center mb-5">
-                <MapPin className="w-5 h-5 text-[#c9a96e]" />
-                <h2 className="text-xl font-semibold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>Bản Đồ</h2>
+                <MapPin className="w-5 h-5 text-[#8B0000]" />
+                <h2 className="text-xl font-semibold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>Bản Đồ</h2>
             </div>
             {embedUrl ? (
                 <div className="max-w-sm mx-auto aspect-video rounded-xl overflow-hidden">
@@ -890,15 +890,15 @@ function MapBlock({ block }: { block: InvitationBlock }) {
                 </div>
             ) : address ? (
                 <div className="text-center">
-                    <p className="text-sm text-[#2c1810]/50 mb-3">{address}</p>
-                    <Button variant="outline" size="sm" className="h-9 text-xs border-[#c9a96e]/20 text-[#c9a96e] gap-1.5"
+                    <p className="text-sm text-[#4A0E0E]/50 mb-3">{address}</p>
+                    <Button variant="outline" size="sm" className="h-9 text-xs border-[#8B0000]/20 text-[#8B0000] gap-1.5"
                         onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(address)}`)}
                     >
                         <MapPin className="w-3.5 h-3.5" /> Mở Google Maps
                     </Button>
                 </div>
             ) : (
-                <p className="text-center text-sm text-[#2c1810]/30">Chưa có thông tin bản đồ.</p>
+                <p className="text-center text-sm text-[#4A0E0E]/30">Chưa có thông tin bản đồ.</p>
             )}
         </div>
     )
@@ -958,11 +958,11 @@ function GiftBlock({ block }: { block: InvitationBlock }) {
 function TextBlock({ block }: { block: InvitationBlock }) {
     const { content, title } = block.props as { content?: string; title?: string }
     return (
-        <div className="py-8 px-6 bg-[#fdfaf7]">
+        <div className="py-8 px-6 bg-[#FDF5F0]">
             <div className="max-w-sm mx-auto text-center">
                 <Type className="w-5 h-5 text-slate-400 mx-auto mb-2" />
-                {title && <h3 className="text-lg font-semibold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>{title}</h3>}
-                <p className="text-sm text-[#2c1810]/60 leading-relaxed whitespace-pre-wrap">{content || ''}</p>
+                {title && <h3 className="text-lg font-semibold text-[#4A0E0E] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>{title}</h3>}
+                <p className="text-sm text-[#4A0E0E]/60 leading-relaxed whitespace-pre-wrap">{content || ''}</p>
             </div>
         </div>
     )
@@ -1069,14 +1069,14 @@ export default function ClientInvitation({ slug }: { slug: string }) {
 
     if (notFound) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#fdfaf7]">
+            <div className="min-h-screen flex items-center justify-center bg-[#FDF5F0]">
                 <div className="text-center px-6">
                     <div className="text-5xl mb-4">💌</div>
-                    <h1 className="text-2xl font-bold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <h1 className="text-2xl font-bold text-[#4A0E0E] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                         Không tìm thấy thiệp
                     </h1>
-                    <p className="text-sm text-[#2c1810]/50 mb-6">Thiệp này không tồn tại hoặc đã bị xóa.</p>
-                    <Button asChild className="bg-[#c9a96e] hover:bg-[#b8925a] text-white">
+                    <p className="text-sm text-[#4A0E0E]/50 mb-6">Thiệp này không tồn tại hoặc đã bị xóa.</p>
+                    <Button asChild className="bg-[#8B0000] hover:bg-[#A61C00] text-white">
                         <Link href="/">Về trang chủ</Link>
                     </Button>
                 </div>

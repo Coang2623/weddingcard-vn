@@ -42,11 +42,11 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#fdfaf7] flex">
+        <div className="min-h-screen bg-[#FDF5F0] flex">
             {/* Left decorative */}
-            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#2c1810]">
+            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#4A0E0E]">
                 <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#c9a96e] blur-3xl" />
+                    <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#8B0000] blur-3xl" />
                     <div className="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-rose-400 blur-3xl" />
                 </div>
                 <div className="relative flex flex-col items-center justify-center w-full p-12 text-center">
@@ -58,7 +58,7 @@ export default function LoginPage() {
                         Thiệp cưới của bạn đang chờ. Đăng nhập để tiếp tục chỉnh sửa và quản lý khách mời.
                     </p>
                     <div className="mt-10 flex items-center gap-4 text-white/40 text-sm">
-                        <Heart className="w-4 h-4 fill-[#c9a96e] text-[#c9a96e]" />
+                        <Heart className="w-4 h-4 fill-[#8B0000] text-[#8B0000]" />
                         <span>WeddingCard.vn — Thiệp cưới đẹp nhất Việt Nam</span>
                     </div>
                 </div>
@@ -73,27 +73,27 @@ export default function LoginPage() {
                     transition={{ duration: 0.5 }}
                 >
                     <div className="flex items-center gap-2 mb-8">
-                        <Heart className="w-6 h-6 text-[#c9a96e] fill-[#c9a96e]" />
-                        <span className="font-bold text-lg text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
-                            WeddingCard<span className="text-[#c9a96e]">.vn</span>
+                        <Heart className="w-6 h-6 text-[#8B0000] fill-[#8B0000]" />
+                        <span className="font-bold text-lg text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            WeddingCard<span className="text-[#8B0000]">.vn</span>
                         </span>
                     </div>
 
-                    <h1 className="text-3xl font-bold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <h1 className="text-3xl font-bold text-[#4A0E0E] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                         Đăng nhập
                     </h1>
-                    <p className="text-[#2c1810]/50 mb-8">
+                    <p className="text-[#4A0E0E]/50 mb-8">
                         Chưa có tài khoản?{' '}
-                        <Link href="/register" className="text-[#c9a96e] hover:underline font-medium">
+                        <Link href="/register" className="text-[#8B0000] hover:underline font-medium">
                             Đăng ký miễn phí
                         </Link>
                     </p>
 
                     <form onSubmit={handleLogin} className="space-y-5">
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-[#2c1810] font-medium">Email</Label>
+                            <Label htmlFor="email" className="text-[#4A0E0E] font-medium">Email</Label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#2c1810]/30" />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4A0E0E]/30" />
                                 <Input
                                     id="email"
                                     type="email"
@@ -101,15 +101,15 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="pl-10 h-11 border-[#c9a96e]/20 focus:border-[#c9a96e] focus:ring-[#c9a96e]/20"
+                                    className="pl-10 h-11 border-[#8B0000]/20 focus:border-[#8B0000] focus:ring-[#8B0000]/20"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="password" className="text-[#2c1810] font-medium">Mật khẩu</Label>
+                            <Label htmlFor="password" className="text-[#4A0E0E] font-medium">Mật khẩu</Label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#2c1810]/30" />
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4A0E0E]/30" />
                                 <Input
                                     id="password"
                                     type={showPassword ? 'text' : 'password'}
@@ -117,12 +117,12 @@ export default function LoginPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    className="pl-10 pr-10 h-11 border-[#c9a96e]/20 focus:border-[#c9a96e] focus:ring-[#c9a96e]/20"
+                                    className="pl-10 pr-10 h-11 border-[#8B0000]/20 focus:border-[#8B0000] focus:ring-[#8B0000]/20"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2c1810]/30 hover:text-[#2c1810]/60 transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4A0E0E]/30 hover:text-[#4A0E0E]/60 transition-colors"
                                 >
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -130,7 +130,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="flex justify-end">
-                            <Link href="/forgot-password" className="text-sm text-[#c9a96e] hover:underline">
+                            <Link href="/forgot-password" className="text-sm text-[#8B0000] hover:underline">
                                 Quên mật khẩu?
                             </Link>
                         </div>
@@ -138,7 +138,7 @@ export default function LoginPage() {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full h-11 bg-[#c9a96e] hover:bg-[#b8925a] text-white shadow-lg shadow-[#c9a96e]/30"
+                            className="w-full h-11 bg-[#8B0000] hover:bg-[#A61C00] text-white shadow-lg shadow-[#8B0000]/30"
                         >
                             {loading ? (
                                 <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Đang đăng nhập...</>
@@ -150,16 +150,16 @@ export default function LoginPage() {
 
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-[#c9a96e]/10" />
+                            <div className="w-full border-t border-[#8B0000]/10" />
                         </div>
-                        <div className="relative flex justify-center text-xs text-[#2c1810]/40 bg-[#fdfaf7] px-3">
+                        <div className="relative flex justify-center text-xs text-[#4A0E0E]/40 bg-[#FDF5F0] px-3">
                             hoặc
                         </div>
                     </div>
 
                     <Button
                         variant="outline"
-                        className="w-full h-11 border-[#c9a96e]/20 hover:border-[#c9a96e]/40 text-[#2c1810]"
+                        className="w-full h-11 border-[#8B0000]/20 hover:border-[#8B0000]/40 text-[#4A0E0E]"
                         onClick={async () => {
                             const supabase = createClient()
                             await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/auth/callback` } })
@@ -174,11 +174,11 @@ export default function LoginPage() {
                         Tiếp tục với Google
                     </Button>
 
-                    <p className="mt-8 text-center text-xs text-[#2c1810]/30">
+                    <p className="mt-8 text-center text-xs text-[#4A0E0E]/30">
                         Bằng cách đăng nhập, bạn đồng ý với{' '}
-                        <Link href="/terms" className="underline hover:text-[#c9a96e]">Điều khoản</Link>{' '}
+                        <Link href="/terms" className="underline hover:text-[#8B0000]">Điều khoản</Link>{' '}
                         và{' '}
-                        <Link href="/privacy" className="underline hover:text-[#c9a96e]">Chính sách riêng tư</Link>
+                        <Link href="/privacy" className="underline hover:text-[#8B0000]">Chính sách riêng tư</Link>
                     </p>
                 </motion.div>
             </div>

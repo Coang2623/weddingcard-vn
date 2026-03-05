@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Heart, Sparkles, Users, QrCode, Globe2, Shield, ChevronRight, Star, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { SnowingIcons } from '@/components/SnowingIcons'
 
 const features = [
   {
@@ -110,27 +111,28 @@ const itemVariants = {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#fdfaf7] overflow-x-hidden">
+    <div className="min-h-screen bg-[#FDF5F0] overflow-x-hidden relative">
+      <SnowingIcons />
       {/* NAVIGATION */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-[#c9a96e]/20">
+      <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-[#8B0000]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Heart className="w-6 h-6 text-[#c9a96e] fill-[#c9a96e] animate-heartbeat" />
-            <span className="font-bold text-lg text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
-              WeddingCard<span className="text-[#c9a96e]">.vn</span>
+            <Heart className="w-6 h-6 text-[#8B0000] fill-[#8B0000] animate-heartbeat" />
+            <span className="font-bold text-lg text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
+              WeddingCard<span className="text-[#8B0000]">.vn</span>
             </span>
           </Link>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#2c1810]/70">
-            <Link href="#features" className="hover:text-[#c9a96e] transition-colors">Tính năng</Link>
-            <Link href="#templates" className="hover:text-[#c9a96e] transition-colors">Mẫu thiệp</Link>
-            <Link href="#pricing" className="hover:text-[#c9a96e] transition-colors">Bảng giá</Link>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#4A0E0E]/70">
+            <Link href="#features" className="hover:text-[#8B0000] transition-colors">Tính năng</Link>
+            <Link href="#templates" className="hover:text-[#8B0000] transition-colors">Mẫu thiệp</Link>
+            <Link href="#pricing" className="hover:text-[#8B0000] transition-colors">Bảng giá</Link>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/login">
-              <Button variant="ghost" size="sm" className="text-[#2c1810]">Đăng nhập</Button>
+              <Button variant="ghost" size="sm" className="text-[#4A0E0E] hover:text-[#8B0000] hover:bg-[#8B0000]/10">Đăng nhập</Button>
             </Link>
             <Link href="/register">
-              <Button size="sm" className="bg-[#c9a96e] hover:bg-[#b8925a] text-white">
+              <Button size="sm" className="bg-[#8B0000] hover:bg-[#A61C00] text-white">
                 Tạo thiệp ngay
               </Button>
             </Link>
@@ -142,9 +144,9 @@ export default function LandingPage() {
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
         {/* Background decorations */}
         <div className="absolute inset-0 wedding-gradient opacity-60" />
-        <div className="absolute top-20 left-10 w-48 h-48 rounded-full bg-[#c9a96e]/10 blur-3xl animate-float" />
+        <div className="absolute top-20 left-10 w-48 h-48 rounded-full bg-[#8B0000]/10 blur-3xl animate-float" />
         <div className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-rose-300/10 blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-40 right-1/4 w-3 h-3 rounded-full bg-[#c9a96e]/60 animate-heartbeat" />
+        <div className="absolute top-40 right-1/4 w-3 h-3 rounded-full bg-[#8B0000]/60 animate-heartbeat" />
         <div className="absolute top-60 left-1/4 w-2 h-2 rounded-full bg-rose-400/60 animate-heartbeat" style={{ animationDelay: '0.7s' }} />
 
         <div className="relative max-w-4xl mx-auto text-center">
@@ -153,29 +155,29 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Badge className="mb-6 bg-[#c9a96e]/10 text-[#c9a96e] border-[#c9a96e]/30 px-4 py-1 text-sm">
+            <Badge className="mb-6 bg-[#8B0000]/10 text-[#8B0000] border-[#8B0000]/30 px-4 py-1 text-sm">
               ✨ Nền tảng thiệp cưới #1 Việt Nam
             </Badge>
           </motion.div>
 
           <motion.h1
             className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#2c1810' }}
+            style={{ fontFamily: 'Playfair Display, serif', color: '#4A0E0E' }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             Tạo Thiệp Cưới Online{' '}
             <span className="relative">
-              <span className="text-[#c9a96e]">Đẹp & Dễ Dàng</span>
+              <span className="text-[#8B0000]">Đẹp & Dễ Dàng</span>
               <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 8" fill="none">
-                <path d="M0 6 Q100 0 200 6" stroke="#c9a96e" strokeWidth="2" fill="none" strokeDasharray="4 2" />
+                <path d="M0 6 Q100 0 200 6" stroke="#8B0000" strokeWidth="2" fill="none" strokeDasharray="4 2" />
               </svg>
             </span>
           </motion.h1>
 
           <motion.p
-            className="text-lg sm:text-xl text-[#2c1810]/60 mb-10 max-w-2xl mx-auto leading-relaxed"
+            className="text-lg sm:text-xl text-[#4A0E0E]/60 mb-10 max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -190,14 +192,14 @@ export default function LandingPage() {
             transition={{ delay: 0.4 }}
           >
             <Link href="/register">
-              <Button size="lg" className="bg-[#c9a96e] hover:bg-[#b8925a] text-white gap-2 px-8 h-12 text-base shadow-lg shadow-[#c9a96e]/30 hover:shadow-xl hover:shadow-[#c9a96e]/40 transition-all">
+              <Button size="lg" className="bg-[#8B0000] hover:bg-[#A61C00] text-white gap-2 px-8 h-12 text-base shadow-lg shadow-[#8B0000]/30 hover:shadow-xl hover:shadow-[#8B0000]/40 transition-all">
                 <Heart className="w-4 h-4 fill-white" />
                 Tạo Thiệp Miễn Phí
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </Link>
             <Link href="/demo" target="_blank">
-              <Button size="lg" variant="outline" className="border-[#c9a96e]/40 text-[#c9a96e] hover:bg-[#c9a96e]/5 h-12 text-base gap-2">
+              <Button size="lg" variant="outline" className="border-[#8B0000]/40 text-[#8B0000] hover:bg-[#8B0000]/5 h-12 text-base gap-2">
                 🎴 Xem Demo Thiệp
               </Button>
             </Link>
@@ -216,10 +218,10 @@ export default function LandingPage() {
               { num: '4.9★', label: 'Đánh giá' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-xl font-bold text-[#c9a96e]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <div className="text-xl font-bold text-[#8B0000]" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {stat.num}
                 </div>
-                <div className="text-xs text-[#2c1810]/50 mt-0.5">{stat.label}</div>
+                <div className="text-xs text-[#4A0E0E]/50 mt-0.5">{stat.label}</div>
               </div>
             ))}
           </motion.div>
@@ -232,19 +234,19 @@ export default function LandingPage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.7 }}
         >
-          <div className="glass-card rounded-3xl p-6 shadow-2xl shadow-[#c9a96e]/20 text-center">
-            <div className="text-4xl mb-3 animate-float">💐</div>
-            <p className="text-xs text-[#2c1810]/40 tracking-widest uppercase mb-2">Trân trọng kính mời</p>
-            <h3 className="text-2xl font-semibold text-[#2c1810] mb-0.5" style={{ fontFamily: 'Playfair Display, serif' }}>
+          <div className="glass-card rounded-3xl p-6 shadow-2xl shadow-[#8B0000]/20 text-center">
+            <div className="text-4xl mb-3 animate-float text-[#8B0000] font-serif drop-shadow-sm">囍</div>
+            <p className="text-xs text-[#4A0E0E]/40 tracking-widest uppercase mb-2">Trân trọng kính mời</p>
+            <h3 className="text-2xl font-semibold text-[#4A0E0E] mb-0.5" style={{ fontFamily: 'Playfair Display, serif' }}>
               Minh Anh & Quang Huy
             </h3>
-            <p className="text-[#c9a96e] text-sm font-medium mb-4">12 – 12 – 2025</p>
-            <div className="text-xs bg-[#c9a96e]/10 rounded-full px-4 py-1.5 text-[#c9a96e] inline-block">
+            <p className="text-[#8B0000] text-sm font-medium mb-4">12 – 12 – 2025</p>
+            <div className="text-xs bg-[#8B0000]/10 rounded-full px-4 py-1.5 text-[#8B0000] inline-block">
               ✓ Xác nhận tham dự tại đây
             </div>
           </div>
           {/* Phone frame hint */}
-          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs text-[#2c1810]/30">
+          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs text-[#4A0E0E]/30">
             📱 Xem đẹp trên mọi thiết bị
           </div>
         </motion.div>
@@ -254,10 +256,10 @@ export default function LandingPage() {
       <section className="py-20 px-4 bg-white/60">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#4A0E0E] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
               Chỉ 3 bước đơn giản
             </h2>
-            <p className="text-[#2c1810]/50">Từ lúc đăng ký đến khi gửi link cho khách mời — dưới 30 phút</p>
+            <p className="text-[#4A0E0E]/50">Từ lúc đăng ký đến khi gửi link cho khách mời — dưới 30 phút</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -273,14 +275,14 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
               >
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#c9a96e] text-white text-xs font-bold flex items-center justify-center shadow-md">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#8B0000] text-white text-xs font-bold flex items-center justify-center shadow-md">
                   {item.step}
                 </div>
                 <div className="text-5xl mb-4 mt-4">{item.icon}</div>
-                <h3 className="text-lg font-semibold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{item.title}</h3>
-                <p className="text-[#2c1810]/55 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-semibold text-[#4A0E0E] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>{item.title}</h3>
+                <p className="text-[#4A0E0E]/55 text-sm leading-relaxed">{item.desc}</p>
                 {i < 2 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 text-[#c9a96e] text-2xl">→</div>
+                  <div className="hidden md:block absolute top-1/2 -right-4 text-[#8B0000] text-2xl">→</div>
                 )}
               </motion.div>
             ))}
@@ -292,10 +294,10 @@ export default function LandingPage() {
       <section id="features" className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#4A0E0E] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
               Mọi thứ cặp đôi cần
             </h2>
-            <p className="text-[#2c1810]/50">8 tính năng hoàn chỉnh cho một đám cưới hiện đại</p>
+            <p className="text-[#4A0E0E]/50">8 tính năng hoàn chỉnh cho một đám cưới hiện đại</p>
           </div>
           <motion.div
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -308,13 +310,13 @@ export default function LandingPage() {
               <motion.div
                 key={f.title}
                 variants={itemVariants}
-                className="group p-6 rounded-2xl border border-transparent hover:border-[#c9a96e]/20 hover:shadow-lg hover:shadow-[#c9a96e]/10 transition-all duration-300 bg-white/70 hover:bg-white"
+                className="group p-6 rounded-2xl border border-transparent hover:border-[#8B0000]/20 hover:shadow-lg hover:shadow-[#8B0000]/10 transition-all duration-300 bg-white/70 hover:bg-white"
               >
                 <div className={`w-12 h-12 rounded-xl ${f.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                   <f.icon className={`w-6 h-6 ${f.color}`} />
                 </div>
-                <h3 className="font-semibold text-[#2c1810] mb-2">{f.title}</h3>
-                <p className="text-sm text-[#2c1810]/55 leading-relaxed">{f.desc}</p>
+                <h3 className="font-semibold text-[#4A0E0E] mb-2">{f.title}</h3>
+                <p className="text-sm text-[#4A0E0E]/55 leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -322,10 +324,10 @@ export default function LandingPage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 px-4 bg-[#f5e6d3]/30">
+      <section className="py-20 px-4 bg-[#F8DCE0]/30">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h2 className="text-3xl font-bold text-[#4A0E0E] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
               Cặp đôi nói gì?
             </h2>
           </div>
@@ -341,15 +343,15 @@ export default function LandingPage() {
               >
                 <div className="flex gap-0.5 mb-4">
                   {Array.from({ length: t.stars }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-[#c9a96e] text-[#c9a96e]" />
+                    <Star key={j} className="w-4 h-4 fill-[#8B0000] text-[#8B0000]" />
                   ))}
                 </div>
-                <p className="text-sm text-[#2c1810]/70 mb-5 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
+                <p className="text-sm text-[#4A0E0E]/70 mb-5 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
                 <div className="flex items-center gap-3">
                   <div className="text-2xl">{t.avatar}</div>
                   <div>
-                    <p className="font-medium text-sm text-[#2c1810]">{t.name}</p>
-                    <p className="text-xs text-[#2c1810]/40">{t.date}</p>
+                    <p className="font-medium text-sm text-[#4A0E0E]">{t.name}</p>
+                    <p className="text-xs text-[#4A0E0E]/40">{t.date}</p>
                   </div>
                 </div>
               </motion.div>
@@ -362,53 +364,53 @@ export default function LandingPage() {
       <section id="pricing" className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-[#2c1810] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h2 className="text-3xl font-bold text-[#4A0E0E] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
               Đơn giản & Minh bạch
             </h2>
-            <p className="text-[#2c1810]/50">Trả một lần, dùng mãi mãi — không subscription, không ẩn phí</p>
+            <p className="text-[#4A0E0E]/50">Trả một lần, dùng mãi mãi — không subscription, không ẩn phí</p>
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
             {plans.map((plan) => (
               <motion.div
                 key={plan.name}
                 className={`rounded-3xl p-8 ${plan.highlight
-                  ? 'bg-[#2c1810] text-white shadow-2xl shadow-[#2c1810]/30 scale-105'
-                  : 'bg-white border border-[#c9a96e]/20'
+                  ? 'bg-[#4A0E0E] text-white shadow-2xl shadow-[#4A0E0E]/30 scale-105'
+                  : 'bg-white border border-[#8B0000]/20'
                   }`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
                 {plan.highlight && (
-                  <Badge className="mb-3 bg-[#c9a96e] text-white border-0 text-xs">PHỔ BIẾN NHẤT</Badge>
+                  <Badge className="mb-3 bg-[#8B0000] text-white border-0 text-xs">PHỔ BIẾN NHẤT</Badge>
                 )}
-                <h3 className={`text-lg font-semibold mb-1 ${plan.highlight ? 'text-[#c9a96e]' : 'text-[#2c1810]'}`}>
+                <h3 className={`text-lg font-semibold mb-1 ${plan.highlight ? 'text-[#8B0000]' : 'text-[#4A0E0E]'}`}>
                   {plan.name}
                 </h3>
                 <div className="mb-1">
                   <span className="text-4xl font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>
                     {plan.price}
                   </span>
-                  <span className={`text-sm ml-1 ${plan.highlight ? 'text-white/50' : 'text-[#2c1810]/40'}`}>
+                  <span className={`text-sm ml-1 ${plan.highlight ? 'text-white/50' : 'text-[#4A0E0E]/40'}`}>
                     {plan.period}
                   </span>
                 </div>
-                <p className={`text-sm mb-6 ${plan.highlight ? 'text-white/60' : 'text-[#2c1810]/50'}`}>
+                <p className={`text-sm mb-6 ${plan.highlight ? 'text-white/60' : 'text-[#4A0E0E]/50'}`}>
                   {plan.desc}
                 </p>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.highlight ? 'text-[#c9a96e]' : 'text-green-500'}`} />
-                      <span className={plan.highlight ? 'text-white/80' : 'text-[#2c1810]/70'}>{feature}</span>
+                      <CheckCircle2 className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.highlight ? 'text-[#8B0000]' : 'text-green-500'}`} />
+                      <span className={plan.highlight ? 'text-white/80' : 'text-[#4A0E0E]/70'}>{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <Link href="/register">
                   <Button
                     className={`w-full h-11 ${plan.highlight
-                      ? 'bg-[#c9a96e] hover:bg-[#b8925a] text-white'
-                      : 'border-[#c9a96e] text-[#c9a96e] hover:bg-[#c9a96e]/5'
+                      ? 'bg-[#8B0000] hover:bg-[#A61C00] text-white'
+                      : 'border-[#8B0000] text-[#8B0000] hover:bg-[#8B0000]/5'
                       }`}
                     variant={plan.variant}
                   >
@@ -422,9 +424,9 @@ export default function LandingPage() {
       </section>
 
       {/* CTA BANNER */}
-      <section className="py-20 px-4 bg-[#2c1810] relative overflow-hidden">
+      <section className="py-20 px-4 bg-[#4A0E0E] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full bg-[#c9a96e] blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full bg-[#8B0000] blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-48 h-48 rounded-full bg-rose-400 blur-3xl" />
         </div>
         <div className="relative max-w-2xl mx-auto text-center">
@@ -436,7 +438,7 @@ export default function LandingPage() {
             Miễn phí. Không cần thẻ tín dụng. Tạo thiệp trong 5 phút.
           </p>
           <Link href="/register">
-            <Button size="lg" className="bg-[#c9a96e] hover:bg-[#b8925a] text-white gap-2 px-10 h-12 text-base shadow-lg shadow-[#c9a96e]/30">
+            <Button size="lg" className="bg-[#8B0000] hover:bg-[#A61C00] text-white gap-2 px-10 h-12 text-base shadow-lg shadow-[#8B0000]/30">
               <Heart className="w-4 h-4 fill-white" />
               Tạo Thiệp Cưới Miễn Phí
             </Button>
@@ -445,22 +447,22 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-10 px-4 border-t border-[#c9a96e]/10 bg-[#fdfaf7]">
+      <footer className="py-10 px-4 border-t border-[#8B0000]/10 bg-[#FDF5F0]">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-              <Heart className="w-5 h-5 text-[#c9a96e] fill-[#c9a96e]" />
-              <span className="font-bold text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <Heart className="w-5 h-5 text-[#8B0000] fill-[#8B0000]" />
+              <span className="font-bold text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
                 WeddingCard.vn
               </span>
             </div>
-            <p className="text-sm text-[#2c1810]/40">
-              © 2026 WeddingCard.vn — Tạo bởi ❤️ tại Việt Nam
+            <p className="text-sm text-[#4A0E0E]/40">
+              © 2026 WeddingCard.vn — Tạo bởi Coang
             </p>
-            <div className="flex gap-6 text-sm text-[#2c1810]/50">
-              <Link href="/privacy" className="hover:text-[#c9a96e] transition-colors">Chính sách</Link>
-              <Link href="/terms" className="hover:text-[#c9a96e] transition-colors">Điều khoản</Link>
-              <Link href="/contact" className="hover:text-[#c9a96e] transition-colors">Liên hệ</Link>
+            <div className="flex gap-6 text-sm text-[#4A0E0E]/50">
+              <Link href="/privacy" className="hover:text-[#8B0000] transition-colors">Chính sách</Link>
+              <Link href="/terms" className="hover:text-[#8B0000] transition-colors">Điều khoản</Link>
+              <Link href="/contact" className="hover:text-[#8B0000] transition-colors">Liên hệ</Link>
             </div>
           </div>
         </div>

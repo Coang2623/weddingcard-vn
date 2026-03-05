@@ -2,10 +2,10 @@ import type { InvitationBlock, InvitationTheme, Template } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
 
 export const DEFAULT_THEME: InvitationTheme = {
-    primaryColor: '#c9a96e',
-    secondaryColor: '#f5e6d3',
-    backgroundColor: '#fdfaf7',
-    textColor: '#2c1810',
+    primaryColor: '#8B0000',
+    secondaryColor: '#F8DCE0',
+    backgroundColor: '#FDF5F0',
+    textColor: '#4A0E0E',
     fontTitle: 'Playfair Display',
     fontBody: 'Lato',
     style: 'minimal',
@@ -123,10 +123,10 @@ export const DEFAULT_TEMPLATES: Template[] = [
         preview_image: '/templates/minimal-01.jpg',
         is_premium: false,
         default_theme: {
-            primaryColor: '#c9a96e',
-            secondaryColor: '#f5e6d3',
-            backgroundColor: '#fdfaf7',
-            textColor: '#2c1810',
+            primaryColor: '#8B0000',
+            secondaryColor: '#F8DCE0',
+            backgroundColor: '#FDF5F0',
+            textColor: '#4A0E0E',
             fontTitle: 'Playfair Display',
             fontBody: 'Lato',
             style: 'minimal',

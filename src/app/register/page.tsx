@@ -61,16 +61,16 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#fdfaf7] flex">
+        <div className="min-h-screen bg-[#FDF5F0] flex">
             {/* Left decorative */}
-            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-[#f5e6d3] to-[#fdfaf7]">
+            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-[#F8DCE0] to-[#FDF5F0]">
                 <div className="relative flex flex-col items-center justify-center w-full p-12">
                     <div className="text-center mb-10">
-                        <div className="text-7xl mb-6 animate-float">💐</div>
-                        <h2 className="text-3xl font-bold text-[#2c1810] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <div className="text-7xl mb-6 animate-float text-[#8B0000] font-serif drop-shadow-sm">囍</div>
+                        <h2 className="text-3xl font-bold text-[#4A0E0E] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                             Bắt đầu hành trình<br />của bạn
                         </h2>
-                        <p className="text-[#2c1810]/50 text-base leading-relaxed max-w-sm">
+                        <p className="text-[#4A0E0E]/50 text-base leading-relaxed max-w-sm">
                             Hàng nghìn cặp đôi đã tin tưởng WeddingCard.vn để tạo nên ngày đặc biệt nhất của cuộc đời.
                         </p>
                     </div>
@@ -83,8 +83,8 @@ export default function RegisterPage() {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: i * 0.15 }}
                             >
-                                <CheckCircle2 className="w-5 h-5 text-[#c9a96e] flex-shrink-0" />
-                                <span className="text-sm text-[#2c1810]/70">{perk}</span>
+                                <CheckCircle2 className="w-5 h-5 text-[#8B0000] flex-shrink-0" />
+                                <span className="text-sm text-[#4A0E0E]/70">{perk}</span>
                             </motion.div>
                         ))}
                     </div>
@@ -100,27 +100,27 @@ export default function RegisterPage() {
                     transition={{ duration: 0.5 }}
                 >
                     <div className="flex items-center gap-2 mb-8">
-                        <Heart className="w-6 h-6 text-[#c9a96e] fill-[#c9a96e]" />
-                        <span className="font-bold text-lg text-[#2c1810]" style={{ fontFamily: 'Playfair Display, serif' }}>
-                            WeddingCard<span className="text-[#c9a96e]">.vn</span>
+                        <Heart className="w-6 h-6 text-[#8B0000] fill-[#8B0000]" />
+                        <span className="font-bold text-lg text-[#4A0E0E]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            WeddingCard<span className="text-[#8B0000]">.vn</span>
                         </span>
                     </div>
 
-                    <h1 className="text-3xl font-bold text-[#2c1810] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <h1 className="text-3xl font-bold text-[#4A0E0E] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                         Tạo tài khoản
                     </h1>
-                    <p className="text-[#2c1810]/50 mb-8">
+                    <p className="text-[#4A0E0E]/50 mb-8">
                         Đã có tài khoản?{' '}
-                        <Link href="/login" className="text-[#c9a96e] hover:underline font-medium">
+                        <Link href="/login" className="text-[#8B0000] hover:underline font-medium">
                             Đăng nhập tại đây
                         </Link>
                     </p>
 
                     <form onSubmit={handleRegister} className="space-y-5">
                         <div className="space-y-2">
-                            <Label htmlFor="name" className="text-[#2c1810] font-medium">Tên của bạn</Label>
+                            <Label htmlFor="name" className="text-[#4A0E0E] font-medium">Tên của bạn</Label>
                             <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#2c1810]/30" />
+                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4A0E0E]/30" />
                                 <Input
                                     id="name"
                                     type="text"
@@ -128,15 +128,15 @@ export default function RegisterPage() {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     required
-                                    className="pl-10 h-11 border-[#c9a96e]/20 focus:border-[#c9a96e]"
+                                    className="pl-10 h-11 border-[#8B0000]/20 focus:border-[#8B0000]"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-[#2c1810] font-medium">Email</Label>
+                            <Label htmlFor="email" className="text-[#4A0E0E] font-medium">Email</Label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#2c1810]/30" />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4A0E0E]/30" />
                                 <Input
                                     id="email"
                                     type="email"
@@ -144,15 +144,15 @@ export default function RegisterPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="pl-10 h-11 border-[#c9a96e]/20 focus:border-[#c9a96e]"
+                                    className="pl-10 h-11 border-[#8B0000]/20 focus:border-[#8B0000]"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="password" className="text-[#2c1810] font-medium">Mật khẩu</Label>
+                            <Label htmlFor="password" className="text-[#4A0E0E] font-medium">Mật khẩu</Label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#2c1810]/30" />
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4A0E0E]/30" />
                                 <Input
                                     id="password"
                                     type={showPassword ? 'text' : 'password'}
@@ -160,12 +160,12 @@ export default function RegisterPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    className="pl-10 pr-10 h-11 border-[#c9a96e]/20 focus:border-[#c9a96e]"
+                                    className="pl-10 pr-10 h-11 border-[#8B0000]/20 focus:border-[#8B0000]"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2c1810]/30 hover:text-[#2c1810]/60 transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4A0E0E]/30 hover:text-[#4A0E0E]/60 transition-colors"
                                 >
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -175,7 +175,7 @@ export default function RegisterPage() {
                                     {[4, 6, 8].map((len) => (
                                         <div
                                             key={len}
-                                            className={`h-1 flex-1 rounded-full transition-all ${password.length >= len ? 'bg-[#c9a96e]' : 'bg-gray-200'
+                                            className={`h-1 flex-1 rounded-full transition-all ${password.length >= len ? 'bg-[#8B0000]' : 'bg-gray-200'
                                                 }`}
                                         />
                                     ))}
@@ -186,7 +186,7 @@ export default function RegisterPage() {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full h-11 bg-[#c9a96e] hover:bg-[#b8925a] text-white shadow-lg shadow-[#c9a96e]/30"
+                            className="w-full h-11 bg-[#8B0000] hover:bg-[#A61C00] text-white shadow-lg shadow-[#8B0000]/30"
                         >
                             {loading ? (
                                 <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Đang tạo tài khoản...</>
@@ -196,11 +196,11 @@ export default function RegisterPage() {
                         </Button>
                     </form>
 
-                    <p className="mt-8 text-center text-xs text-[#2c1810]/30">
+                    <p className="mt-8 text-center text-xs text-[#4A0E0E]/30">
                         Bằng cách đăng ký, bạn đồng ý với{' '}
-                        <Link href="/terms" className="underline hover:text-[#c9a96e]">Điều khoản dịch vụ</Link>{' '}
+                        <Link href="/terms" className="underline hover:text-[#8B0000]">Điều khoản dịch vụ</Link>{' '}
                         và{' '}
-                        <Link href="/privacy" className="underline hover:text-[#c9a96e]">Chính sách riêng tư</Link>
+                        <Link href="/privacy" className="underline hover:text-[#8B0000]">Chính sách riêng tư</Link>
                     </p>
                 </motion.div>
             </div>
