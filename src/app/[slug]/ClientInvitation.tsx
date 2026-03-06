@@ -673,204 +673,111 @@ function GuestbookBlock({ invitationId }: { invitationId: string }) {
 }
 
 function GalleryBlock({ block }: { block: InvitationBlock }) {
+    const theme = useContext(ThemeContext)
     const { images } = block.props as { images?: string[] }
-    const [activeIndex, setActiveIndex] = useState(0)
     const [lightbox, setLightbox] = useState<number | null>(null)
-    const [shuffledOrder, setShuffledOrder] = useState<number[]>([])
-    const touchStartX = useRef(0)
-    const [touchDeltaX, setTouchDeltaX] = useState(0)
-    const [swiping, setSwiping] = useState(false)
 
-    // Initialize shuffled order
-    useEffect(() => {
-        const t = setTimeout(() => {
-            if (images && images.length > 0) {
-                setShuffledOrder(images.map((_, i) => i))
-            } else {
-                setShuffledOrder([])
-            }
-        }, 0)
-        return () => clearTimeout(t)
-    }, [images])
-
-    // Desktop: auto-shuffle every 5s
-    useEffect(() => {
-        if (!images || images.length <= 1) return
-        const interval = setInterval(() => {
-            setShuffledOrder(prev => {
-                const arr = [...prev]
-                // Swap the large image (index 0) with a random small image (index > 0)
-                const swapIdx = Math.floor(Math.random() * (arr.length - 1)) + 1
-                    ;[arr[0], arr[swapIdx]] = [arr[swapIdx], arr[0]]
-                return arr
-            })
-        }, 5000)
-        return () => clearInterval(interval)
-    }, [images])
-
-    // Mobile: touch handlers for swipe
-    const handleTouchStart = (e: React.TouchEvent) => {
-        touchStartX.current = e.touches[0].clientX
-        setTouchDeltaX(0)
-        setSwiping(true)
-    }
-
-    const handleTouchMove = (e: React.TouchEvent) => {
-        setTouchDeltaX(e.touches[0].clientX - touchStartX.current)
-    }
-
-    const handleTouchEnd = () => {
-        setSwiping(false)
-        if (!images) return
-        const threshold = 50
-        if (touchDeltaX < -threshold && activeIndex < images.length - 1) {
-            setActiveIndex(prev => prev + 1)
-        } else if (touchDeltaX > threshold && activeIndex > 0) {
-            setActiveIndex(prev => prev - 1)
-        }
-        setTouchDeltaX(0)
-    }
-
-    if (!images || images.length === 0) {
-        return (
-            <div className="py-8 sm:py-10 px-4 sm:px-6 bg-[#FDF5F0]">
-                <h2 className="text-center text-lg sm:text-xl font-semibold text-[#4A0E0E] mb-4 sm:mb-5" style={{ fontFamily: 'Playfair Display, serif' }}>
-                    Album Ảnh
-                </h2>
-                <p className="text-center text-sm text-[#4A0E0E]/30">Chưa có ảnh trong album.</p>
-            </div>
-        )
-    }
+    // Áp dụng Theme
+    const isCinematic = theme.style === 'cinematic'
+    const isModern = theme.style === 'modern'
+    const isDark = isCinematic || isModern
+    const bg = isDark ? (theme.style === 'cinematic' ? '#141414' : '#1a1a2e') : 'white'
+    const textCol = isDark ? theme.primaryColor : theme.textColor
 
     return (
-        <div className="py-8 sm:py-10 bg-[#FDF5F0]">
-            <h2 className="text-center text-lg sm:text-xl font-semibold text-[#4A0E0E] mb-4 sm:mb-5 px-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-                Album Ảnh
-            </h2>
-
-            {/* ===== Mobile: Single centered swipeable slide ===== */}
-            <div className="sm:hidden">
-                <div
-                    className="relative overflow-hidden"
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                >
-                    <div
-                        className="flex transition-transform duration-300 ease-out"
-                        style={{
-                            transform: `translateX(calc(-${activeIndex * 100}% + ${swiping ? touchDeltaX : 0}px))`,
-                            ...(swiping ? { transition: 'none' } : {})
-                        }}
-                    >
-                        {images.map((url, i) => (
-                            <div key={i} className="w-full flex-shrink-0 px-8">
-                                <div
-                                    className="aspect-[3/4] rounded-2xl overflow-hidden shadow-lg mx-auto cursor-pointer"
-                                    onClick={() => setLightbox(i)}
-                                >
-                                    <img src={url} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x800/fdfaf7/c9a96e?text=Opps' }} />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+        <div className="py-12 sm:py-16" style={{ background: bg }}>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center mb-10 px-4"
+            >
+                <div className="flex items-center justify-center gap-3 mb-2">
+                    <div className="h-px w-12" style={{ background: `${theme.primaryColor}50` }}></div>
+                    <h2 className="text-2xl sm:text-3xl font-semibold tracking-wide" style={{ fontFamily: `${theme.fontTitle}, serif`, color: textCol }}>Album Ảnh</h2>
+                    <div className="h-px w-12" style={{ background: `${theme.primaryColor}50` }}></div>
                 </div>
-
-                {/* Dot indicators */}
-                {images.length > 1 && (
-                    <div className="flex justify-center gap-2 mt-4">
-                        {images.map((_, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setActiveIndex(i)}
-                                className={`h-2 rounded-full transition-all duration-300 ${i === activeIndex
-                                    ? 'bg-[#8B0000] w-6'
-                                    : 'bg-[#8B0000]/25 w-2'
-                                    }`}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {/* Counter */}
-                <p className="text-center text-xs text-[#4A0E0E]/30 mt-2">
-                    {activeIndex + 1} / {images.length}
+                <p className="text-sm mt-3" style={{ color: isDark ? 'rgba(255,255,255,0.5)' : `${theme.textColor}70` }}>
+                    Lưu giữ những khoảnh khắc đẹp nhất của chúng mình
                 </p>
-            </div>
+            </motion.div>
 
-            {/* ===== Desktop: Grid with auto-shuffle ===== */}
-            <div className="hidden sm:block max-w-lg mx-auto px-6">
-                <LayoutGroup>
-                    <div className={`grid gap-3 ${images.length === 1 ? 'grid-cols-1' :
-                        images.length === 2 ? 'grid-cols-2' :
-                            images.length === 4 ? 'grid-cols-2' :
-                                'grid-cols-3'
-                        }`}>
-                        {shuffledOrder.map((imgIndex, i) => (
+            {!images || images.length === 0 ? (
+                <p className="text-center text-sm" style={{ color: isDark ? 'rgba(255,255,255,0.3)' : `${theme.textColor}40` }}>Chưa có ảnh trong album.</p>
+            ) : (
+                <div className="max-w-4xl mx-auto px-4 sm:px-6">
+                    {/* Masonry Layout sử dụng Tailwind Columns */}
+                    <div className="columns-2 sm:columns-3 gap-3 sm:gap-4 space-y-3 sm:space-y-4">
+                        {images.map((url, i) => (
                             <motion.div
-                                key={imgIndex}
-                                layout
-                                layoutId={`gallery-img-${imgIndex}`}
-                                className={`rounded-xl overflow-hidden shadow-sm cursor-pointer ${images.length >= 3 && i === 0 ? 'col-span-2 row-span-2' : ''
-                                    }`}
-                                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                whileHover={{ scale: 1.05 }}
-                                onClick={() => setLightbox(imgIndex)}
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "0px 0px -50px 0px" }}
+                                transition={{ duration: 0.5, delay: (i % 6) * 0.1 }}
+                                whileHover={{ y: -5 }}
+                                className="break-inside-avoid relative rounded-xl overflow-hidden shadow-sm cursor-pointer group"
+                                onClick={() => setLightbox(i)}
                             >
-                                <div className="aspect-square bg-[#8B0000]/10 h-full w-full">
-                                    <img src={images[imgIndex]} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x800/fdfaf7/c9a96e?text=Opps' }} />
-                                </div>
+                                {/* Overlay tối nhẹ khi hover */}
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 z-10" />
+                                <img
+                                    src={url}
+                                    alt=""
+                                    className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
+                                    loading="lazy"
+                                    onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x800/eeeeee/cccccc?text=Error' }}
+                                />
                             </motion.div>
                         ))}
                     </div>
-                </LayoutGroup>
-            </div>
+                </div>
+            )}
 
-            {/* ===== Lightbox ===== */}
-            {lightbox !== null && (
+            {/* Lightbox (Trình xem ảnh phóng to) */}
+            {lightbox !== null && images && (
                 <motion.div
-                    className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+                    className="fixed inset-0 bg-black/95 z-[9999] flex items-center justify-center p-2 sm:p-4 backdrop-blur-sm"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     onClick={() => setLightbox(null)}
                 >
                     <button
-                        className="absolute top-4 right-4 text-white/70 hover:text-white z-50"
+                        className="absolute top-4 right-4 text-white/50 hover:text-white z-50 p-2 transition-colors"
                         onClick={() => setLightbox(null)}
                     >
                         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                     <motion.img
                         key={lightbox}
                         src={images[lightbox]}
                         alt=""
-                        className="max-w-full max-h-[85vh] object-contain rounded-lg"
-                        onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x800/fdfaf7/c9a96e?text=Opps' }}
-                        initial={{ scale: 0.8, opacity: 0 }}
+                        className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                        onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x800/eeeeee/cccccc?text=Error' }}
+                        initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
                         onClick={(e) => e.stopPropagation()}
                     />
                     {images.length > 1 && (
                         <>
                             <button
-                                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-xl"
+                                className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center text-white text-2xl backdrop-blur-md transition-all"
                                 onClick={(e) => { e.stopPropagation(); setLightbox((lightbox - 1 + images.length) % images.length) }}
                             >
                                 ‹
                             </button>
                             <button
-                                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-xl"
+                                className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center text-white text-2xl backdrop-blur-md transition-all"
                                 onClick={(e) => { e.stopPropagation(); setLightbox((lightbox + 1) % images.length) }}
                             >
                                 ›
                             </button>
                         </>
                     )}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/50 text-sm">
-                        {lightbox + 1} / {images.length}
-                    </div>
                 </motion.div>
             )}
         </div>
