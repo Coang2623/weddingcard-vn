@@ -85,7 +85,7 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
         <motion.div
             className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 text-center overflow-hidden"
             style={{
-                background: isVip ? `linear-gradient(to bottom, #020617, #0f172a)` : isCinematic ? `linear-gradient(to bottom, #050505, #1a1a1a)`
+                background: isCinematic ? `linear-gradient(to bottom, #050505, #1a1a1a)`
                     : isModern
                         ? `linear-gradient(135deg, #0f0c29, #302b63, #24243e)`
                         : isTraditional
@@ -102,7 +102,7 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
 
             {/* Premium Decorations */}
             <OrnamentDecoration style={theme.style} />
-            {(isCinematic || isModern || isVip) && <FloatingParticles />}
+            {(isCinematic || isModern) && <FloatingParticles />}
 
             {/* Style-specific decorations */}
             {isCinematic && (
@@ -139,7 +139,7 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
                         animate={{ y: [0, -10, 0] }}
                         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                        {isVip ? '👑' : isCinematic ? '📽️' : isTraditional ? '🏮' : isModern ? '✨' : '🕊️'}
+                        {isCinematic ? '📽️' : isTraditional ? '🏮' : isModern ? '✨' : '🕊️'}
                     </motion.div>
                     <div className="w-12 h-px bg-current opacity-20" />
                 </motion.div>
@@ -162,8 +162,8 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
                         transition={{ delay: 0.5 }}
                         style={{
                             fontFamily: `${theme.fontTitle}, serif`,
-                            color: (isCinematic || isModern || isVip) ? 'white' : theme.textColor,
-                            textShadow: (isCinematic || isModern || isVip) ? '0 4px 12px rgba(0,0,0,0.3)' : 'none'
+                            color: (isCinematic || isModern) ? 'white' : theme.textColor,
+                            textShadow: (isCinematic || isModern) ? '0 4px 12px rgba(0,0,0,0.3)' : 'none'
                         }}
                     >
                         {groomName}
@@ -180,7 +180,7 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
                             style={{
                                 fill: isTraditional ? '#c0392b' : theme.primaryColor,
                                 color: isTraditional ? '#c0392b' : theme.primaryColor,
-                                filter: (isCinematic || isModern || isVip) ? 'drop-shadow(0 0 10px var(--p))' : 'none'
+                                filter: (isCinematic || isModern) ? 'drop-shadow(0 0 10px var(--p))' : 'none'
                             }}
                         />
                     </motion.div>
@@ -192,8 +192,8 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
                         transition={{ delay: 0.9 }}
                         style={{
                             fontFamily: `${theme.fontTitle}, serif`,
-                            color: (isCinematic || isModern || isVip) ? 'white' : theme.textColor,
-                            textShadow: (isCinematic || isModern || isVip) ? '0 4px 12px rgba(0,0,0,0.3)' : 'none'
+                            color: (isCinematic || isModern) ? 'white' : theme.textColor,
+                            textShadow: (isCinematic || isModern) ? '0 4px 12px rgba(0,0,0,0.3)' : 'none'
                         }}
                     >
                         {brideName}
@@ -210,7 +210,7 @@ function HeroBlock({ block }: { block: InvitationBlock }) {
                             style={{
                                 borderColor: `${theme.primaryColor}30`,
                                 background: isCinematic || isModern ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-                                color: (isCinematic || isModern || isVip) ? 'white' : theme.textColor
+                                color: (isCinematic || isModern) ? 'white' : theme.textColor
                             }}
                         >
                             <p className="text-sm sm:text-base font-medium tracking-[3px] uppercase" style={{ fontFamily: theme.fontBody }}>
@@ -248,7 +248,7 @@ function CountdownBlock({ block }: { block: InvitationBlock }) {
     const targetDate = (block.props as { targetDate?: string }).targetDate || ''
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
     const theme = useTheme()
-    const isDark = theme.style === 'cinematic' || theme.style === 'modern' || theme.style === 'vip'
+    const isDark = theme.style === 'cinematic' || theme.style === 'modern' 
 
     useEffect(() => {
         if (!targetDate) return
@@ -269,7 +269,7 @@ function CountdownBlock({ block }: { block: InvitationBlock }) {
 
     return (
         <div className="py-12 sm:py-16 px-4 sm:px-6 text-center relative overflow-hidden"
-            style={{ background: isDark ? (theme.style === 'vip' ? '#020617' : theme.style === 'cinematic' ? '#0d0d0d' : '#14142b') : theme.backgroundColor }}>
+            style={{ background: isDark ? (theme.style === 'cinematic' ? '#0d0d0d' : '#14142b') : theme.backgroundColor }}>
 
             <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
                 style={{ backgroundImage: 'url(/assets/texture.png)', backgroundSize: '200px' }} />
@@ -321,7 +321,7 @@ function CountdownBlock({ block }: { block: InvitationBlock }) {
 function StoryBlock({ block }: { block: InvitationBlock }) {
     const { content } = block.props as { content?: string }
     const theme = useTheme()
-    const isDark = theme.style === 'cinematic' || theme.style === 'modern' || theme.style === 'vip'
+    const isDark = theme.style === 'cinematic' || theme.style === 'modern' 
     const isTraditional = theme.style === 'traditional'
 
     return (
@@ -329,7 +329,7 @@ function StoryBlock({ block }: { block: InvitationBlock }) {
             className="py-16 sm:py-20 px-6 sm:px-12 relative overflow-hidden"
             style={{
                 background: isDark
-                    ? (theme.style === 'vip' ? '#0f172a' : theme.style === 'cinematic' ? '#111' : '#1a1a2e')
+                    ? ((theme.style === 'cinematic' ? '#111' : '#1a1a2e'))
                     : theme.backgroundColor
             }}
             initial={{ opacity: 0 }}
@@ -379,7 +379,7 @@ function ScheduleBlock({ block }: { block: InvitationBlock }) {
     }
     const eventList = events || []
     const theme = useTheme()
-    const isDark = theme.style === 'cinematic' || theme.style === 'modern' || theme.style === 'vip'
+    const isDark = theme.style === 'cinematic' || theme.style === 'modern' 
     const bg = isDark ? (theme.style === 'cinematic' ? '#1a1a1a' : '#1a1a2e') : 'white'
 
     return (
@@ -491,7 +491,7 @@ function RSVPBlock({ block, invitationId }: { block: InvitationBlock; invitation
 
     return (
         <div className="py-16 px-6 sm:px-12 relative overflow-hidden"
-            style={{ background: isDark ? (theme.style === 'vip' ? '#020617' : theme.style === 'cinematic' ? '#0d0d0d' : '#14142b') : '#fdfbf7' }}>
+            style={{ background: isDark ? (theme.style === 'cinematic' ? '#0d0d0d' : '#14142b') : '#fdfbf7' }}>
 
             <div className="max-w-md mx-auto relative">
                 <div className="absolute -right-20 -bottom-20 w-64 h-64 opacity-5 blur-[80px] rounded-full" style={{ background: theme.primaryColor }} />
@@ -561,7 +561,7 @@ function RSVPBlock({ block, invitationId }: { block: InvitationBlock; invitation
                     </div>
 
                     <Button type="submit" disabled={loading} className="w-full h-14 rounded-2xl font-bold uppercase tracking-[4px] mt-4 shadow-2xl transition-transform active:scale-95"
-                        style={{ backgroundColor: theme.primaryColor, color: (isCinematic || isModern || isVip) ? 'black' : 'white', opacity: loading ? 0.7 : 1 }}>
+                        style={{ backgroundColor: theme.primaryColor, color: (isCinematic || isModern) ? 'black' : 'white', opacity: loading ? 0.7 : 1 }}>
                         {loading ? 'Đang gửi...' : 'Gửi Phản Hồi'}
                     </Button>
                 </form>
@@ -1171,7 +1171,7 @@ export default function ClientInvitation({ slug }: { slug: string }) {
         )
     }
 
-    const isDarkTheme = theme.style === 'cinematic' || theme.style === 'modern' || theme.style === 'vip'
+    const isDarkTheme = theme.style === 'cinematic' || theme.style === 'modern' 
     const outerBg = isDarkTheme ? '#0a0a0a' : `${theme.secondaryColor}30`
 
     return (

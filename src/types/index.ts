@@ -76,7 +76,7 @@ export interface InvitationTheme {
     textColor: string
     fontTitle: string
     fontBody: string
-    style: 'traditional' | 'modern' | 'cinematic' | 'minimal' | 'vip'
+    style: 'traditional' | 'modern' | 'cinematic' | 'minimal'
 }
 
 export interface Invitation {
@@ -136,7 +136,7 @@ export interface Message {
 export interface Template {
     id: string
     name: string
-    style: 'traditional' | 'modern' | 'cinematic' | 'minimal' | 'vip'
+    style: 'traditional' | 'modern' | 'cinematic' | 'minimal'
     preview_image: string
     default_theme: InvitationTheme
     default_blocks: InvitationBlock[]

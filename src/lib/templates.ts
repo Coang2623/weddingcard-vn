@@ -223,7 +223,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
     {
         id: 'vip-01',
         name: 'VIP Pro Max',
-        style: 'vip',
+        style: 'cinematic',
         preview_image: '/templates/modern-01.jpg',
         is_premium: true,
         default_theme: {
@@ -233,7 +233,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
             textColor: '#f8fafc', // Slate 50
             fontTitle: 'Cinzel',
             fontBody: 'Outfit',
-            style: 'vip',
+            style: 'cinematic',
         },
         default_blocks: [
             BLOCK_TEMPLATES.hero(),

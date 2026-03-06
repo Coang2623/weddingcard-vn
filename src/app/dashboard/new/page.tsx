@@ -19,6 +19,7 @@ const styleLabels: Record<string, string> = {
     modern: 'Hiện Đại',
     cinematic: 'Điện Ảnh',
     traditional: 'Truyền Thống',
+    vip: 'VIP Pro Max',
 }
 
 const styleColors: Record<string, string> = {
@@ -26,6 +27,7 @@ const styleColors: Record<string, string> = {
     modern: 'bg-purple-100 text-purple-700',
     cinematic: 'bg-amber-100 text-amber-700',
     traditional: 'bg-red-100 text-red-700',
+    vip: 'bg-slate-950 text-yellow-500',
 }
 
 function slugify(text: string): string {
@@ -145,18 +147,49 @@ function PreviewTraditional() {
     )
 }
 
+function PreviewVip() {
+    return (
+        <div className="w-full h-full flex flex-col bg-slate-950 text-slate-50 relative overflow-hidden border border-slate-800">
+            <div className="absolute inset-0 opacity-20 mix-blend-overlay" style={{ backgroundImage: 'url(/assets/texture.png)' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-3xl opacity-20 bg-yellow-500" />
+
+            <div className="flex-1 flex flex-col items-center justify-center relative z-10 px-4">
+                <div className="flex items-center gap-2 mb-3 tracking-[3px] text-[#d4af37]">
+                    <div className="h-px w-4 bg-[#d4af37]/30" />
+                    <span>👑</span>
+                    <div className="h-px w-4 bg-[#d4af37]/30" />
+                </div>
+                <p className="text-[7px] tracking-[4px] uppercase text-[#d4af37] mb-2 font-medium">Trân trọng kính mời</p>
+                <p className="text-xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>M & Q</p>
+                <div className="h-px w-12 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent my-3" />
+                <div className="bg-white/5 backdrop-blur-md rounded-full px-3 py-1 border border-white/10">
+                    <p className="text-[7px] text-white/80 tracking-widest" style={{ fontFamily: 'Outfit, sans-serif' }}>12 THÁNG 12 2025</p>
+                </div>
+            </div>
+
+            <div className="relative z-10 flex gap-2 justify-center pb-4 text-[#d4af37]/70">
+                {['📍', '🗓️', '💌', '🎁'].map((e, i) => (
+                    <div key={i} className="text-[10px] bg-white/5 rounded-full w-6 h-6 flex items-center justify-center border border-white/5">{e}</div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
 const PREVIEW_COMPONENTS: Record<string, React.FC> = {
     'minimal-01': PreviewMinimal,
     'modern-01': PreviewModern,
     'cinematic-01': PreviewCinematic,
     'traditional-01': PreviewTraditional,
+    'vip-01': PreviewCinematic,
 }
 
 const TEMPLATE_FEATURES: Record<string, string[]> = {
     'minimal-01': ['Thanh lịch, tinh tế', 'Nền kem nhẹ nhàng', '4 mục nội dung'],
-    'modern-01': ['Hiện đại, sang trọng', 'Tông tím-chàm tối', '6 mục + Album ảnh'],
+    'modern-01': ['Hiện Đại, sang trọng', 'Tông tím-chàm tối', '6 mục + Album ảnh'],
     'cinematic-01': ['Như phim, lãng mạn', 'Nền tối vàng gold', '8 mục đầy đủ nhất'],
     'traditional-01': ['Truyền thống đỏ vàng', 'Phong cách Á Đông', '4 mục cơ bản'],
+    'vip-01': ['Giao diện siêu cao cấp', 'Kính mờ (Glassmorphism)', '10 mục thượng lưu'],
 }
 
 export default function NewInvitationPage() {
