@@ -34,7 +34,9 @@ Tại đây, mô hình Client-Side-Rendering (CSR) được tận dụng cực m
 ### 3.2 Vùng Public Route (Khu Khách Xem Thiệp)
 Tại đây mô hình Server-side áp dụng cho lần khởi động đầu:
 *   Trang gốc `app/[slug]/page.tsx` sẽ nhận chuỗi URL (Params slug). 
-*   **Động cơ Render (Engine `RenderBlock`):** Đóng vai trò Translator (Người phiên dịch). Nó dựa trên thuộc tính `.type` của mỗi block cấu trúc mảng JSON (`hero`, `countdown`, `story`, `gallery`), sinh ra đúng thẻ `<HeroBlock/>` hay `<StoryBlock/>`, bọc trong nền Wrapper có tuỳ chỉnh màu sắc chủ đạo qua Context `ThemeContext`.
+*   **Động cơ Render (Engine `RenderBlock`):** Đóng vai trò Translator (Người phiên dịch). Nó dựa trên thuộc tính `.type` của mỗi block cấu trúc mảng JSON (`hero`, `countdown`, `story`, `gallery`, `gift`, `music`,...), sinh ra đúng thẻ `<HeroBlock/>` hay `<StoryBlock/>`, bọc trong nền Wrapper có tuỳ chỉnh màu sắc chủ đạo qua Context `ThemeContext`.
+*   **Xử lý Âm nhạc (Music Block):** Render thẻ `<audio>` hoặc iframe YouTube ở chế độ ẩn (tọa độ ngoài viewport `-9999px`) để tuân thủ chính sách autoplay chặn kích thước 0x0 của trình duyệt. 
+*   **Vấn đề Hydration:** Root layout được thiết lập `suppressHydrationWarning` để bỏ qua lỗi sai lệch DOM giữa SSR và CSR do các Extension lướt web trên máy người dùng gây ra.
 
 ## 4. Xử lý Trạng thái State (State Management)
 *   State "Vui lòng đợi/Loading": `useState` (Sử dụng Loader2 của Lucide icon).
