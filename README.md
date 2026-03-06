@@ -26,8 +26,8 @@
 - **Landing**: giới thiệu sản phẩm + CTA `/login` / `/register`
 - **Auth (Supabase)**: email/password + Google OAuth, callback `/auth/callback`
 - **Dashboard**: tạo thiệp mới `/dashboard/new`, quản lý thiệp `/dashboard`
-- **Builder**: kéo-thả block, live preview, lưu design, upload ảnh lên Storage bucket `wedding-images`
-- **Public card**: render thiệp theo `theme + blocks` tại `/<slug>`, cho phép RSVP + guestbook
+- **Builder**: kéo-thả block, live preview, lưu design, upload ảnh lên Storage bucket `wedding-images`, chỉnh sửa màu/font, chèn nhạc (MP3/Youtube).
+- **Public card**: render thiệp theo `theme + blocks` tại `/<slug>`, cho phép RSVP, guestbook, và tooltip tên bài hát (nếu có nhạc).
 
 ## Trạng thái hiện tại (để đúng với code)
 

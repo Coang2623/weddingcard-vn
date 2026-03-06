@@ -250,11 +250,11 @@ function BlockEditor({ block, onChange }: BlockEditorProps) {
                         </div>
                         <div className="space-y-1.5">
                             <Label className="text-xs text-[#4A0E0E]/70">Số Tài Khoản</Label>
-                            <Input value={(block.props.accountNumber as string) || (block.props.bankAccount as string) || ''} onChange={(e) => updateProp('accountNumber', e.target.value)} placeholder="0123456789" className="h-9 text-sm" />
+                            <Input value={(block.props.accountNumber as string ?? block.props.bankAccount as string) || ''} onChange={(e) => updateProp('accountNumber', e.target.value)} placeholder="0123456789" className="h-9 text-sm" />
                         </div>
                         <div className="space-y-1.5">
                             <Label className="text-xs text-[#4A0E0E]/70">Tên Chủ Tài Khoản</Label>
-                            <Input value={(block.props.accountOwner as string) || (block.props.bankOwner as string) || (block.props.accountName as string) || ''} onChange={(e) => updateProp('accountOwner', e.target.value.toUpperCase())} placeholder="NGUYEN VAN A" className="h-9 text-sm uppercase" />
+                            <Input value={(block.props.accountOwner as string ?? block.props.bankOwner as string ?? block.props.accountName as string) || ''} onChange={(e) => updateProp('accountOwner', e.target.value.toUpperCase())} placeholder="NGUYEN VAN A" className="h-9 text-sm uppercase" />
                         </div>
                         <div className="space-y-1.5">
                             <Label className="text-xs text-[#4A0E0E]/70">Giao diện VietQR</Label>

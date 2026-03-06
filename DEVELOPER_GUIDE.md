@@ -151,9 +151,11 @@ Lưu ý: Mọi giao diện phải có style bọc bởi Tailwind kết hợp con
 
 ## 7. Quy Trình Debug & Khắc Phục Lỗi (Troubleshoot)
 
-*   **Lỗi "Hydration Mismatch":** Rất hay xảy ra trên Chrome do Extension (ví dụ Grammarly) tự động render lại Tag. Rủi ro này đã được fix tạm cho thẻ `<body>` qua thuộc tính `suppressHydrationWarning`. Nếu xuất hiện ở component cụ thể, tra xét useEffect() render trươc sau (server khác client).
-*   **Lỗi Proxy / Middleware:** Proxy `src/proxy.ts` đang ép cứng các route `/dashboard/:path`. Nếu bạn làm thêm trang Admin Dashboard `/admin`, nhớ vào file proxy cấu hình thêm đoạn logic để không chệch luồng bảo vệ.
-*   **Thêm ảnh lỗi, tải không lên Gallery:** Kiểm tra Storage trên Supabase đã được Cấu hình RLS gỡ giới hạn quyền GHI file hay chưa (Hoặc quên cấp tài khoản user_id map).
+*   **Lỗi "Hydration Mismatch":** Rất hay xảy ra trên Chrome do Extension (ví dụ Grammarly, chặn quảng cáo) tự động render lại Tag. Rủi ro này đã được fix cho thẻ `<html>` qua thuộc tính `suppressHydrationWarning`. Nếu xuất hiện ở component cụ thể khác, bạn xem lại `useEffect()` (chờ Component mount xong mới render logic phía Client) hoặc việc render thuộc tính tùy thuộc trạng thái network.
+*   **Thiếu block hoặc render lỗi:** Khi thiết kế thêm block (vd `text`, `music`), cần khai báo Type đầy đủ tại `src/types/index.ts` và tạo object default tại `src/lib/templates.ts`. 
+*   **Nhạc YouTube/MP3 bị chặn Autoplay:** Trình duyệt hiện đại (Chrome 66+) chặn Autoplay nếu Element bị `display: none`, `opacity: 0` hoặc kích thước `0x0`. Để fix, component Music đã dùng trick: đẩy iframe/audio ra `left: -9999px` kết hợp `width/height` thật để "đánh lừa" việc play, và chỉ phát sau cái click/tương tác đầu tiên của khách.
+*   **Proxy / Middleware:** Proxy `src/proxy.ts` đang ép cứng các route `/dashboard/:path`. Nếu bạn làm thêm trang Admin Dashboard `/admin`, nhớ vào file proxy cấu hình thêm đoạn logic để không chệch luồng.
+*   **Thêm ảnh lỗi, tải không lên Gallery:** Kiểm tra Storage trên Supabase đã được Cấu hình RLS gỡ giới hạn quyền GHI file hay chưa.
 
 ## 8. Hướng Tới Tương Lai (Next Roadmap)
 
