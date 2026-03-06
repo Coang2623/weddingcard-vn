@@ -1,0 +1,2 @@
+src/app/[slug]/ClientInvitation.tsx(1022,21): error TS2322: Type '{ url: string; playing: boolean; loop: true; volume: number; playsinline: boolean; onPlay: () => void; onPause: () => void; onError: (e: SyntheticEvent<HTMLVideoElement, Event>) => void; width: string; height: string; }' is not assignable to type 'IntrinsicAttributes & Omit<ReactPlayerProps, "ref"> & RefAttributes<HTMLVideoElement>'.
+  Property 'url' does not exist on type 'IntrinsicAttributes & Omit<ReactPlayerProps, "ref"> & RefAttributes<HTMLVideoElement>'.

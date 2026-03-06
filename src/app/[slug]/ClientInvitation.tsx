@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState, useEffect, useRef, createContext, useContext } from 'react'
 import { motion, LayoutGroup } from 'framer-motion'
-import { Heart, MapPin, Calendar, Share2, QrCode, MessageSquare, Loader2, Gift, Type } from 'lucide-react'
+import { Heart, MapPin, Calendar, Share2, QrCode, MessageSquare, Loader2, Gift, Type, Music } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -12,6 +12,7 @@ import { toast } from '@/lib/toast'
 import { createClient } from '@/lib/supabase/client'
 import type { InvitationBlock, InvitationTheme } from '@/types'
 import { DEFAULT_THEME } from '@/lib/templates'
+
 
 // ── Premium UI Helpers ──
 
@@ -905,12 +906,16 @@ function MapBlock({ block }: { block: InvitationBlock }) {
 }
 
 function GiftBlock({ block }: { block: InvitationBlock }) {
-    const { bankName, bankAccount, bankOwner, note } = block.props as {
-        bankName?: string; bankAccount?: string; bankOwner?: string; note?: string
+    const { bankName, bankAccount, accountNumber, bankOwner, accountOwner, accountName, note, customQrImage, vietqrTemplate } = block.props as {
+        bankName?: string; bankAccount?: string; accountNumber?: string; bankOwner?: string; accountOwner?: string; accountName?: string; note?: string; customQrImage?: string; vietqrTemplate?: string
     }
     const theme = useContext(ThemeContext)
 
-    const qrUrl = bankName && bankAccount ? `https://img.vietqr.io/image/${bankName.trim()}-${bankAccount.trim()}-print.png?accountName=${encodeURIComponent(bankOwner || '')}` : null
+    const finalAccount = bankAccount || accountNumber || ''
+    const finalOwner = bankOwner || accountOwner || accountName || ''
+    const template = vietqrTemplate || 'print'
+    const defaultQrUrl = bankName && finalAccount ? `https://img.vietqr.io/image/${bankName.trim()}-${finalAccount.trim()}-${template}.png?accountName=${encodeURIComponent(finalOwner)}` : null
+    const qrUrl = customQrImage || defaultQrUrl
 
     return (
         <div className="py-12 px-6" style={{ backgroundColor: theme.backgroundColor }}>
@@ -922,30 +927,34 @@ function GiftBlock({ block }: { block: InvitationBlock }) {
             <div className="max-w-md mx-auto text-center">
                 {note && <p className="text-sm italic mb-6 leading-relaxed" style={{ color: `${theme.textColor}99`, fontFamily: theme.fontBody }}>&quot;{note}&quot;</p>}
 
-                {bankName && bankAccount ? (
+                {(bankName && finalAccount) || customQrImage ? (
                     <div className="bg-white/50 backdrop-blur-sm rounded-2xl border p-6 space-y-4 shadow-sm" style={{ borderColor: `${theme.primaryColor}20` }}>
-                        <div className="space-y-1">
-                            <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: `${theme.textColor}60` }}>{bankName}</p>
-                            <p className="text-xl font-bold tracking-wider" style={{ color: theme.primaryColor }}>{bankAccount}</p>
-                            {bankOwner && <p className="text-sm font-medium" style={{ color: theme.textColor }}>{bankOwner.toUpperCase()}</p>}
-                        </div>
+                        {(bankName || finalAccount) && (
+                            <div className="space-y-1">
+                                {bankName && <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: `${theme.textColor}60` }}>{bankName}</p>}
+                                {finalAccount && <p className="text-xl font-bold tracking-wider" style={{ color: theme.primaryColor }}>{finalAccount}</p>}
+                                {finalOwner && <p className="text-sm font-medium" style={{ color: theme.textColor }}>{finalOwner.toUpperCase()}</p>}
+                            </div>
+                        )}
 
                         {qrUrl && (
-                            <div className="mt-6 flex justify-center">
-                                <div className="p-3 bg-white rounded-xl shadow-sm border border-slate-100 inline-block">
-                                    <img src={qrUrl} alt="QR Code Mừng Cưới" className="w-48 h-48 object-contain" />
+                            <div className="mt-4 flex justify-center">
+                                <div className="p-1.5 bg-white rounded-xl shadow-sm border border-slate-100 inline-block overflow-hidden">
+                                    <img src={qrUrl} alt="QR Code Mừng Cưới" className="w-56 h-56 md:w-64 md:h-64 object-contain" />
                                 </div>
                             </div>
                         )}
 
-                        <div className="pt-4 border-t mt-4" style={{ borderColor: `${theme.primaryColor}10` }}>
-                            <Button variant="outline" size="sm" className="h-10 text-xs px-6 rounded-full transition-all hover:scale-105"
-                                style={{ borderColor: `${theme.primaryColor}30`, color: theme.primaryColor, backgroundColor: 'transparent' }}
-                                onClick={() => { navigator.clipboard.writeText(bankAccount || ''); toast.success('Đã sao chép số tài khoản!') }}
-                            >
-                                Sao chép STK
-                            </Button>
-                        </div>
+                        {finalAccount && (
+                            <div className="pt-4 border-t mt-4" style={{ borderColor: `${theme.primaryColor}10` }}>
+                                <Button variant="outline" size="sm" className="h-10 text-xs px-6 rounded-full transition-all hover:scale-105"
+                                    style={{ borderColor: `${theme.primaryColor}30`, color: theme.primaryColor, backgroundColor: 'transparent' }}
+                                    onClick={() => { navigator.clipboard.writeText(finalAccount); toast.success('Đã sao chép số tài khoản!') }}
+                                >
+                                    Sao chép STK
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <p className="text-sm" style={{ color: `${theme.textColor}50` }}>Thông tin tài khoản chưa được thiết lập.</p>
@@ -968,6 +977,126 @@ function TextBlock({ block }: { block: InvitationBlock }) {
     )
 }
 
+function getYouTubeVideoId(url: string): string | null {
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=)([^&\s]+)/,
+        /(?:youtu\.be\/)([^?\s]+)/,
+        /(?:youtube\.com\/embed\/)([^?\s]+)/,
+    ];
+    for (const p of patterns) {
+        const m = url.match(p);
+        if (m) return m[1];
+    }
+    return null;
+}
+
+function MusicBlock({ block }: { block: InvitationBlock }) {
+    const theme = useContext(ThemeContext);
+    const { musicUrl, autoPlay } = block.props as { musicUrl?: string, autoPlay?: boolean };
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [hasInteracted, setHasInteracted] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const ytRef = useRef<HTMLIFrameElement | null>(null);
+
+    const parsedUrl = musicUrl?.trim();
+    const youtubeId = parsedUrl ? getYouTubeVideoId(parsedUrl) : null;
+    const isYouTube = !!youtubeId;
+
+    // Listen for first user interaction
+    useEffect(() => {
+        if (!parsedUrl) return;
+
+        const handleInteraction = () => {
+            if (!hasInteracted) {
+                setHasInteracted(true);
+            }
+        };
+
+        document.addEventListener('click', handleInteraction, { once: true });
+        document.addEventListener('scroll', handleInteraction, { once: true });
+        document.addEventListener('touchstart', handleInteraction, { once: true });
+
+        return () => {
+            document.removeEventListener('click', handleInteraction);
+            document.removeEventListener('scroll', handleInteraction);
+            document.removeEventListener('touchstart', handleInteraction);
+        }
+    }, [parsedUrl, hasInteracted]);
+
+    // Auto-play after first interaction
+    useEffect(() => {
+        if (hasInteracted && autoPlay && !isPlaying) {
+            setIsPlaying(true);
+        }
+    }, [hasInteracted, autoPlay]);
+
+    // Control audio element playback
+    useEffect(() => {
+        if (isYouTube || !audioRef.current) return;
+        if (isPlaying) {
+            audioRef.current.play().catch(() => setIsPlaying(false));
+        } else {
+            audioRef.current.pause();
+        }
+    }, [isPlaying, isYouTube]);
+
+    // Control YouTube iframe playback via postMessage
+    useEffect(() => {
+        if (!isYouTube || !ytRef.current?.contentWindow) return;
+        const cmd = isPlaying
+            ? '{"event":"command","func":"playVideo","args":""}'
+            : '{"event":"command","func":"pauseVideo","args":""}';
+        ytRef.current.contentWindow.postMessage(cmd, '*');
+    }, [isPlaying, isYouTube]);
+
+    const togglePlay = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!hasInteracted) setHasInteracted(true);
+        setIsPlaying(prev => !prev);
+    };
+
+    if (!parsedUrl) return null;
+
+    return (
+        <>
+            {/* Hidden audio/video player */}
+            <div style={{ position: 'fixed', left: '-9999px', top: '-9999px', pointerEvents: 'none' }}>
+                {isYouTube ? (
+                    <iframe
+                        ref={ytRef}
+                        width="200"
+                        height="200"
+                        src={`https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&autoplay=0&loop=1&playlist=${youtubeId}&controls=0`}
+                        allow="autoplay"
+                        style={{ border: 'none' }}
+                    />
+                ) : (
+                    <audio
+                        ref={audioRef}
+                        src={parsedUrl}
+                        loop
+                        preload="auto"
+                        onPlay={() => setIsPlaying(true)}
+                        onPause={() => setIsPlaying(false)}
+                    />
+                )}
+            </div>
+
+            {/* Floating music button */}
+            <div className="fixed bottom-6 right-6 z-50 pointer-events-auto flex items-center justify-center">
+                <button
+                    onClick={togglePlay}
+                    className={`w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all duration-700 border-2 ${isPlaying ? 'animate-[spin_4s_linear_infinite] scale-100' : 'animate-pulse scale-95'}`}
+                    style={{ backgroundColor: theme.primaryColor, borderColor: '#fff', color: '#fff' }}
+                >
+                    <Music className="w-5 h-5 absolute" />
+                    <div className="absolute inset-1 rounded-full border border-white/20"></div>
+                </button>
+            </div>
+        </>
+    )
+}
+
 // ---- Dynamic Block Renderer ----
 export function RenderBlock({ block, invitationId }: { block: InvitationBlock; invitationId: string }) {
     switch (block.type) {
@@ -981,6 +1110,7 @@ export function RenderBlock({ block, invitationId }: { block: InvitationBlock; i
         case 'guestbook': return <GuestbookBlock invitationId={invitationId} />
         case 'gift': return <GiftBlock block={block} />
         case 'text': return <TextBlock block={block} />
+        case 'music': return <MusicBlock block={block} />
         default: return null
     }
 }

@@ -11,6 +11,7 @@ export type BlockType =
     | 'gift'
     | 'countdown'
     | 'text'
+    | 'music'
 
 export interface BlockProps {
     // Hero block
@@ -47,6 +48,9 @@ export interface BlockProps {
     targetDate?: string
     // Text block
     content?: string
+    // Music block
+    musicUrl?: string
+    autoPlay?: boolean
     // Common
     [key: string]: unknown
 }
