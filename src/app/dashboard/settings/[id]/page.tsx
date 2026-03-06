@@ -109,9 +109,9 @@ export default function SettingsPage() {
             {/* Nav */}
             <nav className="border-b border-[#8B0000]/10 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
-                    <Link href="/dashboard" className="flex items-center gap-1.5 text-sm text-[#4A0E0E]/60 hover:text-[#4A0E0E] transition-colors">
-                        <ArrowLeft className="w-4 h-4" /> Dashboard
-                    </Link>
+                    <button type="button" onClick={() => router.back()} className="flex items-center gap-1.5 text-sm text-[#4A0E0E]/60 hover:text-[#4A0E0E] transition-colors">
+                        <ArrowLeft className="w-4 h-4" /> Quay lại
+                    </button>
                     <span className="text-[#8B0000]">/</span>
                     <span className="text-sm font-medium text-[#4A0E0E]">Cài đặt thiệp</span>
                     <div className="ml-auto">

@@ -113,6 +113,16 @@ export const BLOCK_TEMPLATES: Record<string, () => InvitationBlock> = {
         visibility: 'all',
         order: 9,
     }),
+    music: () => ({
+        id: uuidv4(),
+        type: 'music',
+        props: {
+            musicUrl: '',
+            autoPlay: true,
+        },
+        visibility: 'all',
+        order: 10,
+    }),
 }
 
 export const DEFAULT_TEMPLATES: Template[] = [

@@ -6,8 +6,8 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 import {
     GripVertical, Plus, Trash2, Eye, Save,
     ChevronDown, ChevronUp, Smartphone, Monitor, ArrowLeft,
-    Heart, Image, Calendar, MapPin, Users, MessageSquare, Gift, Timer, Type,
-    Loader2, ArrowUpCircle, ArrowDownCircle, Upload, X, Globe, Lock
+    Heart, Image, Calendar, MapPin, Users, MessageSquare, Gift, Timer, Type, Music,
+    Loader2, ArrowUpCircle, ArrowDownCircle, Upload, X, Globe, Lock, Settings
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,6 +17,13 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Switch } from '@/components/ui/switch'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import type { InvitationBlock, BlockType } from '@/types'
 import { BLOCK_TEMPLATES, DEFAULT_THEME } from '@/lib/templates'
 import { loadDesignBlocks, saveDesignBlocks, getInvitationById, updateInvitation } from '@/lib/supabase/api'
@@ -25,6 +32,24 @@ import { toast } from '@/lib/toast'
 import { createClient } from '@/lib/supabase/client'
 import { RenderBlock, ThemeContext } from '@/app/[slug]/ClientInvitation'
 import imageCompression from 'browser-image-compression'
+
+const VIETQR_BANKS = [
+    { id: 'vietcombank', name: 'Vietcombank (VCB)', shortName: 'vcb' },
+    { id: 'vietinbank', name: 'VietinBank', shortName: 'vietinbank' },
+    { id: 'bidv', name: 'BIDV', shortName: 'bidv' },
+    { id: 'agribank', name: 'Agribank', shortName: 'agribank' },
+    { id: 'ocb', name: 'OCB', shortName: 'ocb' },
+    { id: 'mbbank', name: 'MBBank', shortName: 'mb' },
+    { id: 'techcombank', name: 'Techcombank (TCB)', shortName: 'techcombank' },
+    { id: 'acb', name: 'ACB', shortName: 'acb' },
+    { id: 'vpbank', name: 'VPBank', shortName: 'vpbank' },
+    { id: 'tpbank', name: 'TPBank', shortName: 'tpbank' },
+    { id: 'sacombank', name: 'Sacombank', shortName: 'sacombank' },
+    { id: 'hdbank', name: 'HDBank', shortName: 'hdbank' },
+    { id: 'vib', name: 'VIB', shortName: 'vib' },
+    { id: 'seabank', name: 'SeABank', shortName: 'seabank' },
+    { id: 'msb', name: 'MSB', shortName: 'msb' },
+]
 
 const BLOCK_META: Record<BlockType, { label: string; icon: React.ElementType; color: string; bg: string }> = {
     hero: { label: 'Tiêu Đề Chính', icon: Heart, color: 'text-rose-500', bg: 'bg-rose-50' },
@@ -37,9 +62,10 @@ const BLOCK_META: Record<BlockType, { label: string; icon: React.ElementType; co
     guestbook: { label: 'Sổ Lưu Bút', icon: MessageSquare, color: 'text-pink-500', bg: 'bg-pink-50' },
     gift: { label: 'Mừng Cưới', icon: Gift, color: 'text-yellow-500', bg: 'bg-yellow-50' },
     text: { label: 'Văn Bản', icon: Type, color: 'text-slate-500', bg: 'bg-slate-50' },
+    music: { label: 'Nhạc Nền', icon: Music, color: 'text-fuchsia-500', bg: 'bg-fuchsia-50' },
 }
 
-const ADD_BLOCKS: BlockType[] = ['hero', 'countdown', 'story', 'gallery', 'schedule', 'rsvp', 'map', 'guestbook', 'gift', 'text']
+const ADD_BLOCKS: BlockType[] = ['hero', 'countdown', 'story', 'gallery', 'schedule', 'rsvp', 'map', 'guestbook', 'gift', 'text', 'music']
 
 interface BlockEditorProps {
     block: InvitationBlock
@@ -202,22 +228,97 @@ function BlockEditor({ block, onChange }: BlockEditorProps) {
             )
         case 'gift':
             return (
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <div className="space-y-1.5">
                         <Label className="text-xs">Lời Nhắn (Tuỳ chọn)</Label>
                         <Input value={(block.props.note as string) || ''} onChange={(e) => updateProp('note', e.target.value)} placeholder="Nhắn nhủ lời yêu thương đến cặp đôi" className="h-9 text-sm" />
                     </div>
-                    <div className="space-y-1.5">
-                        <Label className="text-xs">Tên/Mã Ngân Hàng (VD: Vietcombank, MB, Techcombank)</Label>
-                        <Input value={(block.props.bankName as string) || ''} onChange={(e) => updateProp('bankName', e.target.value)} placeholder="Vietcombank" className="h-9 text-sm" />
+                    <div className="space-y-3 p-3 rounded-lg border border-[#8B0000]/10 bg-[#8B0000]/5">
+                        <Label className="text-xs font-semibold text-[#8B0000]">Mã QR Tự Động (VietQR)</Label>
+                        <div className="space-y-1.5">
+                            <Label className="text-xs text-[#4A0E0E]/70">Ngân Hàng</Label>
+                            <Select value={(block.props.bankName as string) || ''} onValueChange={(val) => updateProp('bankName', val)}>
+                                <SelectTrigger className="h-9 text-sm border-[#8B0000]/20 bg-white">
+                                    <SelectValue placeholder="Chọn ngân hàng" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {VIETQR_BANKS.map(bank => (
+                                        <SelectItem key={bank.shortName} value={bank.shortName}>{bank.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label className="text-xs text-[#4A0E0E]/70">Số Tài Khoản</Label>
+                            <Input value={(block.props.accountNumber as string) || (block.props.bankAccount as string) || ''} onChange={(e) => updateProp('accountNumber', e.target.value)} placeholder="0123456789" className="h-9 text-sm" />
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label className="text-xs text-[#4A0E0E]/70">Tên Chủ Tài Khoản</Label>
+                            <Input value={(block.props.accountOwner as string) || (block.props.bankOwner as string) || (block.props.accountName as string) || ''} onChange={(e) => updateProp('accountOwner', e.target.value.toUpperCase())} placeholder="NGUYEN VAN A" className="h-9 text-sm uppercase" />
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label className="text-xs text-[#4A0E0E]/70">Giao diện VietQR</Label>
+                            <Select value={(block.props.vietqrTemplate as string) || 'print'} onValueChange={(val) => updateProp('vietqrTemplate', val)}>
+                                <SelectTrigger className="h-9 text-sm border-[#8B0000]/20 bg-white">
+                                    <SelectValue placeholder="Chọn giao diện" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="print">Bản in (Đầy đủ)</SelectItem>
+                                    <SelectItem value="compact">Nhỏ gọn 1</SelectItem>
+                                    <SelectItem value="compact2">Nhỏ gọn 2</SelectItem>
+                                    <SelectItem value="qr_only">Chỉ mã QR</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
-                    <div className="space-y-1.5">
-                        <Label className="text-xs">Số Tài Khoản</Label>
-                        <Input value={(block.props.accountNumber as string) || ''} onChange={(e) => updateProp('accountNumber', e.target.value)} placeholder="0123456789" className="h-9 text-sm" />
-                    </div>
-                    <div className="space-y-1.5">
-                        <Label className="text-xs">Tên Chủ Tài Khoản</Label>
-                        <Input value={(block.props.accountOwner as string) || (block.props.accountName as string) || ''} onChange={(e) => updateProp('accountOwner', e.target.value.toUpperCase())} placeholder="NGUYEN VAN A" className="h-9 text-sm uppercase" />
+
+                    <div className="space-y-3 p-3 rounded-lg border border-[#8B0000]/10">
+                        <div className="flex items-center justify-between">
+                            <Label className="text-xs font-semibold text-[#4A0E0E]">Mã QR Tuỳ Chỉnh (Momo, Paypal...) (Tuỳ chọn)</Label>
+                            {!!block.props.customQrImage && (
+                                <button onClick={() => updateProp('customQrImage', null)} className="text-xs text-red-500 hover:text-red-600 transition-colors">
+                                    Xoá ảnh
+                                </button>
+                            )}
+                        </div>
+                        <p className="text-[10px] text-[#4A0E0E]/50">Nếu tải ảnh lên, hệ thống sẽ hiển thị ảnh này thay vì tạo mã VietQR.</p>
+                        {block.props.customQrImage ? (
+                            <div className="relative w-32 h-32 rounded-lg border border-[#8B0000]/20 overflow-hidden mx-auto">
+                                <img src={block.props.customQrImage as string} alt="Custom QR" className="w-full h-full object-contain" />
+                            </div>
+                        ) : (
+                            <label className="flex flex-col items-center justify-center p-4 h-24 rounded-lg border-2 border-dashed border-[#8B0000]/30 hover:bg-[#8B0000]/5 cursor-pointer text-[#4A0E0E]/50 transition-colors">
+                                <Upload className="w-5 h-5 mb-2 text-[#8B0000]/50" />
+                                <span className="text-xs">Tải ảnh mã QR lên</span>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={async (e) => {
+                                        const file = e.target.files?.[0]
+                                        if (!file) return
+                                        const toastId = toast.loading('Đang tải ảnh lên...')
+                                        try {
+                                            const supabase = createClient()
+                                            let fileToUpload = file
+                                            try {
+                                                fileToUpload = await imageCompression(file, { maxSizeMB: 0.5, maxWidthOrHeight: 1200, useWebWorker: true })
+                                            } catch (e) { }
+                                            const ext = file.name.split('.').pop()
+                                            const path = `qr/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+                                            const { error } = await supabase.storage.from('wedding-images').upload(path, fileToUpload)
+                                            if (error) throw error
+                                            const { data: urlData } = supabase.storage.from('wedding-images').getPublicUrl(path)
+                                            updateProp('customQrImage', urlData.publicUrl)
+                                            toast.success('Đã tải lên mã QR!', { id: toastId })
+                                        } catch (error) {
+                                            toast.error('Lỗi khi tải ảnh. Vui lòng thử lại.', { id: toastId })
+                                        }
+                                        e.target.value = ''
+                                    }}
+                                />
+                            </label>
+                        )}
                     </div>
                 </div>
             )
@@ -242,6 +343,59 @@ function BlockEditor({ block, onChange }: BlockEditorProps) {
                 <div className="space-y-1.5">
                     <Label className="text-xs">Địa Chỉ Google Maps</Label>
                     <Input value={block.props.mapAddress || ''} onChange={(e) => updateProp('mapAddress', e.target.value)} placeholder="123 Đường XYZ, Quận 1, TP.HCM" className="h-9 text-sm" />
+                </div>
+            )
+        case 'music':
+            return (
+                <div className="space-y-4">
+                    <div className="space-y-3">
+                        <Label className="text-xs">Đường Dẫn Nhạc Nền (URL)</Label>
+                        <Input value={(block.props.musicUrl as string) || ''} onChange={(e) => updateProp('musicUrl', e.target.value)} placeholder="https://example.com/music.mp3" className="h-9 text-sm" />
+
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t border-[#8B0000]/10" />
+                            </div>
+                            <div className="relative flex justify-center text-xs">
+                                <span className="bg-white px-2 text-[#4A0E0E]/40">Hoặc</span>
+                            </div>
+                        </div>
+
+                        <label className="flex flex-col items-center justify-center p-3 rounded-lg border border-dashed border-[#8B0000]/30 hover:bg-[#8B0000]/5 cursor-pointer text-[#4A0E0E]/50 transition-colors">
+                            <Upload className="w-4 h-4 mb-2 text-[#8B0000]/50" />
+                            <span className="text-[11px]">Tải file nhạc lên (.mp3)</span>
+                            <input
+                                type="file"
+                                accept="audio/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                    const file = e.target.files?.[0]
+                                    if (!file) return
+                                    const toastId = toast.loading('Đang tải nhạc lên...')
+                                    try {
+                                        const supabase = createClient()
+                                        const ext = file.name.split('.').pop()
+                                        const path = `audio/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+                                        const { error } = await supabase.storage.from('wedding-images').upload(path, file)
+                                        if (error) throw error
+                                        const { data: urlData } = supabase.storage.from('wedding-images').getPublicUrl(path)
+                                        updateProp('musicUrl', urlData.publicUrl)
+                                        toast.success('Đã tải nhạc lên thành công!', { id: toastId })
+                                    } catch (error) {
+                                        toast.error('Lỗi khi tải file. Vui lòng thử lại.', { id: toastId })
+                                    }
+                                    e.target.value = ''
+                                }}
+                            />
+                        </label>
+                    </div>
+                    <div className="flex items-center justify-between p-3 rounded-lg border border-[#8B0000]/10 bg-[#8B0000]/5">
+                        <div className="space-y-0.5">
+                            <Label className="text-xs font-semibold text-[#8B0000]">Tự động phát</Label>
+                            <p className="text-[10px] text-[#4A0E0E]/50">Trình duyệt có thể tự chặn nếu người dùng chưa tương tác.</p>
+                        </div>
+                        <Switch checked={block.props.autoPlay !== false} onCheckedChange={(checked) => updateProp('autoPlay', checked)} />
+                    </div>
                 </div>
             )
         default:
@@ -492,6 +646,12 @@ export default function BuilderPage() {
                                 <Monitor className="w-3.5 h-3.5" />
                             </Button>
                         </div>
+                        <Button variant="outline" size="sm" className="h-8 text-xs border-[#8B0000]/20 gap-1.5" asChild>
+                            <Link href={`/dashboard/settings/${invitationId}`}>
+                                <Settings className="w-3.5 h-3.5" />
+                                Cài đặt
+                            </Link>
+                        </Button>
                         <Button variant="outline" size="sm" className="h-8 text-xs border-[#8B0000]/20 gap-1.5" asChild>
                             <Link href={`/${invitationSlug}`} target="_blank">
                                 <Eye className="w-3.5 h-3.5" />
