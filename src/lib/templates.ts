@@ -220,4 +220,32 @@ export const DEFAULT_TEMPLATES: Template[] = [
             BLOCK_TEMPLATES.rsvp(),
         ],
     },
+    {
+        id: 'vip-01',
+        name: 'VIP Pro Max',
+        style: 'vip',
+        preview_image: '/templates/modern-01.jpg',
+        is_premium: true,
+        default_theme: {
+            primaryColor: '#d4af37', // Gold
+            secondaryColor: '#0f172a', // Slate 900
+            backgroundColor: '#020617', // Slate 950
+            textColor: '#f8fafc', // Slate 50
+            fontTitle: 'Cinzel',
+            fontBody: 'Outfit',
+            style: 'vip',
+        },
+        default_blocks: [
+            BLOCK_TEMPLATES.hero(),
+            BLOCK_TEMPLATES.countdown(),
+            BLOCK_TEMPLATES.story(),
+            BLOCK_TEMPLATES.gallery(),
+            BLOCK_TEMPLATES.schedule(),
+            BLOCK_TEMPLATES.map(),
+            BLOCK_TEMPLATES.gift(),
+            BLOCK_TEMPLATES.guestbook(),
+            BLOCK_TEMPLATES.rsvp(),
+            BLOCK_TEMPLATES.music(),
+        ],
+    },
 ]
