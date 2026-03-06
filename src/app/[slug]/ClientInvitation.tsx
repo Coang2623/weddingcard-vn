@@ -995,12 +995,36 @@ function MusicBlock({ block }: { block: InvitationBlock }) {
     const { musicUrl, autoPlay } = block.props as { musicUrl?: string, autoPlay?: boolean };
     const [isPlaying, setIsPlaying] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
+    const [songTitle, setSongTitle] = useState<string>('');
+    const [showTitle, setShowTitle] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const ytRef = useRef<HTMLIFrameElement | null>(null);
 
     const parsedUrl = musicUrl?.trim();
     const youtubeId = parsedUrl ? getYouTubeVideoId(parsedUrl) : null;
     const isYouTube = !!youtubeId;
+
+    // Fetch song title
+    useEffect(() => {
+        if (!parsedUrl) return;
+        if (isYouTube && youtubeId) {
+            fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${youtubeId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.title) setSongTitle(data.title);
+                })
+                .catch(() => setSongTitle('YouTube Music'));
+        } else {
+            try {
+                const url = new URL(parsedUrl);
+                const filename = decodeURIComponent(url.pathname.split('/').pop() || '');
+                const name = filename.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+                setSongTitle(name || 'Background Music');
+            } catch {
+                setSongTitle('Background Music');
+            }
+        }
+    }, [parsedUrl, isYouTube, youtubeId]);
 
     // Listen for first user interaction
     useEffect(() => {
@@ -1082,11 +1106,32 @@ function MusicBlock({ block }: { block: InvitationBlock }) {
                 )}
             </div>
 
-            {/* Floating music button */}
-            <div className="fixed bottom-6 right-6 z-50 pointer-events-auto flex items-center justify-center">
+            {/* Floating music button with title tooltip */}
+            <div
+                className="fixed bottom-6 right-6 z-50 pointer-events-auto flex items-center gap-2"
+                onMouseEnter={() => setShowTitle(true)}
+                onMouseLeave={() => setShowTitle(false)}
+            >
+                {/* Song title tooltip */}
+                <div
+                    className={`transition-all duration-300 ease-out ${showTitle && songTitle ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}
+                >
+                    <div
+                        className="px-3 py-1.5 rounded-full text-xs font-medium max-w-[200px] truncate shadow-lg backdrop-blur-sm"
+                        style={{
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            color: '#fff',
+                            border: `1px solid ${theme.primaryColor}40`,
+                        }}
+                    >
+                        🎵 {songTitle}
+                    </div>
+                </div>
+
+                {/* Music button */}
                 <button
                     onClick={togglePlay}
-                    className={`w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all duration-700 border-2 ${isPlaying ? 'animate-[spin_4s_linear_infinite] scale-100' : 'animate-pulse scale-95'}`}
+                    className={`w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all duration-700 border-2 flex-shrink-0 ${isPlaying ? 'animate-[spin_4s_linear_infinite] scale-100' : 'animate-pulse scale-95'}`}
                     style={{ backgroundColor: theme.primaryColor, borderColor: '#fff', color: '#fff' }}
                 >
                     <Music className="w-5 h-5 absolute" />
